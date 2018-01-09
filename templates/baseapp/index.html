@@ -1,0 +1,30 @@
+{% extends "baseapp/base.html" %}
+{% load i18n %}
+
+{% block page_body %}
+<div class="container">
+    <div class="row">
+        <div class="twelve columns">
+            <h1>{% trans "Welcome to Django" %}</h1>
+            <h2>{% trans "It worked!" %}</h2>
+            <h3>{% trans "Template variables" %}</h3>
+            
+            <table class="u-full-width">
+                <tr>
+                    <td><code>{% templatetag openvariable %} IS_DEBUG {% templatetag closevariable %}</code></td>
+                    <td><code>{{ IS_DEBUG }}</code></td>
+                </tr>
+                <tr>
+                    <td><code>{% templatetag openvariable %} LANG {% templatetag closevariable %}</code></td>
+                    <td><code>{{ LANG }}</code></td>
+                </tr>
+            </table>
+
+            {% hdbg %}
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
+
+

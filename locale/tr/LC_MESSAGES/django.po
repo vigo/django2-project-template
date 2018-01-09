@@ -1,0 +1,156 @@
+# Turkish language support for our Django application
+# Copyright (C) 2017 Uğur "vigo" Özyılmazel
+# This file is distributed under the same license as the Django package.
+# Uğur Özyılmazel <ugurozyilmazel@gmail.com>, 2017.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: django-base-project\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-20 15:59+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Uğur Özyılmazel <ugurozyilmazel@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: applications/baseapp/admin/base.py:34
+msgid "1 record was"
+msgstr "1 kayıt"
+
+#: applications/baseapp/admin/base.py:36
+#, python-format
+msgid "%(number_of_rows)s records were"
+msgstr "%(number_of_rows)s kayıt"
+
+#: applications/baseapp/admin/base.py:37
+#, python-format
+msgid "%(message_bit)s successfully marked as active"
+msgstr "%(message_bit)s aktif olarak işaretlendi."
+
+#: applications/baseapp/admin/base.py:58
+#, python-format
+msgid "Recover selected %(verbose_name_plural)s"
+msgstr "Seçili %(verbose_name_plural)s nesnelerini aktif hale getir"
+
+#: applications/baseapp/admin/user.py:21 applications/baseapp/admin/user.py:52
+msgid "Password"
+msgstr ""
+
+#: applications/baseapp/admin/user.py:23
+msgid ""
+"Raw passwords are not stored, so there is no way to see this user's "
+"password, but you can change the password using <a href=\"../password/"
+"\">this form</a>."
+msgstr ""
+
+#: applications/baseapp/admin/user.py:41 applications/baseapp/admin/user.py:68
+#: applications/baseapp/models/user.py:81
+msgid "first name"
+msgstr ""
+
+#: applications/baseapp/admin/user.py:42 applications/baseapp/admin/user.py:69
+#: applications/baseapp/models/user.py:91
+msgid "last name"
+msgstr ""
+
+#: applications/baseapp/admin/user.py:56
+msgid "Password confirmation"
+msgstr ""
+
+#: applications/baseapp/admin/user.py:76
+msgid "Passwords don't match"
+msgstr ""
+
+#: applications/baseapp/admin/user.py:97
+msgid "User information"
+msgstr "Kullanıcı Bilgileri"
+
+#: applications/baseapp/admin/user.py:105
+msgid "Permissions"
+msgstr ""
+
+#: applications/baseapp/admin/user.py:137
+#: applications/baseapp/models/user.py:95
+msgid "Profile Image"
+msgstr "Profil Fotoğrafı"
+
+#: applications/baseapp/models/base.py:26
+msgid "Offline"
+msgstr "Kapalı"
+
+#: applications/baseapp/models/base.py:27
+msgid "Online"
+msgstr "Yayında"
+
+#: applications/baseapp/models/base.py:28
+msgid "Deleted"
+msgstr "Silinmiş"
+
+#: applications/baseapp/models/base.py:29
+msgid "Draft"
+msgstr "Taslak"
+
+#: applications/baseapp/models/base.py:34
+msgid "Created At"
+msgstr "Oluşturma Tarihi"
+
+#: applications/baseapp/models/base.py:38
+msgid "Updated At"
+msgstr "Güncelleme Tarihi"
+
+#: applications/baseapp/models/base.py:43
+msgid "Status"
+msgstr "Durum"
+
+#: applications/baseapp/models/base.py:76
+msgid "Deleted At"
+msgstr "Silinme Tarihi"
+
+#: applications/baseapp/models/user.py:32
+msgid "Users must have an email address"
+msgstr ""
+
+#: applications/baseapp/models/user.py:77
+msgid "email address"
+msgstr ""
+
+#: applications/baseapp/models/user.py:87
+msgid "middle name"
+msgstr "göbek adı"
+
+#: applications/baseapp/models/user.py:99
+msgid "active"
+msgstr ""
+
+#: applications/baseapp/models/user.py:103
+msgid "staff status"
+msgstr ""
+
+#: applications/baseapp/models/user.py:110
+msgid "user"
+msgstr ""
+
+#: applications/baseapp/models/user.py:111
+msgid "users"
+msgstr ""
+
+#: applications/baseapp/widgets/image_file.py:46
+msgid "Dimensions"
+msgstr "Boyutları"
+
+#: templates/baseapp/index.html:8
+msgid "Welcome to Django"
+msgstr ""
+
+#: templates/baseapp/index.html:9
+msgid "It worked!"
+msgstr ""
+
+#: templates/baseapp/index.html:10
+msgid "Template variables"
+msgstr ""

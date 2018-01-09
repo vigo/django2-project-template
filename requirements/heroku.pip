@@ -1,0 +1,5 @@
+-r base.pip
+gunicorn==19.7.1
+psycopg2==2.7.3.2
+dj-database-url==0.4.2
+whitenoise==3.3.1

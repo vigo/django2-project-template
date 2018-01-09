@@ -1,0 +1,18 @@
+body {
+    font-family: -apple-system,
+                 BlinkMacSystemFont,
+                 "Segoe UI",
+                 Roboto, 
+                 "Helvetica Neue", 
+                 Arial, sans-serif !important;
+}
+
+.baseapp-debug {
+    background: #ddd;
+}
+
+.baseapp-debug pre {
+    padding: 1rem;
+    line-height: 1.8em;
+    overflow-wrap: break-word;
+}
