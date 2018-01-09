@@ -49,14 +49,15 @@ USER_REMINDER = """
     ]
 
     - Do not forget to fix your `config/settings/urls.py`:
-
+    
+    # ...
     urlpatterns = [
         # ...
         # this is just an example!
         path('__{app_name}__/', include('{app_name}.urls', namespace='{app_name}')),
         # ..
     ]
-
+    # ...
 """
 
 

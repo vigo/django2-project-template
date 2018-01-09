@@ -105,10 +105,10 @@ First, create application:
 $ python manage.py baseapp_create_app blog
 
 # or
+
 $ rake new:application[blog]
 
 "blog" application created.
-
 
     - Do not forget to add your `blog` to `INSTALLED_APPS` under `config/settings/base.py`:
 
@@ -117,14 +117,15 @@ $ rake new:application[blog]
     ]
 
     - Do not forget to fix your `config/settings/urls.py`:
-
+    
+    # ...
     urlpatterns = [
         # ...
         # this is just an example!
-        url(r'^__blog__/', include('blog.urls', namespace='blog')),
+        path('__blog__/', include('blog.urls', namespace='blog')),
         # ..
     ]
-
+    # ...
 
 ```
 
