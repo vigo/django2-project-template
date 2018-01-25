@@ -4,7 +4,7 @@ from ..models import {model_name}
 
 
 __all__ = [
-    '{model_name}',
+    '{model_name}Admin',
 ]
 
 

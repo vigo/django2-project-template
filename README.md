@@ -1,5 +1,5 @@
 ![Django](https://img.shields.io/badge/django-2.0.1-green.svg)
-![Version](https://img.shields.io/badge/version-0.1.0-yellow.svg)
+![Version](https://img.shields.io/badge/version-0.1.1-yellow.svg)
 
 # Django Project Starter Template
 
@@ -811,7 +811,7 @@ from ..models import Post
 
 
 __all__ = [
-    'Post',
+    'PostAdmin',
 ]
 
 
@@ -1361,7 +1361,7 @@ from ..models import Post
 
 
 __all__ = [
-    'Post',
+    'PostAdmin',
 ]
 
 
