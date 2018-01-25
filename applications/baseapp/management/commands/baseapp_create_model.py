@@ -1,3 +1,4 @@
+import re
 import os
 
 from importlib import import_module
@@ -81,17 +82,21 @@ class Command(BaseCommand):
 
         app_dir = os.path.join(settings.BASE_DIR, 'applications', app_name)
 
-        model_file = os.path.join(app_dir, 'models', '{}.py'.format(model_name.lower()))
+        dash_seperated_file_base_name = '_'.join(
+            [m for m in re.split('([A-Z][a-z]+)', model_name) if m]
+        )
+
+        model_file = os.path.join(app_dir, 'models', '{}.py'.format(dash_seperated_file_base_name.lower()))
         model_init_file = os.path.join(app_dir, 'models', '__init__.py')
 
-        admin_file = os.path.join(app_dir, 'admin', '{}.py'.format(model_name.lower()))
+        admin_file = os.path.join(app_dir, 'admin', '{}.py'.format(dash_seperated_file_base_name.lower()))
         admin_init_file = os.path.join(app_dir, 'admin', '__init__.py')
 
         content_model_file = TEMPLATE_MODELS[model_type].format(
             model_name=model_name,
             app_name=app_name,
         )
-        content_init_file = 'from .{} import *\n'.format(model_name.lower())
+        content_init_file = 'from .{} import *\n'.format(dash_seperated_file_base_name.lower())
 
         content_admin_file = TEMPLATE_ADMINS[model_type].format(
             model_name=model_name,
@@ -113,5 +118,5 @@ class Command(BaseCommand):
         self.stdout.write(self.style.NOTICE(USER_REMINDER.format(
             app_name=app_name,
             model_name=model_name,
-            model_name_lower=model_name.lower(),
+            model_name_lower=dash_seperated_file_base_name.lower(),
         )))
