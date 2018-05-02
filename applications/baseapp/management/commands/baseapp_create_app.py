@@ -94,6 +94,7 @@ class Command(BaseCommand):
         )
 
         self.mkdir(new_application_dir)
+        self.touch(os.path.join(new_application_dir, '__init__.py'))
 
         for package in APP_DIR_STRUCTURE.get('packages'):
             package_dir = os.path.join(new_application_dir, package.get('name'))
