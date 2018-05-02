@@ -54,8 +54,18 @@ class Command(BaseCommand):
             f.write(content)
 
     def add_arguments(self, parser):
-        parser.add_argument('app_name', nargs=1, type=str, help='Name of your application')
-        parser.add_argument('model_name', nargs=1, type=str, help='Name of your model')
+        parser.add_argument(
+            'app_name', 
+            nargs=1, 
+            type=str, 
+            help='Name of your application',
+        )
+        parser.add_argument(
+            'model_name',
+            nargs=1,
+            type=str,
+            help='Name of your model',
+        )
         parser.add_argument(
             'model_type',
             nargs='?',
@@ -65,7 +75,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         app_name = options.pop('app_name')[0]
-        model_name = options.pop('model_name')[0]
+        model_name = options.pop('model_name')[0].title()
         model_type = options.pop('model_type')
 
         try:
@@ -86,11 +96,27 @@ class Command(BaseCommand):
             [m for m in re.split('([A-Z][a-z]+)', model_name) if m]
         )
 
-        model_file = os.path.join(app_dir, 'models', '{}.py'.format(dash_seperated_file_base_name.lower()))
-        model_init_file = os.path.join(app_dir, 'models', '__init__.py')
+        model_file = os.path.join(
+            app_dir, 
+            'models', 
+            '{}.py'.format(dash_seperated_file_base_name.lower()),
+        )
+        model_init_file = os.path.join(
+            app_dir, 
+            'models', 
+            '__init__.py',
+        )
 
-        admin_file = os.path.join(app_dir, 'admin', '{}.py'.format(dash_seperated_file_base_name.lower()))
-        admin_init_file = os.path.join(app_dir, 'admin', '__init__.py')
+        admin_file = os.path.join(
+            app_dir, 
+            'admin', 
+            '{}.py'.format(dash_seperated_file_base_name.lower()),
+        )
+        admin_init_file = os.path.join(
+            app_dir, 
+            'admin', 
+            '__init__.py',
+        )
 
         content_model_file = TEMPLATE_MODELS[model_type].format(
             model_name=model_name,
