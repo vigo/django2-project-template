@@ -1,5 +1,5 @@
-![Django](https://img.shields.io/badge/django-2.0.1-green.svg)
-![Version](https://img.shields.io/badge/version-0.1.1-yellow.svg)
+![Django](https://img.shields.io/badge/django-2.0.5-green.svg)
+![Version](https://img.shields.io/badge/version-0.2.0-yellow.svg)
 
 # Django Project Starter Template
 
@@ -15,6 +15,8 @@ Django releases as much as I can!
 ## Installation
 
 Please use `virtualenvwrapper` and create your environment and activate it.
+With Python 3.3+, you don’t need to install `virtualenv`. You can create your
+environment via; `python -m venv /path/to/your/environment`
 
 ```bash
 # example
@@ -26,7 +28,7 @@ $ workon my_projects_env
 You need to declare **2 environment** variables. I always put my project
 specific environment variables under `virtualenvwrapper`’s `postactivate`
 file. Open your `~/.virtualenvs/my_projects_env/bin/postactivate` and add
-these lines:
+these lines (*or set it manually*):
 
 ```bash
 export DJANGO_ENV="development"
@@ -36,10 +38,10 @@ export DJANGO_SECRET="YOUR-SECRET-HERE" # will fix it in a second.
 then;
 
 ```bash
-# for django 2.0.1
-$ curl -L https://github.com/vigo/django2-project-template/archive/django-2.0.1.zip > template.zip
+# for django 2.0.5
+$ curl -L https://github.com/vigo/django2-project-template/archive/django-2.0.5.zip > template.zip
 $ unzip template.zip
-$ mv django2-project-template-django-2.0.1 my_project && rm template.zip
+$ mv django2-project-template-django-2.0.5 my_project && rm template.zip
 $ cd my_project/
 $ cp config/settings/development.example.py config/settings/development.py
 # development.py is not under revison control
@@ -515,8 +517,8 @@ need to create a copy of it! (*if you follow along from the beginning, you’ve 
 All the base/common required Python packages/modules are defined under `requirements/base.pip`:
 
 ```python
-Django==2.0.1
-Pillow==5.0.0
+Django==2.0.5
+Pillow==5.1.0
 ```
 
 ### `development.py`
@@ -1432,6 +1434,10 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2018-05-02**
+
+- Django 2.0.5 and related changes.
 
 **2018-01-09**
 

@@ -6,15 +6,18 @@
 set -e
 set -o pipefail
 
-AVAILABLE_OPTIONS=("Django 2.0.1" "Cancel and quit")
+AVAILABLE_OPTIONS=(
+    "Django 2.0.5"
+    "Cancel and quit"
+)
 
 echo "Django Project Template Installer"
 PS3="Select option:"
 select i in "${AVAILABLE_OPTIONS[@]}"
 do
     case $i in
-        "Django 2.0.1")
-            PACKAGE="django-2.0.1"
+        "Django 2.0.5")
+            PACKAGE="django-2.0.5"
             break
             ;;
         "Cancel and quit")
@@ -44,5 +47,7 @@ echo
 echo
 echo "Installation completed..."
 echo "Now, create your virtual environment and run:"
+echo
 echo "cd ${PROJECT_NAME}/"
 echo "pip install -r requirements/development.pip"
+echo
