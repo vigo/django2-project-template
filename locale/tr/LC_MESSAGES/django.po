@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django-base-project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-20 15:59+0300\n"
+"POT-Creation-Date: 2018-05-02 14:16+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Uğur Özyılmazel <ugurozyilmazel@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: applications/baseapp/admin/base.py:34
+#: applications/baseapp/admin/base.py:27
 msgid "1 record was"
 msgstr "1 kayıt"
 
-#: applications/baseapp/admin/base.py:36
+#: applications/baseapp/admin/base.py:29
 #, python-format
 msgid "%(number_of_rows)s records were"
 msgstr "%(number_of_rows)s kayıt"
 
-#: applications/baseapp/admin/base.py:37
+#: applications/baseapp/admin/base.py:30
 #, python-format
 msgid "%(message_bit)s successfully marked as active"
 msgstr "%(message_bit)s aktif olarak işaretlendi."
@@ -49,12 +49,12 @@ msgid ""
 msgstr ""
 
 #: applications/baseapp/admin/user.py:41 applications/baseapp/admin/user.py:68
-#: applications/baseapp/models/user.py:81
+#: applications/baseapp/models/user.py:72
 msgid "first name"
 msgstr ""
 
 #: applications/baseapp/admin/user.py:42 applications/baseapp/admin/user.py:69
-#: applications/baseapp/models/user.py:91
+#: applications/baseapp/models/user.py:82
 msgid "last name"
 msgstr ""
 
@@ -75,73 +75,99 @@ msgid "Permissions"
 msgstr ""
 
 #: applications/baseapp/admin/user.py:137
-#: applications/baseapp/models/user.py:95
+#: applications/baseapp/models/user.py:86
 msgid "Profile Image"
 msgstr "Profil Fotoğrafı"
 
-#: applications/baseapp/models/base.py:26
+#: applications/baseapp/models/base.py:137
 msgid "Offline"
 msgstr "Kapalı"
 
-#: applications/baseapp/models/base.py:27
+#: applications/baseapp/models/base.py:138
 msgid "Online"
 msgstr "Yayında"
 
-#: applications/baseapp/models/base.py:28
+#: applications/baseapp/models/base.py:139
 msgid "Deleted"
 msgstr "Silinmiş"
 
-#: applications/baseapp/models/base.py:29
+#: applications/baseapp/models/base.py:140
 msgid "Draft"
 msgstr "Taslak"
 
-#: applications/baseapp/models/base.py:34
+#: applications/baseapp/models/base.py:145
+#: applications/baseapp/models/user.py:60
 msgid "Created At"
 msgstr "Oluşturma Tarihi"
 
-#: applications/baseapp/models/base.py:38
+#: applications/baseapp/models/base.py:149
+#: applications/baseapp/models/user.py:64
 msgid "Updated At"
 msgstr "Güncelleme Tarihi"
 
-#: applications/baseapp/models/base.py:43
+#: applications/baseapp/models/base.py:154
 msgid "Status"
 msgstr "Durum"
 
-#: applications/baseapp/models/base.py:76
+#: applications/baseapp/models/base.py:168
 msgid "Deleted At"
 msgstr "Silinme Tarihi"
 
-#: applications/baseapp/models/user.py:32
+#: applications/baseapp/models/user.py:26
 msgid "Users must have an email address"
 msgstr ""
 
-#: applications/baseapp/models/user.py:77
+#: applications/baseapp/models/user.py:68
 msgid "email address"
 msgstr ""
 
-#: applications/baseapp/models/user.py:87
+#: applications/baseapp/models/user.py:78
 msgid "middle name"
 msgstr "göbek adı"
 
-#: applications/baseapp/models/user.py:99
+#: applications/baseapp/models/user.py:92
 msgid "active"
 msgstr ""
 
-#: applications/baseapp/models/user.py:103
+#: applications/baseapp/models/user.py:96
 msgid "staff status"
 msgstr ""
 
-#: applications/baseapp/models/user.py:110
+#: applications/baseapp/models/user.py:103
 msgid "user"
 msgstr ""
 
-#: applications/baseapp/models/user.py:111
+#: applications/baseapp/models/user.py:104
 msgid "users"
 msgstr ""
 
-#: applications/baseapp/widgets/image_file.py:46
+#: applications/baseapp/widgets/image_file.py:49
 msgid "Dimensions"
 msgstr "Boyutları"
+
+#: config/urls.py:10
+msgid "Your admin index title"
+msgstr "Admin listesi başlığı"
+
+#: config/urls.py:11
+msgid "Your site title"
+msgstr "Siteniniz başlığı"
+
+#: config/urls.py:12
+msgid "Your site header"
+msgstr "Marka ya da proje başlığı"
+
+#: templates/admin/base_site.html:5
+msgid "Django site admin"
+msgstr ""
+
+#: templates/admin/base_site.html:9
+msgid "Django administration"
+msgstr ""
+
+#: templates/admin/base_site.html:15
+msgid "Welcome,"
+msgstr ""
 
 #: templates/baseapp/index.html:8
 msgid "Welcome to Django"

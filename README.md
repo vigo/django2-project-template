@@ -78,6 +78,17 @@ $ python manage.py generate_secret_key
 
 and fix your `~/.virtualenvs/my_projects_env/bin/postactivate`
 
+You can fix your Django Admin titles now. Go to `config/urls.py` and fix:
+
+```python
+admin.site.index_title = _('Your admin index title')
+admin.site.site_title = _('Your site title')
+admin.site.site_header = _('Your site header')
+
+```
+
+Do not forget to compile your locale messages file.
+
 ---
 
 ## Features
@@ -95,6 +106,8 @@ and fix your `~/.virtualenvs/my_projects_env/bin/postactivate`
 - Debug Mixins for your HTML templates
 - Handy utils: `console`, `console.dir()`, `numerify`, `urlify`, `save_file`
 - File widget for Django Admin: `AdminImageFileWidget`
+- Easy naming for your admin site!
+- `DJANGO_ENV` indicator for your admin site!
 
 ---
 
@@ -458,6 +471,7 @@ Here is directory/file structure:
     │       ├── widgets
     │       ├── __init__.py
     │       ├── apps.py
+    │       ├── context_processors.py
     │       ├── urls.py
     │       └── views.py
     ├── config
@@ -484,6 +498,8 @@ Here is directory/file structure:
     │   └── heroku.pip
     ├── static
     ├── templates
+    │   └── admin
+    │       └── base_site.html
     │   └── baseapp
     │       ├── base.html
     │       └── index.html
@@ -565,15 +581,18 @@ Django Extension adds great functionalities:
 - `dumpscript`
 - `export_emails`
 - `find_template`
+- `generate_password`
 - `generate_secret_key`
 - `graph_models`
 - `mail_debug`
+- `merge_model_instances`
 - `notes`
 - `passwd`
 - `pipchecker`
 - `print_settings`
 - `print_user_for_session`
 - `reset_db`
+- `reset_schema`
 - `runjob`
 - `runjobs`
 - `runprofileserver`
@@ -606,8 +625,8 @@ All the required modules are defined under `requirements/development.pip`:
 ```python
 # requirements/development.pip
 -r base.pip
-ipython==6.2.1
-django-extensions==1.9.8
+ipython==6.3.1
+django-extensions==2.0.7
 Werkzeug==0.14.1
 django-debug-toolbar==1.9.1
 ```
@@ -632,9 +651,9 @@ All the required modules are defined under `requirements/heroku.pip`:
 ```python
 # requirements/heroku.pip
 -r base.pip
-gunicorn==19.7.1
-psycopg2==2.7.3.2
-dj-database-url==0.4.2
+gunicorn==19.8.1
+psycopg2==2.7.4
+dj-database-url==0.5.0
 whitenoise==3.3.1
 ```
 
@@ -1169,6 +1188,61 @@ requirements file. Show image preview, width x height if the file is image.
 
 ---
 
+## `context_processors.py`
+
+Currently, there is only one template variable available: `{{ DJANGO_ENVIRONMENT_NAME }}`.
+This is used for indicating the current environment in django admin site. You
+can customize look and feel here:
+
+```django
+<!-- templates/admin/base_site.html -->
+
+{% extends "admin/base_site.html" %}
+
+{% load i18n %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
+</h1>
+{% endblock %}
+
+
+{% block welcome-msg %}
+    {% trans 'Welcome,' %}
+    <strong>{{ user.get_full_name }}</strong>.
+{% endblock %}
+
+{% block extrastyle %}
+<style type="text/css">
+    body:before {
+        display: block;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 9999;
+        line-height: 35px;
+        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: white;
+        content: "{{ DJANGO_ENVIRONMENT_NAME }}";
+        background-color: red;
+    }
+    body {
+        padding-top: 35px !important;
+    }
+</style>
+{% endblock %}
+
+```
+
+This adds a basic HTML element via CSS to the `<body>` tag.
+
+---
+
 ## Rakefile
 
 If you have Ruby installed, you’ll have lots of handy tasks for the project.
@@ -1438,6 +1512,8 @@ This project is licensed under MIT
 **2018-05-02**
 
 - Django 2.0.5 and related changes.
+- Django Admin site titles are easy editable.
+- Django Admin site indicator.
 
 **2018-01-09**
 

@@ -1,3 +1,4 @@
+from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.urls import (
     path,
@@ -5,6 +6,10 @@ from django.urls import (
 )
 from django.conf.urls.static import static
 from django.contrib import admin
+
+admin.site.index_title = _('Your admin index title')
+admin.site.site_title = _('Your site title')
+admin.site.site_header = _('Your site header')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

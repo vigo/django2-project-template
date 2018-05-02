@@ -1,0 +1,39 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
+</h1>
+{% endblock %}
+
+
+{% block welcome-msg %}
+    {% trans 'Welcome,' %}
+    <strong>{{ user.get_full_name }}</strong>.
+{% endblock %}
+
+{% block extrastyle %}
+<style type="text/css">
+    body:before {
+        display: block;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        z-index: 9999;
+        line-height: 35px;
+        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: white;
+        content: "{{ DJANGO_ENVIRONMENT_NAME }}";
+        background-color: red;
+    }
+    body {
+        padding-top: 35px !important;
+    }
+</style>
+{% endblock %}
