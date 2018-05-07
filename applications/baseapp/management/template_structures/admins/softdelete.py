@@ -10,13 +10,11 @@ __all__ = [
 ]
 
 
+@admin.register({model_name})
 class {model_name}Admin(BaseAdminWithSoftDelete):
     # sticky_list_filter = None
     # hide_deleted_at = False
     pass
-
-
-admin.site.register({model_name}, {model_name}Admin)
 
 """
 

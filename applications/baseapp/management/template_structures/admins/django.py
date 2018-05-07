@@ -8,11 +8,9 @@ __all__ = [
 ]
 
 
+@admin.register({model_name})
 class {model_name}Admin(admin.ModelAdmin):
     pass
-
-
-admin.site.register({model_name}, {model_name}Admin)
 
 """
 
