@@ -1,5 +1,5 @@
 ![Django](https://img.shields.io/badge/django-2.0.5-green.svg)
-![Version](https://img.shields.io/badge/version-0.2.1-yellow.svg)
+![Version](https://img.shields.io/badge/version-0.2.2-yellow.svg)
 
 # Django Project Starter Template
 
@@ -1508,6 +1508,10 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2018-05-08**
+
+- Fix: `application/__init__.py`
 
 **2018-05-07**
 

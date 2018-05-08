@@ -9,8 +9,11 @@ from django.core.management.base import (
     BaseCommand,
     CommandError,
 )
+from django.utils.text import capfirst
+
 
 from baseapp.management.template_structures import application as application_templates
+
 
 TEMPLATE_MODELS_INIT = """# from .MODEL_FILE import *
 
@@ -18,6 +21,9 @@ TEMPLATE_MODELS_INIT = """# from .MODEL_FILE import *
 
 TEMPLATE_ADMIN_INIT = """# from .ADMIN_FILE import *
 
+"""
+
+TEMPLATE_APP_INIT = """default_app_config = '{app_name}.apps.{app_name_capfirst}Config'
 """
 
 APP_DIR_STRUCTURE = {
@@ -34,6 +40,7 @@ APP_DIR_STRUCTURE = {
         dict(name='index.html', render=application_templates.TEMPLATE_HTML),
     ],
     'files': [
+        dict(name='__init__.py', render=TEMPLATE_APP_INIT),
         dict(name='apps.py', render=application_templates.TEMPLATE_APPS),
         dict(name='urls.py', render=application_templates.TEMPLATE_URLS),
         dict(name='views.py', render=application_templates.TEMPLATE_VIEWS),
@@ -91,6 +98,7 @@ class Command(BaseCommand):
         render_params = dict(
             app_name_title=app_name.title(),
             app_name=app_name,
+            app_name_capfirst=capfirst(app_name),
         )
 
         self.mkdir(new_application_dir)
