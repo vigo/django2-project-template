@@ -23,7 +23,7 @@ namespace :new do
   task :application, [:name_of_application] => [:check_development_environment] do |t, args|
     abort "Please provide: 'name_of_application'" unless args.name_of_application
     
-    system "python manage.py baseapp_create_app #{args.name_of_application}"
+    system "python manage.py create_app #{args.name_of_application}"
   end
 
   AVAILABLE_MODEL_TYPES = ['django', 'basemodel', 'softdelete']
@@ -34,7 +34,7 @@ namespace :new do
     abort "Please provide: 'name_of_model'" unless args.name_of_model
     abort "Please provide valide model tyoe: #{AVAILABLE_MODEL_TYPES.join(',')}" unless AVAILABLE_MODEL_TYPES.include?(args.type_of_model)
     
-    system "python manage.py baseapp_create_model #{args.name_of_application} #{args.name_of_model} #{args.type_of_model}"
+    system "python manage.py create_model #{args.name_of_application} #{args.name_of_model} #{args.type_of_model}"
   end
 end
 
@@ -99,14 +99,24 @@ namespace :db do
       puts "Please select your migration:"
       system "python manage.py showmigrations #{which_application}"
     else
-      system "python manage.py migrate #{which_application} #{args.name_of_migration}"
+      system "python manage.py migrate #{which_application} #{sprintf("%04d", args.name_of_migration)}"
     end
   end
 end
 
+
 namespace :test do
-  desc "Run test against baseapp"
-  task :baseapp do
-    system "DJANGO_ENV=test python manage.py test baseapp -v 2"
+  desc "Run tests for given application. (default: 'applications' tests everything...)"
+  task :run, [:name_of_application, :verbose] do |t, args|
+    args.with_defaults(:name_of_application => "applications")
+    args.with_defaults(:verbose => 1)
+    puts "Running tests for: #{args.name_of_application}"
+    system "DJANGO_ENV=test coverage run --source='.' manage.py test #{args.name_of_application} -v #{args.verbose}"
+  end
+
+  desc "Show test coverage (default: '--show-missing --ignore-errors --skip-covered')"
+  task :coverage, [:cli_args] do |t, args|
+    args.with_defaults(:cli_args => "--show-missing --ignore-errors --skip-covered")
+    system "coverage report #{args.cli_args}"
   end
 end

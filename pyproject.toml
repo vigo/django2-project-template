@@ -1,0 +1,17 @@
+[tool.black]
+line-length = 60
+py36 = true
+skip-string-normalization = true
+quiet = true
+exclude='''
+/(
+    \.git
+  | \.hg
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''

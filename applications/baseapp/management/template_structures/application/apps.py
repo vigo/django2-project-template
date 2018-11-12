@@ -1,5 +1,5 @@
-TEMPLATE_APPS = """from django.utils.translation import ugettext_lazy as _
-from django.apps import AppConfig
+TEMPLATE_APPS = """from django.apps import AppConfig
+from django.utils.translation import ugettext_lazy as _
 
 class {app_name_title}Config(AppConfig):
     name = '{app_name}'
@@ -9,6 +9,4 @@ class {app_name_title}Config(AppConfig):
 """
 
 
-__all__ = [
-    'TEMPLATE_APPS',
-]
+__all__ = ['TEMPLATE_APPS']

@@ -1,1 +1,1 @@
-from .locale import *
+from .locale import *  # noqa

@@ -1,17 +1,18 @@
-from django.utils.translation import ugettext_lazy as _
-from django.db import models
+import logging
+
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
-    PermissionsMixin
+    PermissionsMixin,
 )
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from baseapp.utils import save_file as custom_save_file
 
+__all__ = ['User']
 
-__all__ = [
-    'User',
-]
+logger = logging.getLogger('main')
 
 
 class UserManager(BaseUserManager):
@@ -21,9 +22,18 @@ class UserManager(BaseUserManager):
 
     use_in_migrations = True
 
-    def create_user(self, email, first_name, last_name, middle_name=None, password=None):
+    def create_user(
+        self,
+        email,
+        first_name,
+        last_name,
+        middle_name=None,
+        password=None,
+    ):
         if not email:
-            raise ValueError(_('Users must have an email address'))
+            raise ValueError(
+                _('Users must have an email address')
+            )
 
         user_create_fields = {
             'email': email,
@@ -37,39 +47,57 @@ class UserManager(BaseUserManager):
         user = self.model(**user_create_fields)
         user.set_password(password)
         user.save(using=self._db)
+        logger.info(
+            f'{user.get_full_name()} created successfully. PK: {user.pk}'
+        )
         return user
 
-    def create_superuser(self, email, first_name, last_name, middle_name=None, password=None):
-        user = self.create_user(email, first_name, last_name, middle_name, password)
+    def create_superuser(
+        self,
+        email,
+        first_name,
+        last_name,
+        middle_name=None,
+        password=None,
+    ):
+        user = self.create_user(
+            email,
+            first_name,
+            last_name,
+            middle_name,
+            password,
+        )
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
+        logger.info(
+            f'{user.get_full_name()} is set to superuser. PK: {user.pk}'
+        )
         return user
 
 
 def save_user_avatar(instance, filename):
-    return custom_save_file(instance, filename, upload_to='avatar/')
+    return custom_save_file(
+        instance, filename, upload_to='avatar/'
+    )
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created At'),
+        auto_now_add=True, verbose_name=_('Created At')
     )
     updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated At'),
+        auto_now=True, verbose_name=_('Updated At')
     )
     email = models.EmailField(
-        unique=True,
-        verbose_name=_('email address'),
+        unique=True, verbose_name=_('email address')
     )
     first_name = models.CharField(
-        max_length=255,
-        verbose_name=_('first name'),
+        max_length=255, verbose_name=_('first name')
     )
     middle_name = models.CharField(
         max_length=255,
@@ -78,8 +106,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name=_('middle name'),
     )
     last_name = models.CharField(
-        max_length=255,
-        verbose_name=_('last name'),
+        max_length=255, verbose_name=_('last name')
     )
     avatar = models.FileField(
         upload_to=save_user_avatar,
@@ -88,12 +115,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         blank=True,
     )
     is_active = models.BooleanField(
-        default=True,
-        verbose_name=_('active'),
+        default=True, verbose_name=_('active')
     )
     is_staff = models.BooleanField(
-        default=False,
-        verbose_name=_('staff status'),
+        default=False, verbose_name=_('staff status')
     )
 
     objects = UserManager()
@@ -116,7 +141,12 @@ class User(AbstractBaseUser, PermissionsMixin):
             'last_name': self.last_name,
         }
         if self.middle_name:
-            params['middle_name'] = ' {middle_name} '.format(
-                middle_name=self.middle_name)
-        full_name = '{first_name}{middle_name}{last_name}'.format(**params)
+            params[
+                'middle_name'
+            ] = ' {middle_name} '.format(
+                middle_name=self.middle_name
+            )
+        full_name = '{first_name}{middle_name}{last_name}'.format(
+            **params
+        )
         return full_name.strip()

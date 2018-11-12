@@ -1,8 +1,12 @@
-import re
 import logging
+import re
 
-from django.conf import settings
 from django.core.management.color import color_style
+
+__all__ = [
+    'CustomWerkzeugLogFormatter',
+    'CustomSqlLogFormatter',
+]
 
 ansi_escape = re.compile(r'\x1b[^m]*m')
 
@@ -13,13 +17,13 @@ class CustomWerkzeugLogFormatter(logging.Formatter):
         super().__init__(*args, **kwargs)
 
     def status_code(self, message):
-        match = re.search(' (\d+) -$', message)
+        match = re.search(r' (\d+) -$', message)
         if match:
             return int(match.groups()[0])
         else:
             return None
 
-    def format(self, record):
+    def format(self, record):  # noqa: A003
         msg = ansi_escape.sub('', record.msg)
         status_code = self.status_code(msg)
 
@@ -41,7 +45,9 @@ class CustomWerkzeugLogFormatter(logging.Formatter):
 
         levelname = record.levelname.lower()
         levelstyle = self.style.SUCCESS
-        record.levelname = '{:.<14}'.format(record.levelname)
+        record.levelname = '{0:.<14}'.format(
+            record.levelname
+        )
 
         if levelname == 'warning':
             levelstyle = self.style.WARNING
@@ -62,17 +68,10 @@ class CustomSqlLogFormatter(logging.Formatter):
         self.style = color_style()
         super().__init__(*args, **kwargs)
 
-    def format(self, record):
-        record.levelname = '{:.<14}'.format('SQL')
-        record.levelname = self.style.HTTP_INFO(record.levelname)
+    def format(self, record):  # noqa: A003
+        record.levelname = '{0:.<14}'.format('SQL')
+        record.levelname = self.style.HTTP_INFO(
+            record.levelname
+        )
         record.sql = self.style.SQL_KEYWORD(record.sql)
         return super().format(record)
-
-
-def werkzueg_filter_extenstions_callback(record):
-    if getattr(settings, 'CUSTOM_LOGGER_OPTIONS', False):
-        hide_these_extensions = settings.CUSTOM_LOGGER_OPTIONS.get('hide_these_extensions', False)
-        if hide_these_extensions:
-            return not any(['.{}'.format(ext) in record.msg for ext in hide_these_extensions])
-    else:
-        return True

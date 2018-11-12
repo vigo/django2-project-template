@@ -1,10 +1,7 @@
-from django.utils.cache import patch_vary_headers
 from django.utils import translation
+from django.utils.cache import patch_vary_headers
 
-
-__all__ = [
-    'CustomLocaleMiddleware',
-]
+__all__ = ['CustomLocaleMiddleware']
 
 
 class CustomLocaleMiddleware(object):
@@ -37,6 +34,8 @@ class CustomLocaleMiddleware(object):
         response = self.get_response(request)
 
         patch_vary_headers(response, ('Accept-Language',))
-        response['Content-Language'] = translation.get_language()
+        response[
+            'Content-Language'
+        ] = translation.get_language()
         translation.deactivate()
         return response

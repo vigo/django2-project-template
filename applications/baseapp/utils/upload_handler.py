@@ -1,16 +1,16 @@
-import os
 import datetime
+import os
 
 from django.utils.text import slugify
+
 from baseapp.utils import urlify
 
-
-__all__ = [
-    'save_file',
-]
+__all__ = ['save_file']
 
 
-def save_file(instance, filename, upload_to='upload/%Y/%m/%d/'):
+def save_file(
+    instance, filename, upload_to='upload/%Y/%m/%d/'
+):
     """
 
     By default, this saves to : `MEDIA_ROOT/upload/2017/09/06/`
@@ -35,7 +35,9 @@ def save_file(instance, filename, upload_to='upload/%Y/%m/%d/'):
 
     """
 
-    file_basename, file_extension = os.path.splitext(filename)
+    file_basename, file_extension = os.path.splitext(
+        filename
+    )
     file_savename = '{safe_basename}{extension}'.format(
         safe_basename=slugify(urlify(file_basename)),
         extension=file_extension.lower(),

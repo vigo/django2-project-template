@@ -1,0 +1,10 @@
+#baseapp-debug {
+    background: #ddd;
+    border-bottom: 2px solid #ccc;
+}
+
+#baseapp-debug pre {
+    padding: 1rem;
+    line-height: 1.2rem;
+    overflow-wrap: break-word;
+}

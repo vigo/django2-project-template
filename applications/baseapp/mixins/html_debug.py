@@ -1,10 +1,7 @@
 from django.conf import settings
 from django.utils import translation
 
-
-___all___ = [
-    'HtmlDebugMixin',
-]
+___all___ = ['HtmlDebugMixin']
 
 
 class HtmlDebugMixin:

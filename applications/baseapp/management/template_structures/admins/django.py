@@ -15,6 +15,4 @@ class {model_name}Admin(admin.ModelAdmin):
 """
 
 
-__all__ = [
-    'TEMPLATE_ADMIN_DJANGO',
-]
+__all__ = ['TEMPLATE_ADMIN_DJANGO']

@@ -1,57 +1,46 @@
 import logging
 
+from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from django.db import models
+
+__all__ = ['BaseModel', 'BaseModelWithSoftDelete']
 
 
-__all__ = [
-    'BaseModel',
-    'BaseModelWithSoftDelete',
-]
+logger = logging.getLogger('main')
 
-
-logger = logging.getLogger('user_logger')
 
 class BaseModelQuerySet(models.QuerySet):
     """
-    Common QuerySet for BaseModel and BaseModelWithSoftDelete. 
+    Common QuerySet for BaseModel and BaseModelWithSoftDelete.
     Both querysets have:
-    
+
     - `.actives()`: Returns `status` = `STATUS_ONLINE`
     - `.deleted()`: Returns `status` = `STATUS_DELETED`
     - `.offlines()`: Returns `status` = `STATUS_OFFLINE`
     - `.drafts()`: Returns `status` = `STATUS_DRAFT`
-    
+
     methods.
-    
+
     """
-    
+
     def actives(self):
-        return self.filter(
-            status=BaseModel.STATUS_ONLINE,
-        )
+        return self.filter(status=BaseModel.STATUS_ONLINE)
 
     def deleted(self):
-        return self.filter(
-            status=BaseModel.STATUS_DELETED,
-        )
+        return self.filter(status=BaseModel.STATUS_DELETED)
 
     def offlines(self):
-        return self.filter(
-            status=BaseModel.STATUS_OFFLINE,
-        )
+        return self.filter(status=BaseModel.STATUS_OFFLINE)
 
     def drafts(self):
-        return self.filter(
-            status=BaseModel.STATUS_DRAFT,
-        )
+        return self.filter(status=BaseModel.STATUS_DRAFT)
 
 
 class BaseModelWithSoftDeleteQuerySet(BaseModelQuerySet):
     """
     Available methods are:
-    
+
     - `.all()`: Mimics deleted records. Return only if the `deleted_at` value is NULL!
     - `.deleted()`: Returns soft deleted objects.
     - `.actives()`: Returns `status` = `STATUS_ONLINE`
@@ -61,29 +50,46 @@ class BaseModelWithSoftDeleteQuerySet(BaseModelQuerySet):
     - `.undelete()`: Recovers (sets `status` to `STATUS_ONLINE`) give objects.
 
     """
-    
+
     def _delete_or_undelete(self, undelete=False):
         processed_instances = {}
         call_method = 'undelete' if undelete else 'delete'
 
         for model_instance in self:
-            _count, model_information = getattr(model_instance, call_method)()
-            for app_label, row_amount in model_information.items():
+            _count, model_information = getattr(
+                model_instance, call_method
+            )()
+            for (
+                app_label,
+                row_amount,
+            ) in model_information.items():
                 processed_instances.setdefault(app_label, 0)
-                processed_instances[app_label] = processed_instances[app_label] + row_amount
-        return (sum(processed_instances.values()), processed_instances)
+                processed_instances[app_label] = (
+                    processed_instances[app_label]
+                    + row_amount
+                )
+        return (
+            sum(processed_instances.values()),
+            processed_instances,
+        )
 
-    def all(self):
+    def all(self):  # noqa: A003
         return self.filter(deleted_at__isnull=True)
 
     def actives(self):
-        return self.all().filter(status=BaseModel.STATUS_ONLINE)
+        return self.all().filter(
+            status=BaseModel.STATUS_ONLINE
+        )
 
     def offlines(self):
-        return self.all().filter(status=BaseModel.STATUS_OFFLINE)
+        return self.all().filter(
+            status=BaseModel.STATUS_OFFLINE
+        )
 
     def drafts(self):
-        return self.all().filter(status=BaseModel.STATUS_DRAFT)
+        return self.all().filter(
+            status=BaseModel.STATUS_DRAFT
+        )
 
     def delete(self):
         return self._delete_or_undelete()
@@ -97,11 +103,13 @@ class BaseModelWithSoftDeleteManager(models.Manager):
     This is a manager for `BaseModelWithSoftDelete` instances.
     Do not forget! `.all()` will never return soft-deleted objects!
     """
-    
-    def get_queryset(self):
-        return BaseModelWithSoftDeleteQuerySet(self.model, using=self._db)
 
-    def all(self):
+    def get_queryset(self):
+        return BaseModelWithSoftDeleteQuerySet(
+            self.model, using=self._db
+        )
+
+    def all(self):  # noqa: A003
         return self.get_queryset().all()
 
     def deleted(self):
@@ -141,12 +149,10 @@ class BaseModel(models.Model):
     )
 
     created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created At'),
+        auto_now_add=True, verbose_name=_('Created At')
     )
     updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated At'),
+        auto_now=True, verbose_name=_('Updated At')
     )
     status = models.IntegerField(
         choices=STATUS_CHOICES,
@@ -162,10 +168,9 @@ class BaseModel(models.Model):
 
 
 class BaseModelWithSoftDelete(BaseModel):
+
     deleted_at = models.DateTimeField(
-        null=True,
-        blank=True,
-        verbose_name=_('Deleted At'),
+        null=True, blank=True, verbose_name=_('Deleted At')
     )
 
     objects = models.Manager()
@@ -183,16 +188,20 @@ class BaseModelWithSoftDelete(BaseModel):
     def _delete_or_undelete(self, undelete=False):
         processed_instances = {}
         call_method = 'undelete' if undelete else 'delete'
-        
+
         log_params = {
             'instance': self,
             'label': self._meta.label,
             'pk': self.pk,
         }
-        log_message = '{action} on: "{instance} - pk: {pk}" [{label}]'
+        log_message = (
+            '{action} on: "{instance} - pk: {pk}" [{label}]'
+        )
 
         if call_method == 'delete':
-            models.signals.pre_delete.send(sender=self.__class__, instance=self,)
+            models.signals.pre_delete.send(
+                sender=self.__class__, instance=self
+            )
             status_value = self.STATUS_DELETED
             deleted_at_value = timezone.now()
             log_params.update(action='Soft-delete')
@@ -208,18 +217,42 @@ class BaseModelWithSoftDelete(BaseModel):
         self.save()
 
         if call_method == 'delete':
-            models.signals.post_delete.send(sender=self.__class__, instance=self,)
+            models.signals.post_delete.send(
+                sender=self.__class__, instance=self
+            )
 
         processed_instances.update({self._meta.label: 1})
 
         for related_object in self._meta.related_objects:
-            if hasattr(related_object, 'on_delete') and getattr(related_object, 'on_delete') == models.CASCADE:
-                accessor_name = related_object.get_accessor_name()
-                related_model_instances = getattr(self, accessor_name)
+            if (
+                hasattr(related_object, 'on_delete')
+                and getattr(related_object, 'on_delete')
+                == models.CASCADE
+            ):
+                accessor_name = (
+                    related_object.get_accessor_name()
+                )
+                related_model_instances = getattr(
+                    self, accessor_name
+                )
                 related_model_instance_count = 0
-                for related_model_instance in related_model_instances.all():
-                    getattr(related_model_instance, call_method)()
-                    processed_instances.setdefault(related_model_instance._meta.label, related_model_instance_count)
+                for (
+                    related_model_instance
+                ) in related_model_instances.all():
+                    getattr(
+                        related_model_instance, call_method
+                    )()
+                    processed_instances.setdefault(
+                        related_model_instance._meta.label,
+                        related_model_instance_count,
+                    )
                     related_model_instance_count += 1
-                    processed_instances.update({related_model_instance._meta.label: related_model_instance_count})
-        return (sum(processed_instances.values()), processed_instances)
+                    processed_instances.update(
+                        {
+                            related_model_instance._meta.label: related_model_instance_count
+                        }
+                    )
+        return (
+            sum(processed_instances.values()),
+            processed_instances,
+        )

@@ -8,6 +8,7 @@ set -o pipefail
 
 AVAILABLE_OPTIONS=(
     "Django 2.0.5"
+    "Django 2.1.3"
     "Cancel and quit"
 )
 
@@ -18,6 +19,10 @@ do
     case $i in
         "Django 2.0.5")
             PACKAGE="django-2.0.5"
+            break
+            ;;
+        "Django 2.1.3")
+            PACKAGE="django-2.1.3"
             break
             ;;
         "Cancel and quit")
@@ -42,7 +47,12 @@ unzip template.zip &&
 mv "django2-project-template-${PACKAGE}" "${PROJECT_NAME}" &&
 rm template.zip &&
 cd "${PROJECT_NAME}" &&
+rm -f LICENSE.txt
+rm -f README.md
+rm -f README.md
+rm -f install.sh
 cp config/settings/development.example.py config/settings/development.py &&
+cp config/settings/test.example.py config/settings/test.py &&
 echo
 echo
 echo "Installation completed..."
@@ -50,4 +60,5 @@ echo "Now, create your virtual environment and run:"
 echo
 echo "cd ${PROJECT_NAME}/"
 echo "pip install -r requirements/development.pip"
+echo
 echo
