@@ -3,7 +3,7 @@ __all__ = [
 ]
 
 
-def numerify(input, default=-1):
+def numerify(input_text, default=-1):
     """ (number or string, default=-1) -> number
 
     This is good for query string operations.
@@ -20,8 +20,8 @@ def numerify(input, default=-1):
     44
     """
 
-    if str(input).isnumeric():
-        return int(input)
+    if str(input_text).isnumeric():
+        return int(input_text)
     return default
 
 

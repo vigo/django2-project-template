@@ -1,17 +1,20 @@
-from django.utils.translation import ugettext_lazy as _
-from django.db import models
+import logging
+
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
-    PermissionsMixin
+    PermissionsMixin,
 )
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from baseapp.utils import save_file as custom_save_file
-
 
 __all__ = [
     'User',
 ]
+
+logger = logging.getLogger('main')
 
 
 class UserManager(BaseUserManager):
@@ -37,6 +40,7 @@ class UserManager(BaseUserManager):
         user = self.model(**user_create_fields)
         user.set_password(password)
         user.save(using=self._db)
+        logger.info(f'{user.get_full_name} created successfully. PK: {user.pk}')
         return user
 
     def create_superuser(self, email, first_name, last_name, middle_name=None, password=None):
@@ -44,6 +48,7 @@ class UserManager(BaseUserManager):
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
+        logger.info(f'{user.get_full_name} is set to superuser. PK: {user.pk}')
         return user
 
 
@@ -52,6 +57,7 @@ def save_user_avatar(instance, filename):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 

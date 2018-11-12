@@ -1,9 +1,8 @@
 import logging
 
+from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from django.db import models
-
 
 __all__ = [
     'BaseModel',
@@ -11,22 +10,23 @@ __all__ = [
 ]
 
 
-logger = logging.getLogger('user_logger')
+logger = logging.getLogger('main')
+
 
 class BaseModelQuerySet(models.QuerySet):
     """
-    Common QuerySet for BaseModel and BaseModelWithSoftDelete. 
+    Common QuerySet for BaseModel and BaseModelWithSoftDelete.
     Both querysets have:
-    
+
     - `.actives()`: Returns `status` = `STATUS_ONLINE`
     - `.deleted()`: Returns `status` = `STATUS_DELETED`
     - `.offlines()`: Returns `status` = `STATUS_OFFLINE`
     - `.drafts()`: Returns `status` = `STATUS_DRAFT`
-    
+
     methods.
-    
+
     """
-    
+
     def actives(self):
         return self.filter(
             status=BaseModel.STATUS_ONLINE,
@@ -51,7 +51,7 @@ class BaseModelQuerySet(models.QuerySet):
 class BaseModelWithSoftDeleteQuerySet(BaseModelQuerySet):
     """
     Available methods are:
-    
+
     - `.all()`: Mimics deleted records. Return only if the `deleted_at` value is NULL!
     - `.deleted()`: Returns soft deleted objects.
     - `.actives()`: Returns `status` = `STATUS_ONLINE`
@@ -61,7 +61,7 @@ class BaseModelWithSoftDeleteQuerySet(BaseModelQuerySet):
     - `.undelete()`: Recovers (sets `status` to `STATUS_ONLINE`) give objects.
 
     """
-    
+
     def _delete_or_undelete(self, undelete=False):
         processed_instances = {}
         call_method = 'undelete' if undelete else 'delete'
@@ -73,7 +73,7 @@ class BaseModelWithSoftDeleteQuerySet(BaseModelQuerySet):
                 processed_instances[app_label] = processed_instances[app_label] + row_amount
         return (sum(processed_instances.values()), processed_instances)
 
-    def all(self):
+    def all(self):  # noqa: A003
         return self.filter(deleted_at__isnull=True)
 
     def actives(self):
@@ -97,11 +97,12 @@ class BaseModelWithSoftDeleteManager(models.Manager):
     This is a manager for `BaseModelWithSoftDelete` instances.
     Do not forget! `.all()` will never return soft-deleted objects!
     """
-    
+
     def get_queryset(self):
         return BaseModelWithSoftDeleteQuerySet(self.model, using=self._db)
 
-    def all(self):
+    def all(self):  # noqa: A003
+
         return self.get_queryset().all()
 
     def deleted(self):
@@ -162,6 +163,7 @@ class BaseModel(models.Model):
 
 
 class BaseModelWithSoftDelete(BaseModel):
+
     deleted_at = models.DateTimeField(
         null=True,
         blank=True,
@@ -183,7 +185,7 @@ class BaseModelWithSoftDelete(BaseModel):
     def _delete_or_undelete(self, undelete=False):
         processed_instances = {}
         call_method = 'undelete' if undelete else 'delete'
-        
+
         log_params = {
             'instance': self,
             'label': self._meta.label,
@@ -192,7 +194,7 @@ class BaseModelWithSoftDelete(BaseModel):
         log_message = '{action} on: "{instance} - pk: {pk}" [{label}]'
 
         if call_method == 'delete':
-            models.signals.pre_delete.send(sender=self.__class__, instance=self,)
+            models.signals.pre_delete.send(sender=self.__class__, instance=self)
             status_value = self.STATUS_DELETED
             deleted_at_value = timezone.now()
             log_params.update(action='Soft-delete')
@@ -208,7 +210,7 @@ class BaseModelWithSoftDelete(BaseModel):
         self.save()
 
         if call_method == 'delete':
-            models.signals.post_delete.send(sender=self.__class__, instance=self,)
+            models.signals.post_delete.send(sender=self.__class__, instance=self)
 
         processed_instances.update({self._meta.label: 1})
 

@@ -38,7 +38,7 @@ STATICFILES_DIRS = (
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 INSTALLED_APPS.insert(INSTALLED_APPS.index('django.contrib.staticfiles'),
-    'whitenoise.runserver_nostatic')
+                      'whitenoise.runserver_nostatic')
 
 MIDDLEWARE.insert(MIDDLEWARE.index('django.middleware.security.SecurityMiddleware') + 1,
-    'whitenoise.middleware.WhiteNoiseMiddleware')
+                  'whitenoise.middleware.WhiteNoiseMiddleware')

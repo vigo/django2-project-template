@@ -1,14 +1,17 @@
 from django import forms
-from django.db import models
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.admin import (
+    UserAdmin as BaseUserAdmin,
+)
+from django.contrib.auth.forms import (
+    ReadOnlyPasswordHashField,
+)
+from django.db import models
 from django.utils.html import format_html
+from django.utils.translation import ugettext_lazy as _
 
 from ..models import User
-from baseapp.widgets import AdminImageFileWidget
-
+from ..widgets import AdminImageFileWidget
 
 __all__ = [
     'UserAdmin',
@@ -22,7 +25,7 @@ class UserChangeForm(forms.ModelForm):
         help_text=_(
             'Raw passwords are not stored, so there is no way to see this '
             'user\'s password, but you can change the password using '
-            '<a href="../password/">this form</a>.'
+            '<a href="../password/">this form</a>.',
         ),
     )
 
@@ -119,7 +122,7 @@ class UserAdmin(BaseUserAdmin):
                 'last_name',
                 'password1',
                 'password2',
-            )
+            ),
         }),
     )
     formfield_overrides = {
@@ -128,7 +131,7 @@ class UserAdmin(BaseUserAdmin):
 
     def user_profile_image(self, obj):
         if obj.avatar:
-            return format_html('<img style="max-height: 200px;" src="{}" alt="{}">',
+            return format_html('<img style="max-height: 200px;" src="{0}" alt="{1}">',
                                obj.avatar.url,
                                obj.get_full_name(),
                                )

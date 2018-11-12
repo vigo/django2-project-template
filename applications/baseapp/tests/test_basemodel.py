@@ -5,7 +5,7 @@ from .base_models import BasicPost
 
 class BaseModelTestCase(TestCase):
     @classmethod
-    def setUpTestData(cls):
+    def setUpTestData(cls):  # noqa: N802
         cls.post = BasicPost.objects.create(title='Test Post 1')
         cls.post_status_deleted = BasicPost.objects.create(title='Test Post 2', status=BasicPost.STATUS_DELETED)
         cls.post_status_offline = BasicPost.objects.create(title='Test Post 3', status=BasicPost.STATUS_OFFLINE)
@@ -20,7 +20,7 @@ class BaseModelTestCase(TestCase):
             '<BasicPost: Test Post 1>',
             '<BasicPost: Test Post 2>',
             '<BasicPost: Test Post 3>',
-            '<BasicPost: Test Post 4>'
+            '<BasicPost: Test Post 4>',
         ])
         self.assertQuerysetEqual(BasicPost.objects_bm.actives().order_by('id'), ['<BasicPost: Test Post 1>'])
         self.assertQuerysetEqual(BasicPost.objects_bm.offlines(), ['<BasicPost: Test Post 3>'])

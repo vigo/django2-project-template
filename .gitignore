@@ -5,5 +5,9 @@ __pycache__/
 /venv/
 .env
 config/settings/development.py
+config/settings/test.py
 /media/
+.coverage
+htmlcov/
+.tm_properties
 !.gitkeep

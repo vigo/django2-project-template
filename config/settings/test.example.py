@@ -1,12 +1,12 @@
-from .base import *
+from .base import *            # isort:skip  # noqa
 
 SECRET_KEY = 'fake-key'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': ":memory:",
-    }
+        'NAME': ':memory:',
+    },
 }
 
 PASSWORD_HASHERS = (

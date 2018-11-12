@@ -1,14 +1,11 @@
 from django.test import TestCase
 
-from .base_models import (
-    Category,
-    Post,
-)
+from .base_models import Category, Post
 
 
 class BaseModelWithSoftDeleteTestCase(TestCase):
     @classmethod
-    def setUpTestData(cls):
+    def setUpTestData(cls):  # noqa: N802
         category = Category.objects.create(title='Python')
         cls.category = category
         cls.posts = [
@@ -25,7 +22,7 @@ class BaseModelWithSoftDeleteTestCase(TestCase):
     def test_basemodelwithsoftdelete_queryset(self):
         self.assertQuerysetEqual(self.category.posts.all().order_by('id'), [
             '<Post: Python post 1>',
-            '<Post: Python post 2>'
+            '<Post: Python post 2>',
         ])
         self.assertQuerysetEqual(Category.objects_bm.actives(), ['<Category: Python>'])
         self.assertQuerysetEqual(Category.objects_bm.offlines(), [])
@@ -39,5 +36,5 @@ class BaseModelWithSoftDeleteTestCase(TestCase):
         self.assertQuerysetEqual(Category.objects.all(), ['<Category: Python>'])
         self.assertQuerysetEqual(Post.objects_bm.deleted().order_by('id'), [
             '<Post: Python post 1>',
-            '<Post: Python post 2>'
+            '<Post: Python post 2>',
         ])

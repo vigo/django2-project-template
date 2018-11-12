@@ -1,5 +1,5 @@
-TEMPLATE_MODEL_SOFTDELETEMODEL = """from django.utils.translation import ugettext_lazy as _
-from django.db import models
+TEMPLATE_MODEL_SOFTDELETEMODEL = """from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from baseapp.models import BaseModelWithSoftDelete
 
@@ -19,7 +19,7 @@ class {model_name}(BaseModelWithSoftDelete):
         app_label = '{app_name}'
         verbose_name = _('{model_name}')
         verbose_name_plural = _('{model_name}')
-    
+
     def __str__(self):
         return self.title
 

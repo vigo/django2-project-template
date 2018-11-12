@@ -2,6 +2,7 @@ from django.db import models
 
 from ..models import BaseModel, BaseModelWithSoftDelete
 
+
 class BasicPost(BaseModel):
     title = models.CharField(
         max_length=255,
@@ -41,5 +42,3 @@ class Post(BaseModelWithSoftDelete):
 
     def __str__(self):
         return self.title
-
-

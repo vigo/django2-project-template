@@ -1,11 +1,8 @@
-from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from django.urls import (
-    path,
-    include,
-)
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.urls import include, path
+from django.utils.translation import ugettext_lazy as _
 
 admin.site.index_title = _('Your admin index title')
 admin.site.site_title = _('Your site title')
@@ -24,5 +21,4 @@ if settings.DEBUG:
 
 # add your newly created app's urls here!
 # urlpatterns += [
-#
 # ]

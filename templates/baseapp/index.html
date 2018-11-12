@@ -1,30 +1,28 @@
-{% extends "baseapp/base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 
-{% block page_body %}
-<div class="container">
-    <div class="row">
-        <div class="twelve columns">
-            <h1>{% trans "Welcome to Django" %}</h1>
-            <h2>{% trans "It worked!" %}</h2>
-            <h3>{% trans "Template variables" %}</h3>
-            
-            <table class="u-full-width">
-                <tr>
-                    <td><code>{% templatetag openvariable %} IS_DEBUG {% templatetag closevariable %}</code></td>
-                    <td><code>{{ IS_DEBUG }}</code></td>
-                </tr>
-                <tr>
-                    <td><code>{% templatetag openvariable %} LANG {% templatetag closevariable %}</code></td>
-                    <td><code>{{ LANG }}</code></td>
-                </tr>
-            </table>
+{% block title %}{% trans "Example page" %}{% endblock %}
 
-            {% hdbg %}
-        </div>
+{% block body %}
+<section class="section">
+    <div class="container">
+        <h1 class="title">{% trans "Welcome to Django" %}</h1>
+        <p class="subtitle">{% trans "It worked!" %}</p>
+        
+        <table class="table is-bordered is-fullwidth">
+            <tr>
+                <th>{% trans "Variable" %}</th>
+                <th>{% trans "Value" %}</th>
+            </tr>
+            <tr>
+                <td><code>{% templatetag openvariable %} IS_DEBUG {% templatetag closevariable %}</code></td>
+                <td><code>{{ IS_DEBUG }}</code></td>
+            </tr>
+            <tr>
+                <td><code>{% templatetag openvariable %} LANG {% templatetag closevariable %}</code></td>
+                <td><code>{{ LANG }}</code></td>
+            </tr>
+        </table>
     </div>
-    
-</div>
+</section>
 {% endblock %}
-
-

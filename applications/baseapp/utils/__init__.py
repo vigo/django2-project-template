@@ -1,4 +1,4 @@
-from .console import *
-from .numerify import *
-from .urlify import *
-from .upload_handler import *
+from .console import *              # isort:skip # noqa
+from .numerify import *             # isort:skip # noqa
+from .urlify import *               # isort:skip # noqa
+from .upload_handler import *       # isort:skip # noqa

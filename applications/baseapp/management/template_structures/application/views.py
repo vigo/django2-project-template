@@ -3,10 +3,11 @@ TEMPLATE_VIEWS = """from django.views.generic.base import TemplateView
 from baseapp.mixins import HtmlDebugMixin
 from baseapp.utils import console
 
+__all__ = [
+    '{app_name_title}View',
+]
 
-console.configure(
-    source='{app_name}/views.py',
-)
+console = console(source=__name__)
 
 
 class {app_name_title}View(HtmlDebugMixin, TemplateView):

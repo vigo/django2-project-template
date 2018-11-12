@@ -1,5 +1,6 @@
-![Django](https://img.shields.io/badge/django-2.0.5-green.svg)
-![Version](https://img.shields.io/badge/version-0.2.2-yellow.svg)
+![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
+![Django](https://img.shields.io/badge/django-2.1.3-green.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-yellow.svg)
 
 # Django Project Starter Template
 
@@ -8,7 +9,7 @@ Django releases as much as I can!
 
 ## Requirements
 
-- Latest Python 3.6+ runtime environment. Current version: `3.6.4`
+- Latest `Python 3.7.0` runtime environment.
 - `pip`, `virtualenv`, `virtualenvwrapper`
 - If you like to run Rake Tasks, you need `Ruby` too but not required: `2.5.0`
 
@@ -38,13 +39,15 @@ export DJANGO_SECRET="YOUR-SECRET-HERE" # will fix it in a second.
 then;
 
 ```bash
-# for django 2.0.5
-$ curl -L https://github.com/vigo/django2-project-template/archive/django-2.0.5.zip > template.zip
+# for django 2.1.3
+$ curl -L https://github.com/vigo/django2-project-template/archive/django-2.1.3.zip > template.zip
 $ unzip template.zip
-$ mv django2-project-template-django-2.0.5 my_project && rm template.zip
+$ mv django2-project-template-django-2.1.3 my_project && rm template.zip
 $ cd my_project/
 $ cp config/settings/development.example.py config/settings/development.py
+$ cp config/settings/test.example.py config/settings/test.py
 # development.py is not under revison control
+# test.py is not under revison control
 $ pip install -r requirements/development.pip
 $ git init # now you can start your own repo!
 ```
@@ -182,7 +185,7 @@ $ python manage.py runserver
 $ rake
 ```
 
-You’ll see `Hello from Blog` page and If you check `blog/views.py` you’ll see
+You’ll see `Hello from Blog` page and If you check `blog/views/index.py` you’ll see
 and example usage of `HtmlDebugMixin` and `console` util. 
 
 ```python
@@ -191,10 +194,11 @@ from django.views.generic.base import TemplateView
 from baseapp.mixins import HtmlDebugMixin
 from baseapp.utils import console
 
+__all__ = [
+    'BlogView',
+]
 
-console.configure(
-    source='blog/views.py',
-)
+console = console(source=__name__)
 
 
 class BlogView(HtmlDebugMixin, TemplateView):
@@ -217,9 +221,12 @@ Let’s look at our `blog` application structure:
     │   └── __init__.py
     ├── models
     │   └── __init__.py
+    ├── views
+    │   ├── __init__.py
+    │   └── index.py
+    ├── __init__.py
     ├── apps.py
-    ├── urls.py
-    └── views.py
+    └── urls.py
 
 Now lets add `Post` model with **soft-delete** feature!
 
@@ -443,6 +450,7 @@ What I’ve changed ?
 
 - All Django apps live under `applications/` folder.
 - All of the models live under `models/` folder.
+- All of the views live under `views/` folder.
 - All of the admin files live under `admin/` folder.
 - Every app should contain It’s own `urls.py`.
 - All settings related files will live under `config/settings/` folder.
@@ -457,59 +465,35 @@ Here is directory/file structure:
     .
     ├── applications
     │   └── baseapp
-    │       ├── admin
-    │       ├── libs
-    │       ├── management
-    │       ├── middlewares
-    │       ├── migrations
-    │       ├── mixins
-    │       ├── models
-    │       ├── static
-    │       ├── templatetags
-    │       ├── tests
-    │       ├── utils
-    │       ├── widgets
-    │       ├── __init__.py
-    │       ├── apps.py
-    │       ├── context_processors.py
-    │       ├── urls.py
-    │       └── views.py
     ├── config
     │   ├── settings
-    │   │   ├── __init__.py
-    │   │   ├── base.py
-    │   │   ├── development.example.py
-    │   │   ├── development.py
-    │   │   ├── heroku.py
-    │   │   └── test.py
     │   ├── __init__.py
     │   ├── urls.py
     │   └── wsgi.py
     ├── db
-    │   └── development.sqlite3
     ├── locale
     │   └── tr
-    │       └── LC_MESSAGES
-    ├── media
-    │   └── avatar
+    ├── logging_helpers
+    │   ├── __init__.py
+    │   ├── formatters.py
+    │   └── werkzueg_filters.py
     ├── requirements
     │   ├── base.pip
     │   ├── development.pip
     │   └── heroku.pip
     ├── static
+    │   └── css
     ├── templates
-    │   └── admin
-    │       └── base_site.html
-    │   └── baseapp
-    │       ├── base.html
-    │       └── index.html
-    ├── LICENSE.txt
+    │   ├── admin
+    │   ├── baseapp
+    │   └── base.html
     ├── Procfile
-    ├── README.md
     ├── Rakefile
     ├── manage.py
     ├── requirements.txt
-    └── runtime.txt
+    ├── runtime.txt
+    └── setup.cfg
+
 
 ---
 
@@ -533,45 +517,46 @@ need to create a copy of it! (*if you follow along from the beginning, you’ve 
 All the base/common required Python packages/modules are defined under `requirements/base.pip`:
 
 ```python
-Django==2.0.5
-Pillow==5.1.0
+Django==2.1.3
+Pillow==5.3.0
+django-extensions==2.1.3
 ```
 
-### `development.py`
+### `base.py`
 
-Logging is enabled. In `CUSTOM_LOGGER_OPTIONS`, you can specify un-wanted file
-types not to log your dev-console. You can un-comment `django.db.backends` if
-you want to see the SQL queries. Example:
+This is the main settings file. All other settings will extend this one. By
+default, we have [Django Extensions][01] installed as 3^rd party app.
+
+Available installed apps are:
 
 ```python
-LOGGING = {
-    :
-    :
-    'loggers': {
-        :
-        :
-        'django.db.backends': {
-            'handlers': ['console_sql'],
-            'level': 'DEBUG',
-        },
-        
-    }
-}
+# base apps
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'baseapp',                          # our helper app
+]
 ```
 
-By default, this template ships with 2 awesome/handy Django packages:
+Extras are:
 
-- [Django Extensions][01]
-- [Django Debug Toolbar][02]
+```python
+# add your newly created apps here!
+INSTALLED_APPS += [
+    'django_extensions',
+]
+```
 
-We are using `Werkzeug` as Django server and overriding It’s logging formats.
 Django Extension adds great functionalities:
 
 - `admin_generator`
 - `clean_pyc`
 - `clear_cache`
 - `compile_pyc`
-- `create_app`
 - `create_command`
 - `create_jobs`
 - `create_template_tags`
@@ -616,6 +601,35 @@ Django Extension adds great functionalities:
 
 One of my favorite: `python manage.py show_urls` :)
 
+### `development.py`
+
+Logging is enabled only in development mode. Our development server
+uses Werkzeug and we have special filter which is defined in `LOGGING['filters']`.
+With `WERKZUEG_FILTER_EXTENSTIONS` option in `settings` you can skip
+displaying specified extensions from development server logs.
+
+You can un-comment `django.db.backends` if you want to see the SQL queries.
+Example:
+
+```python
+LOGGING = {
+    :
+    :
+    'loggers': {
+        :
+        :
+        'django.db.backends': {
+            'handlers': ['console_sql'],
+            'level': 'DEBUG',
+        },
+        
+    }
+}
+```
+
+By default, this template ships with [Django Debug Toolbar][02] in development
+mode.
+
 `AUTH_PASSWORD_VALIDATORS` are removed for development purposes. You can enter
 simple passwords such as `1234`. `MEDIA_ROOT` is set to basedir’s `media` folder,
 `STATICFILES_DIRS` includes basedir’s `static` folder.
@@ -625,15 +639,25 @@ All the required modules are defined under `requirements/development.pip`:
 ```python
 # requirements/development.pip
 -r base.pip
-ipython==6.3.1
-django-extensions==2.0.7
+ipython==7.1.1
 Werkzeug==0.14.1
-django-debug-toolbar==1.9.1
+django-debug-toolbar==1.10.1
+coverage==4.5.2
 ```
 
-### `test.py`
+### `test.example.py`
 
-Basic settings for running tests.
+Basic settings for running tests. By default it’s configured to work with
+**Sqlite** database in memory mode. For **PostgreSQL** you can change it to:
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'my_test_db',
+    },
+}
+```
 
 ### `heroku.py`
 
@@ -651,10 +675,10 @@ All the required modules are defined under `requirements/heroku.pip`:
 ```python
 # requirements/heroku.pip
 -r base.pip
-gunicorn==19.8.1
-psycopg2==2.7.4
+gunicorn==19.9.0
+psycopg2-binary==2.7.6.1
 dj-database-url==0.5.0
-whitenoise==3.3.1
+whitenoise==4.1
 ```
 
 By default, Heroku requires `requirements.txt`. Therefore we have it too :)
@@ -863,12 +887,15 @@ Werkzeug’s output. Example usage:
 
 ```python
 import logging
-logger = logging.getLogger('user_logger') # config/setting/development.py
+
+logger = logging.getLogger('main')      # config/setting/development.py
 logger.warning('This is Warning')
 ```
 
-`werkzueg_filter_extenstions_callback` is stands for `CUSTOM_LOGGER_OPTIONS`’s
-`hide_these_extensions` settings.
+`werkzueg_filter_extenstions_callback` is stands for extension filtering.
+You can configure it via `WERKZUEG_FILTER_EXTENSTIONS`. Value is a `list` of
+file extensions: `['css', 'js', 'png', 'jpg', 'svg', 'gif', 'woff']` All
+those extensions will not be shown at development server log...
 
 ---
 
@@ -910,99 +937,34 @@ class IndexView(HtmlDebugMixin, TemplateView):
 
 ```
 
-Just add `{% hdbg %}` in to your `templates/index.html`:
+`{% hdbg %}` tag added by default in to your `templates/base.html`:
 
 ```django
-<!-- example: index.html -->
-<h1>Hello World</h1>
-{% hdbg %}
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Baseapp{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <link rel="stylesheet" href="{% static 'css/baseapp.css' %}">
+    <link rel="stylesheet" href="{% static 'css/application.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% hdbg %}
+    {% block body %}{% endblock %}
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
 ```
 
-Outputs to Html:
-
-    ('This', 'is', 'an', 'example', 'of')
-    ('self.hdbg', 'usage')
-    ({'COOKIES': {'__utma': '****',
-                  '__utmz': '****',
-                  'csrftoken': '****',
-                  'djdt': 'hide',
-                  'language': 'tr'},
-      'META': {'CSRF_COOKIE': '****',
-               'CSRF_COOKIE_USED': True,
-               'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-               'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
-               'HTTP_ACCEPT_LANGUAGE': 'en-us',
-               'HTTP_CONNECTION': 'keep-alive',
-               'HTTP_COOKIE': '****; ',
-               'HTTP_DNT': '1',
-               'HTTP_HOST': '127.0.0.1:8000',
-               'HTTP_UPGRADE_INSECURE_REQUESTS': '1',
-               'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) '
-                                  'AppleWebKit/603.3.8 (KHTML, like Gecko) '
-                                  'Version/10.1.2 Safari/603.3.8',
-               'PATH_INFO': '/__baseapp__/',
-               'QUERY_STRING': '',
-               'REMOTE_ADDR': '127.0.0.1',
-               'REMOTE_PORT': 61081,
-               'REQUEST_METHOD': 'GET',
-               'SCRIPT_NAME': '',
-               'SERVER_NAME': '127.0.0.1',
-               'SERVER_PORT': '8000',
-               'SERVER_PROTOCOL': 'HTTP/1.1',
-               'SERVER_SOFTWARE': 'Werkzeug/0.12.2',
-               'werkzeug.request': <BaseRequest 'http://127.0.0.1:8000/__baseapp__/' [GET]>,
-               'wsgi.errors': <_io.TextIOWrapper name='<stderr>' mode='w' encoding='UTF-8'>,
-               'wsgi.input': <_io.BufferedReader name=6>,
-               'wsgi.multiprocess': False,
-               'wsgi.multithread': False,
-               'wsgi.run_once': False,
-               'wsgi.url_scheme': 'http',
-               'wsgi.version': (1, 0)},
-      '_cached_user': <django.contrib.auth.models.AnonymousUser object at 0x111360e48>,
-      '_messages': <django.contrib.messages.storage.fallback.FallbackStorage object at 0x111360748>,
-      '_post_parse_error': False,
-      '_read_started': False,
-      '_stream': <django.core.handlers.wsgi.LimitedStream object at 0x1113602e8>,
-      'content_params': {},
-      'content_type': '',
-      'csrf_processing_done': True,
-      'environ': {'CSRF_COOKIE': '****',
-                  'CSRF_COOKIE_USED': True,
-                  'HTTP_ACCEPT': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                  'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
-                  'HTTP_ACCEPT_LANGUAGE': 'en-us',
-                  'HTTP_CONNECTION': 'keep-alive',
-                  'HTTP_COOKIE': '****',
-                  'HTTP_DNT': '1',
-                  'HTTP_HOST': '127.0.0.1:8000',
-                  'HTTP_UPGRADE_INSECURE_REQUESTS': '1',
-                  'HTTP_USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X '
-                                     '10_12_6) AppleWebKit/603.3.8 (KHTML, like '
-                                     'Gecko) Version/10.1.2 Safari/603.3.8',
-                  'PATH_INFO': '/__baseapp__/',
-                  'QUERY_STRING': '',
-                  'REMOTE_ADDR': '127.0.0.1',
-                  'REMOTE_PORT': 61081,
-                  'REQUEST_METHOD': 'GET',
-                  'SCRIPT_NAME': '',
-                  'SERVER_NAME': '127.0.0.1',
-                  'SERVER_PORT': '8000',
-                  'SERVER_PROTOCOL': 'HTTP/1.1',
-                  'SERVER_SOFTWARE': 'Werkzeug/0.12.2',
-                  'werkzeug.request': <BaseRequest 'http://127.0.0.1:8000/__baseapp__/' [GET]>,
-                  'wsgi.errors': <_io.TextIOWrapper name='<stderr>' mode='w' encoding='UTF-8'>,
-                  'wsgi.input': <_io.BufferedReader name=6>,
-                  'wsgi.multiprocess': False,
-                  'wsgi.multithread': False,
-                  'wsgi.run_once': False,
-                  'wsgi.url_scheme': 'http',
-                  'wsgi.version': (1, 0)},
-      'method': 'GET',
-      'path': '/__baseapp__/',
-      'path_info': '/__baseapp__/',
-      'resolver_match': ResolverMatch(func=baseapp.views.IndexView, args=(), kwargs={}, url_name=index, app_names=[], namespaces=['baseapp']),
-      'session': <django.contrib.sessions.backends.db.SessionStore object at 0x111360240>,
-      'user': <SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x111360e48>>},)
+If you don’t want to extend from `templates/base.html` you can use your
+own template. You just need to add `{% hdbg %}` tag in to your template.
 
 ---
 
@@ -1059,15 +1021,13 @@ You can set defaults for `console`:
 ```python
 from baseapp.utils import console
 
-console.configure(
-    char='x',            # banners will use `x` character
+console = console(
     source='console.py', # banner title will be `console.py`
     width=8,             # output width will wrap to 8 chars (demo purpose)
     indent=8,            # 8 characters will be userd for indention (demo purpose)
     color='white',       # banner color will be: white
 )
 
-console.configure(color='default') # resets color
 console('Hello again...')
 ```
 
@@ -1261,7 +1221,8 @@ rake new:application[name_of_application]                        # Create new Dj
 rake new:model[name_of_application,name_of_model,type_of_model]  # Create new Model for given application
 rake run_server                                                  # Run server
 rake shell                                                       # Run shell+
-rake test:baseapp                                                # Run test against baseapp
+rake test:coverage[cli_args]                                     # Show test coverage (default: '--show-missing --ignore-errors --skip-covered')
+rake test:run[name_of_application,verbose]                       # Run tests for given application
 ```
 
 Default task is `run_server`. Just type `rake` that’s it! `runserver` uses
@@ -1294,7 +1255,7 @@ You can just call `rake db:migrate` or specify different database like:
 
 Your database must be rollable :) To see available migrations: 
 `rake db:roll_back[NAME_OF_YOUR_APPLICATION]`. Look at the list and choose your
-target migration (*example*): `rake db:roll_back[baseapp,0001_create_custom_user]`.
+target migration (*example*): `rake db:roll_back[baseapp,1]`.
 
 ```bash
 # example scenario
@@ -1304,7 +1265,11 @@ baseapp
  [X] 0001_create_custom_user
  [X] 0002_post_model
 
-$ rake db:roll_back[baseapp,0001_create_custom_user]
+$ rake db:roll_back[baseapp,1]
+$ rake db:show[baseapp]
+baseapp
+ [X] 0001_create_custom_user
+ [ ] 0002_post_model
 ```
 
 ### `rake db:shell`
@@ -1400,17 +1365,34 @@ Runs Django repl/shell with use `shell_plus` of [django-extensions][01].
  `rake shell`. This loads everything to your shell! Also you can see the
 SQL statements while playing in shell.
 
-### `rake test:baseapp`
+### `rake test:run[name_of_application,verbose]`
 
-Runs tests of baseapp!
+If you don’t provide `name_of_application` default value will be `applications`. 
+`verbose` is `1` by default.
+
+Examples:
+
+```bash
+$ rake test:run
+$ rake test:run[baseapp,2]
+```
+
+### `rake test:coverage[cli_args]`
+
+Get the test report. Default is `--show-missing --ignore-errors --skip-covered` for
+`cli_args` parameter.
+
+```bash
+$ rake test:coverage
+```
 
 ---
 
-## Tests
+## Run Tests Manually
 
 ```bash
-$ DJANGO_ENV=test python manage.py test baseapp -v 2 # or
-$ DJANGO_ENV=test python manage.py test baseapp.tests.CustomUserTestCase # single, or
+$ DJANGO_ENV=test python manage.py test baseapp -v 2                                 # or
+$ DJANGO_ENV=test python manage.py test baseapp.tests.test_user.CustomUserTestCase   # run single unit
 $ rake test:baseapp
 ```
 
@@ -1508,6 +1490,10 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2018-11-16**
+
+- Update: New version with new features.
 
 **2018-05-08**
 

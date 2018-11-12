@@ -1,8 +1,8 @@
-from .base import *
+from .base import *                         # isort:skip  # noqa
 
-from baseapp.libs.log_helpers import (
-    CustomWerkzeugLogFormatter,
+from logging_helpers import (
     CustomSqlLogFormatter,
+    CustomWerkzeugLogFormatter,
     werkzueg_filter_extenstions_callback,
 )
 
@@ -13,19 +13,17 @@ INTERNAL_IPS = ['127.0.0.1']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db', 'development.sqlite3'),
-    }
+        'NAME': os.path.join(BASE_DIR, 'db', 'development.sqlite3'),  # noqa: F405
+    },
 }
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),  # noqa: F405
 )
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # noqa: F405
 
-CUSTOM_LOGGER_OPTIONS = {
-    'hide_these_extensions': ['css', 'js', 'png', 'jpg', 'svg', 'gif', 'woff'],
-}
+WERKZUEG_FILTER_EXTENSTIONS = ['css', 'js', 'png', 'jpg', 'svg', 'gif', 'woff']
 
 LOGGING = {
     'version': 1,
@@ -57,7 +55,7 @@ LOGGING = {
             'filters': ['werkzueg_filter_extensions'],
             'class': 'logging.StreamHandler',
             'formatter': 'custom_werkzeug_log_formatter',
-        }
+        },
     },
     'loggers': {
         'werkzeug': {
@@ -65,7 +63,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        'user_logger': {
+        'main': {
             'handlers': ['console_custom'],
             'level': 'DEBUG',
         },
@@ -74,16 +72,15 @@ LOGGING = {
         #     'handlers': ['console_sql'],
         #     'level': 'DEBUG',
         # },
-    }
+    },
 }
 
 # middlewares for development purposes only
-MIDDLEWARE += [
+MIDDLEWARE += [  # noqa: F405
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 # apps for development purposes only
-INSTALLED_APPS += [
-    'django_extensions',
+INSTALLED_APPS += [  # noqa: F405
     'debug_toolbar',
 ]

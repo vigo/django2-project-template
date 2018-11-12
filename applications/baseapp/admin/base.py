@@ -1,9 +1,8 @@
-from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
-from ..utils import numerify
 from ..models import BaseModel
-
+from ..utils import numerify
 
 __all__ = [
     'BaseAdmin',
@@ -12,6 +11,7 @@ __all__ = [
 
 
 class BaseAdmin(admin.ModelAdmin):
+
     sticky_list_filter = ('status',)
 
     def get_list_filter(self, request):
@@ -33,6 +33,7 @@ def recover_deleted(modeladmin, request, queryset):
 
 
 class BaseAdminWithSoftDelete(BaseAdmin):
+
     hide_deleted_at = True
 
     def get_queryset(self, request):
@@ -56,6 +57,6 @@ class BaseAdminWithSoftDelete(BaseAdmin):
                 recover_deleted,
                 'recover_deleted',
                 _('Recover selected %(verbose_name_plural)s'),
-            )
+            ),
         ))
         return existing_actions

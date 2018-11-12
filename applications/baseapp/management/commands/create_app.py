@@ -1,21 +1,30 @@
-import os
 import errno
+import os
 import time
-
 from importlib import import_module
 
 from django.conf import settings
-from django.core.management.base import (
-    BaseCommand,
-    CommandError,
-)
+from django.core.management.base import CommandError
 from django.utils.text import capfirst
 
-
-from baseapp.management.template_structures import application as application_templates
-
+from ..base import CustomBaseCommand
+from ..template_structures import (
+    application as application_templates,
+)
 
 TEMPLATE_MODELS_INIT = """# from .MODEL_FILE import *
+
+"""
+
+TEMPLATE_VIEWS_INIT = """# from .VIEWS_FILE import *
+
+from .index import *
+
+"""
+
+TEMPLATE_TESTS_INIT = """# from .TESTS_FILE import *
+
+from .index import *
 
 """
 
@@ -35,6 +44,14 @@ APP_DIR_STRUCTURE = {
         dict(name='models', files=[
             dict(name='__init__.py', render=TEMPLATE_MODELS_INIT),
         ]),
+        dict(name='views', files=[
+            dict(name='__init__.py', render=TEMPLATE_VIEWS_INIT),
+            dict(name='index.py', render=application_templates.TEMPLATE_VIEWS),
+        ]),
+        dict(name='tests', files=[
+            dict(name='__init__.py', render=TEMPLATE_TESTS_INIT),
+            dict(name='index.py', render=application_templates.TEMPLATE_TESTS),
+        ]),
     ],
     'templates': [
         dict(name='index.html', render=application_templates.TEMPLATE_HTML),
@@ -43,8 +60,7 @@ APP_DIR_STRUCTURE = {
         dict(name='__init__.py', render=TEMPLATE_APP_INIT),
         dict(name='apps.py', render=application_templates.TEMPLATE_APPS),
         dict(name='urls.py', render=application_templates.TEMPLATE_URLS),
-        dict(name='views.py', render=application_templates.TEMPLATE_VIEWS),
-    ]
+    ],
 }
 
 USER_REMINDER = """
@@ -56,7 +72,7 @@ USER_REMINDER = """
     ]
 
     - Do not forget to fix your `config/settings/urls.py`:
-    
+
     # ...
     urlpatterns = [
         # ...
@@ -68,11 +84,12 @@ USER_REMINDER = """
 """
 
 
-class Command(BaseCommand):
-    help = (
+class Command(CustomBaseCommand):
+    help = (  # noqa: A003
         'Creates a custom Django app directory structure for the given app name in '
         '`applications/` directory.'
     )
+
     missing_args_message = 'You must provide an application name.'
 
     def add_arguments(self, parser):
@@ -88,7 +105,7 @@ class Command(BaseCommand):
         else:
             raise CommandError(
                 '%r conflicts with the name of an existing Python module and '
-                'cannot be used as an app name. Please try another name.' % app_name
+                'cannot be used as an app name. Please try another name.' % app_name  # noqa: C812
             )
 
         applications_dir = os.path.join(settings.BASE_DIR, 'applications')
@@ -121,7 +138,7 @@ class Command(BaseCommand):
                 self.create_file_with_content(template_html_path, rendered_content)
 
         self.generate_files(APP_DIR_STRUCTURE.get('files'), new_application_dir, render_params)
-        self.stdout.write(self.style.SUCCESS('"{}" application created.'.format(app_name)))
+        self.stdout.write(self.style.SUCCESS('"{0}" application created.'.format(app_name)))
         self.stdout.write(self.style.NOTICE(USER_REMINDER.format(app_name=app_name)))
 
     def generate_files(self, files_list, root_path, render_params):

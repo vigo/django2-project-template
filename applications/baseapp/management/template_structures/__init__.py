@@ -1,2 +1,2 @@
-from .models import *
-from .admins import *
+from .models import *                   # isort:skip # noqa
+from .admins import *                   # isort:skip # noqa

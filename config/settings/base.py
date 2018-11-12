@@ -71,6 +71,6 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'baseapp.User'
 
 # add your newly created apps here!
-# INSTALLED_APPS += [
-#     'name_of_your_app',
-# ]
+INSTALLED_APPS += [
+    'django_extensions',
+]

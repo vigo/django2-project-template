@@ -1,5 +1,5 @@
 -r base.pip
-gunicorn==19.8.1
-psycopg2==2.7.4
+gunicorn==19.9.0
+psycopg2-binary==2.7.6.1
 dj-database-url==0.5.0
-whitenoise==3.3.1
+whitenoise==4.1

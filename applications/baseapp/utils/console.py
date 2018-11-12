@@ -1,7 +1,8 @@
 import pprint
 import shutil
+import sys
 
-DEBUG = True
+DEBUG = False
 
 try:
     from django.conf import settings
@@ -20,47 +21,34 @@ __all__ = [
 class Console:
     """
 
-    Usage:
+    Custom object inspector. Example usage:
 
+        from ..utils import console         # or
         from baseapp.utils import console
 
-    You can set default configuration such as:
-
-        # main configuration example
-        console.configure(
-            char='x',
-            source='console.py',
-            width=8,             # demo purpose
-            indent=8,            # demo purpose
-            color='white',
+        console = console(
+            source=__name__,
         )
 
-    Examples:
+        # or
+        console = console(
+            source=__name__,
+            indent=8,
+            width=64,
+        )
 
-        console('Some', 'examples', 'of', 'console', 'usage')
+        # or
+        console = console(
+            source=__name__,
+            color='yellow',
+        )
 
-        # change config on the fly
-        console('Hello', 'World', 'Foo', 'Bar', 'Baz', width=12, indent=8, color='yellow')
+        # after setting console, now try:
 
-        console.configure(color='default')
-        console(['this', 'is', 'a', 'list'], ('and', 'a', 'tuple',))
+        console('hello', 'world', [1, 2, 3])
+        console('hello', 'world', [1, 2, 3], color='red')
 
-    Available colors:
-
-    - black
-    - red
-    - green
-    - yellow
-    - blue
-    - magenta
-    - cyan
-    - white
-    - default
-
-    `console.dir()` inspired from Ruby's `inspection` style. This inspects
-    most of the attributes of given Object.
-
-    Examples:
+        # for more complex objects;
 
         class MyClass:
             klass_var1 = 1
@@ -88,40 +76,84 @@ class Console:
 
         console.dir(MyClass)
         console.dir(mc)
-
-        console.dir({})
+        console.dir(dict)
 
     """
 
-    __colors = dict(black=0, red=1, green=2, yellow=3, blue=4, magenta=5, cyan=6, white=7, default=8)
-    __color = 'yellow'
-    __color_reset = '\033[0m'
+    valid_options = ['source', 'width', 'indent', 'color']
+    available_colors = dict(
+        black=0,
+        red=1,
+        green=2,
+        yellow=3,
+        blue=4,
+        magenta=5,
+        cyan=6,
+        white=7,
+        default=8,
+    )
 
-    __seperator_line = '{source:{char}<{length}}'
-    __seperator_char = '*'
+    defaults_options = {
+        'source': 'UNSET',
+        'width': 79,
+        'indent': 4,
+        'seperator_line': '{source:{char}<{width}}',
+        'seperator_char': '*',
+        'color': 'yellow',
+    }
 
-    def __init__(self, *args, **kwargs):
-        self.__width = 79
-        self.__indent = 4
-        self.__source = __name__
-        self.__call__(*args, **kwargs)
+    def __init__(self, **options):
+        self.options = {}
 
-    def __call__(self, *args, **kwargs):
-        self.configure(**kwargs)
-        self.print(*args, **kwargs)
+        for default_option, default_value in self.defaults_options.items():
+            self.options[default_option] = default_value
+        self.configure(**options)
 
-    def dir(self, *args, **kwargs):
+    def configure(self, **options):
+        for option, value in options.items():
+            if option in self.valid_options:
+                self.options[option] = value
+            else:
+                raise Exception(f'Invalid option: [{option}] passed')
+
+        color = self.options['color']
+        if color not in self.available_colors.keys():
+            raise Exception(f'Invalid color value: [{color}] passed')
+
+        if not isinstance(self.options['width'], int):
+            raise Exception('Invalid width value. Expected int, got: [{0}]'.format(
+                type(self.options['width']),
+            ))
+
+        if not isinstance(self.options['indent'], int):
+            raise Exception('Invalid indent value. Expected int, got: [{0}]'.format(
+                type(self.options['indent']),
+            ))
+
+    def colorize(self, input_string):
+        return '\033[3{0}m{1}{2}'.format(
+            self.available_colors[self.options['color']],
+            input_string,
+            '\033[0m',
+        )
+
+    def __call__(self, *args, **options):
+        if args:
+            self.oprint(args, **options)
+
+    def dir(self, *args, **options):  # noqa: A003
+        out = {}
         for arg in args:
-            out = {'arg': args}
             source_name = arg.__class__.__name__
 
             if source_name != 'type':
-                source_name = 'instance of {}'.format(source_name)
+                source_name = 'instance of {0}'.format(source_name)
 
             if hasattr(arg, '__name__'):
                 source_name = arg.__name__
 
-            source = '{} | {}'.format(source_name, type(arg))
+            source = '{0} | {1}'.format(source_name, type(arg))
+
             public_attributes = []
             internal_methods = []
             private_methods = []
@@ -191,55 +223,47 @@ class Console:
                             public_methods.remove(instance_attr)
                     out.update(instance_attributes=instance_attributes)
 
-            self.print(out, source=source)
+            options.update(source=source)
+            self.oprint(out, **options)
 
-    def configure(self, **kwargs):
-        self.width = kwargs.get('width', self.__width)
-        self.indent = kwargs.get('indent', self.__indent)
-        self.color = kwargs.get('color', self.__color)
-        self.source = kwargs.get('source', self.__source)
-        self.seperator_line = self.__seperator_line
-        self.seperator_char = kwargs.get('char', self.__seperator_char)
-        self.__width = self.width
-        self.__indent = self.indent
-        self.__color = self.color
-        self.__source = self.source
-        self.__seperator_char = self.seperator_char
+    def oprint(self, input_txt, **options):
+        source = self.options['source']
 
-    def colorize(self, color):
-        if self.__colors.get(color, False):
-            color_code = self.__colors.get(color)
-        else:
-            color_code = self.__colors.get(self.__color)
-        return "\033[3{}m".format(color_code)
+        if 'source' in options.keys():
+            source = '{0} : {1}'.format(source, options.pop('source'))
 
-    def print(self, *args, **kwargs):
-        if DEBUG:
-            self.pp = pprint.PrettyPrinter(indent=self.indent, width=self.width, compact=True)
-            if args:
-                self.print_banner(**kwargs)
-                self.pp.pprint(args)
-                self.print_banner(source='', end='\n\n')
+        self.configure(**options)
 
-    def print_banner(self, **kwargs):
-        pfmt = dict(
-            source=kwargs.get('source', self.source + ' '),
-            char=self.seperator_char,
-            length=TERMINAL_COLUMNS,
+        self.pp = pprint.PrettyPrinter(
+            indent=self.options['indent'],
+            width=self.options['width'],
+            compact=True,
         )
-        end = '\n'
-        if kwargs.get('end', False):
-            end = kwargs.get('end')
 
-        print(self.colorize(self.color) + self.seperator_line.format(**pfmt) + self.__color_reset, end=end)
+        header = self.options['seperator_line'].format(
+            source='[{0}]'.format(source),
+            char=self.options['seperator_char'],
+            width=self.options['width'],
+        )
+        footer = self.options['seperator_char'] * self.options['width']
+
+        sys.stdout.write(self.colorize(header))
+        sys.stdout.write('\n')
+        self.pp.pprint(input_txt)
+        sys.stdout.write(self.colorize(footer))
+        sys.stdout.write('\n' * 2)
 
 
-if DEBUG:
-    console = Console()
-else:
-    console = type('Console', (object,), dict())
+def console(**options):
+    global DEBUG, TERMINAL_COLUMNS
 
-    setattr(console, 'configure', lambda *args, **kwargs: '')
-    setattr(console, 'dir', lambda *args, **kwargs: '')
-    setattr(console, '__init__', lambda *args, **kwargs: None)
-    setattr(console, '__call__', lambda *args, **kwargs: '')
+    if DEBUG:
+        if 'width' not in options.keys():
+            options.update(width=TERMINAL_COLUMNS)
+        return Console(**options)
+
+    c = type('Console', (object,), dict())
+    setattr(c, 'dir', lambda *args, **kwargs: '')
+    setattr(c, '__init__', lambda *args, **kwargs: None)
+    setattr(c, '__call__', lambda *args, **kwargs: '')
+    return c

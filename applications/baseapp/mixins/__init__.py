@@ -1,1 +1,1 @@
-from .html_debug import *
+from .html_debug import *  # noqa

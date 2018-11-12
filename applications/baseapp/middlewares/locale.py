@@ -1,6 +1,5 @@
-from django.utils.cache import patch_vary_headers
 from django.utils import translation
-
+from django.utils.cache import patch_vary_headers
 
 __all__ = [
     'CustomLocaleMiddleware',
