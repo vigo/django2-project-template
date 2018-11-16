@@ -31,7 +31,7 @@ class AdminImageFileWidget(AdminFileWidget):
 
     """
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         widget = super().render(name, value, attrs)
         if value:
             possible_image = is_image(value)

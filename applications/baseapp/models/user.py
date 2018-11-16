@@ -40,7 +40,7 @@ class UserManager(BaseUserManager):
         user = self.model(**user_create_fields)
         user.set_password(password)
         user.save(using=self._db)
-        logger.info(f'{user.get_full_name} created successfully. PK: {user.pk}')
+        logger.info(f'{user.get_full_name()} created successfully. PK: {user.pk}')
         return user
 
     def create_superuser(self, email, first_name, last_name, middle_name=None, password=None):
@@ -48,7 +48,7 @@ class UserManager(BaseUserManager):
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
-        logger.info(f'{user.get_full_name} is set to superuser. PK: {user.pk}')
+        logger.info(f'{user.get_full_name()} is set to superuser. PK: {user.pk}')
         return user
 
 
