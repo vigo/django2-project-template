@@ -35,6 +35,7 @@ TEMPLATE_ADMIN_INIT = """# from .ADMIN_FILE import *
 TEMPLATE_APP_INIT = """default_app_config = '{app_name}.apps.{app_name_capfirst}Config'
 """
 
+# fmt: off
 APP_DIR_STRUCTURE = {
     'packages': [
         dict(name='admin', files=[
@@ -62,6 +63,7 @@ APP_DIR_STRUCTURE = {
         dict(name='urls.py', render=application_templates.TEMPLATE_URLS),
     ],
 }
+# fmt: on
 
 USER_REMINDER = """
 
@@ -86,8 +88,7 @@ USER_REMINDER = """
 
 class Command(CustomBaseCommand):
     help = (  # noqa: A003
-        'Creates a custom Django app directory structure for the given app name in '
-        '`applications/` directory.'
+        'Creates a custom Django app directory structure for the given app name in ' '`applications/` directory.'
     )
 
     missing_args_message = 'You must provide an application name.'
@@ -112,11 +113,7 @@ class Command(CustomBaseCommand):
         templates_dir = os.path.join(settings.BASE_DIR, 'templates')
         new_application_dir = os.path.join(applications_dir, app_name)
 
-        render_params = dict(
-            app_name_title=app_name.title(),
-            app_name=app_name,
-            app_name_capfirst=capfirst(app_name),
-        )
+        render_params = dict(app_name_title=app_name.title(), app_name=app_name, app_name_capfirst=capfirst(app_name))
 
         self.mkdir(new_application_dir)
         self.touch(os.path.join(new_application_dir, '__init__.py'))
@@ -138,8 +135,8 @@ class Command(CustomBaseCommand):
                 self.create_file_with_content(template_html_path, rendered_content)
 
         self.generate_files(APP_DIR_STRUCTURE.get('files'), new_application_dir, render_params)
-        self.stdout.write(self.style.SUCCESS('"{0}" application created.'.format(app_name)))
-        self.stdout.write(self.style.NOTICE(USER_REMINDER.format(app_name=app_name)))
+        self.stdout.write(self.style.SUCCESS('"{0}" application created.'.format(app_name)))  # pylint: disable=E1101
+        self.stdout.write(self.style.NOTICE(USER_REMINDER.format(app_name=app_name)))  # pylint: disable=E1101
 
     def generate_files(self, files_list, root_path, render_params):
         for single_file in files_list:
