@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
 ![Django](https://img.shields.io/badge/django-2.1.3-green.svg)
 ![Version](https://img.shields.io/badge/version-1.0.0-yellow.svg)
