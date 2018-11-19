@@ -10,6 +10,4 @@ urlpatterns = [
 """
 
 
-__all__ = [
-    'TEMPLATE_URLS',
-]
+__all__ = ['TEMPLATE_URLS']

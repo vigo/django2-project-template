@@ -1,18 +1,15 @@
+# pylint: disable=E1101
 import logging
 import re
 
 from django.core.management.color import color_style
 
-__all__ = [
-    'CustomWerkzeugLogFormatter',
-    'CustomSqlLogFormatter',
-]
+__all__ = ['CustomWerkzeugLogFormatter', 'CustomSqlLogFormatter']
 
 ansi_escape = re.compile(r'\x1b[^m]*m')
 
 
 class CustomWerkzeugLogFormatter(logging.Formatter):
-
     def __init__(self, *args, **kwargs):
         self.style = color_style()
         super().__init__(*args, **kwargs)
@@ -63,7 +60,6 @@ class CustomWerkzeugLogFormatter(logging.Formatter):
 
 
 class CustomSqlLogFormatter(logging.Formatter):
-
     def __init__(self, *args, **kwargs):
         self.style = color_style()
         super().__init__(*args, **kwargs)

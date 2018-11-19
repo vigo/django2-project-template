@@ -4,10 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
-__all__ = [
-    'BaseModel',
-    'BaseModelWithSoftDelete',
-]
+__all__ = ['BaseModel', 'BaseModelWithSoftDelete']
 
 
 logger = logging.getLogger('main')
@@ -28,24 +25,16 @@ class BaseModelQuerySet(models.QuerySet):
     """
 
     def actives(self):
-        return self.filter(
-            status=BaseModel.STATUS_ONLINE,
-        )
+        return self.filter(status=BaseModel.STATUS_ONLINE)
 
     def deleted(self):
-        return self.filter(
-            status=BaseModel.STATUS_DELETED,
-        )
+        return self.filter(status=BaseModel.STATUS_DELETED)
 
     def offlines(self):
-        return self.filter(
-            status=BaseModel.STATUS_OFFLINE,
-        )
+        return self.filter(status=BaseModel.STATUS_OFFLINE)
 
     def drafts(self):
-        return self.filter(
-            status=BaseModel.STATUS_DRAFT,
-        )
+        return self.filter(status=BaseModel.STATUS_DRAFT)
 
 
 class BaseModelWithSoftDeleteQuerySet(BaseModelQuerySet):
@@ -141,19 +130,9 @@ class BaseModel(models.Model):
         (STATUS_DRAFT, _('Draft')),
     )
 
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created At'),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated At'),
-    )
-    status = models.IntegerField(
-        choices=STATUS_CHOICES,
-        default=STATUS_ONLINE,
-        verbose_name=_('Status'),
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
+    status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ONLINE, verbose_name=_('Status'))
 
     objects = models.Manager()
     objects_bm = BaseModelQuerySet.as_manager()
@@ -164,11 +143,7 @@ class BaseModel(models.Model):
 
 class BaseModelWithSoftDelete(BaseModel):
 
-    deleted_at = models.DateTimeField(
-        null=True,
-        blank=True,
-        verbose_name=_('Deleted At'),
-    )
+    deleted_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Deleted At'))
 
     objects = models.Manager()
     objects_bm = BaseModelWithSoftDeleteManager()
@@ -186,11 +161,7 @@ class BaseModelWithSoftDelete(BaseModel):
         processed_instances = {}
         call_method = 'undelete' if undelete else 'delete'
 
-        log_params = {
-            'instance': self,
-            'label': self._meta.label,
-            'pk': self.pk,
-        }
+        log_params = {'instance': self, 'label': self._meta.label, 'pk': self.pk}  # pylint: disable=E1101
         log_message = '{action} on: "{instance} - pk: {pk}" [{label}]'
 
         if call_method == 'delete':
@@ -212,9 +183,9 @@ class BaseModelWithSoftDelete(BaseModel):
         if call_method == 'delete':
             models.signals.post_delete.send(sender=self.__class__, instance=self)
 
-        processed_instances.update({self._meta.label: 1})
+        processed_instances.update({self._meta.label: 1})  # pylint: disable=E1101
 
-        for related_object in self._meta.related_objects:
+        for related_object in self._meta.related_objects:  # pylint: disable=E1101
             if hasattr(related_object, 'on_delete') and getattr(related_object, 'on_delete') == models.CASCADE:
                 accessor_name = related_object.get_accessor_name()
                 related_model_instances = getattr(self, accessor_name)

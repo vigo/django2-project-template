@@ -6,6 +6,7 @@ DEBUG = False
 
 try:
     from django.conf import settings
+
     DEBUG = settings.DEBUG
 except BaseException:
     pass
@@ -13,9 +14,7 @@ except BaseException:
 TERMINAL_COLUMNS, TERMINAL_LINES = shutil.get_terminal_size()
 
 
-__all__ = [
-    'console',
-]
+__all__ = ['console']
 
 
 class Console:
@@ -81,17 +80,7 @@ class Console:
     """
 
     valid_options = ['source', 'width', 'indent', 'color']
-    available_colors = dict(
-        black=0,
-        red=1,
-        green=2,
-        yellow=3,
-        blue=4,
-        magenta=5,
-        cyan=6,
-        white=7,
-        default=8,
-    )
+    available_colors = dict(black=0, red=1, green=2, yellow=3, blue=4, magenta=5, cyan=6, white=7, default=8)
 
     defaults_options = {
         'source': 'UNSET',
@@ -121,21 +110,13 @@ class Console:
             raise Exception(f'Invalid color value: [{color}] passed')
 
         if not isinstance(self.options['width'], int):
-            raise Exception('Invalid width value. Expected int, got: [{0}]'.format(
-                type(self.options['width']),
-            ))
+            raise Exception('Invalid width value. Expected int, got: [{0}]'.format(type(self.options['width'])))
 
         if not isinstance(self.options['indent'], int):
-            raise Exception('Invalid indent value. Expected int, got: [{0}]'.format(
-                type(self.options['indent']),
-            ))
+            raise Exception('Invalid indent value. Expected int, got: [{0}]'.format(type(self.options['indent'])))
 
     def colorize(self, input_string):
-        return '\033[3{0}m{1}{2}'.format(
-            self.available_colors[self.options['color']],
-            input_string,
-            '\033[0m',
-        )
+        return '\033[3{0}m{1}{2}'.format(self.available_colors[self.options['color']], input_string, '\033[0m')
 
     def __call__(self, *args, **options):
         if args:
@@ -234,16 +215,10 @@ class Console:
 
         self.configure(**options)
 
-        self.pp = pprint.PrettyPrinter(
-            indent=self.options['indent'],
-            width=self.options['width'],
-            compact=True,
-        )
+        self.pp = pprint.PrettyPrinter(indent=self.options['indent'], width=self.options['width'], compact=True)
 
         header = self.options['seperator_line'].format(
-            source='[{0}]'.format(source),
-            char=self.options['seperator_char'],
-            width=self.options['width'],
+            source='[{0}]'.format(source), char=self.options['seperator_char'], width=self.options['width']
         )
         footer = self.options['seperator_char'] * self.options['width']
 

@@ -1,35 +1,23 @@
 import dj_database_url
 
-from .base import *                         # isort:skip
+from .base import *  # isort:skip # noqa: F403
 
 
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    '.your.domain.com',
-]
+ALLOWED_HOSTS = ['.your.domain.com']
 
 # Set your DATABASE_URL environment variable.
 # Example:
 # DATABASE_URL=postgres://USER:PASS@DATABASE:5432/TABLE
-DATABASES = {
-    'default': dj_database_url.config(),
-}
+DATABASES = {'default': dj_database_url.config()}
 
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Production only apps
@@ -43,18 +31,14 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 PRODUCTION_BASE_PATH = '/home/deployer/your.domain.com/files/'
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(PRODUCTION_BASE_PATH, 'static_root/')
+STATIC_ROOT = os.path.join(PRODUCTION_BASE_PATH, 'static_root/')  # noqa: F405
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(PRODUCTION_BASE_PATH, 'media_root/')
+MEDIA_ROOT = os.path.join(PRODUCTION_BASE_PATH, 'media_root/')  # noqa: F405
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # noqa: F405
 
-ADMINS = (
-    ('Your Name', 'your@email.com'),
-)
+ADMINS = (('Your Name', 'your@email.com'),)
 MANAGERS = ADMINS
 
 # Error reporting via email

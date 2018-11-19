@@ -15,6 +15,4 @@ TEMPLATE_HTML = """{{% extends "base.html" %}}
 """
 
 
-__all__ = [
-    'TEMPLATE_HTML',
-]
+__all__ = ['TEMPLATE_HTML']

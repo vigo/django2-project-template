@@ -18,6 +18,4 @@ class {model_name}Admin(BaseAdmin):
 """
 
 
-__all__ = [
-    'TEMPLATE_ADMIN_BASEMODEL',
-]
+__all__ = ['TEMPLATE_ADMIN_BASEMODEL']

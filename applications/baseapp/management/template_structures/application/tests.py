@@ -20,6 +20,4 @@ class {app_name_title}BasicTestCase(TestCase):
 """
 
 
-__all__ = [
-    'TEMPLATE_TESTS',
-]
+__all__ = ['TEMPLATE_TESTS']

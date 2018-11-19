@@ -4,10 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from ..models import BaseModel
 from ..utils import numerify
 
-__all__ = [
-    'BaseAdmin',
-    'BaseAdminWithSoftDelete',
-]
+__all__ = ['BaseAdmin', 'BaseAdminWithSoftDelete']
 
 
 class BaseAdmin(admin.ModelAdmin):
@@ -52,11 +49,7 @@ class BaseAdminWithSoftDelete(BaseAdmin):
 
     def get_actions(self, request):
         existing_actions = super().get_actions(request)
-        existing_actions.update(dict(
-            recover_deleted=(
-                recover_deleted,
-                'recover_deleted',
-                _('Recover selected %(verbose_name_plural)s'),
-            ),
-        ))
+        existing_actions.update(
+            dict(recover_deleted=(recover_deleted, 'recover_deleted', _('Recover selected %(verbose_name_plural)s')))
+        )
         return existing_actions

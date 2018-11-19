@@ -1,6 +1,4 @@
-__all__ = [
-    'numerify',
-]
+__all__ = ['numerify']
 
 
 def numerify(input_text, default=-1):
@@ -27,4 +25,5 @@ def numerify(input_text, default=-1):
 
 if __name__ == '__main__':
     import doctest
+
     doctest.testmod()

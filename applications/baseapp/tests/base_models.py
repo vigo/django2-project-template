@@ -4,9 +4,7 @@ from ..models import BaseModel, BaseModelWithSoftDelete
 
 
 class BasicPost(BaseModel):
-    title = models.CharField(
-        max_length=255,
-    )
+    title = models.CharField(max_length=255)
 
     class Meta:
         app_label = 'baseapp'
@@ -16,9 +14,7 @@ class BasicPost(BaseModel):
 
 
 class Category(BaseModelWithSoftDelete):
-    title = models.CharField(
-        max_length=255,
-    )
+    title = models.CharField(max_length=255)
 
     class Meta:
         app_label = 'baseapp'
@@ -28,14 +24,8 @@ class Category(BaseModelWithSoftDelete):
 
 
 class Post(BaseModelWithSoftDelete):
-    category = models.ForeignKey(
-        to='Category',
-        on_delete=models.CASCADE,
-        related_name='posts',
-    )
-    title = models.CharField(
-        max_length=255,
-    )
+    category = models.ForeignKey(to='Category', on_delete=models.CASCADE, related_name='posts')
+    title = models.CharField(max_length=255)
 
     class Meta:
         app_label = 'baseapp'

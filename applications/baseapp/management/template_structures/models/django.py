@@ -31,6 +31,4 @@ class {model_name}(models.Model):
 """
 
 
-__all__ = [
-    'TEMPLATE_MODEL_DJANGO',
-]
+__all__ = ['TEMPLATE_MODEL_DJANGO']

@@ -26,6 +26,4 @@ class {model_name}(BaseModel):
 """
 
 
-__all__ = [
-    'TEMPLATE_MODEL_BASEMODEL',
-]
+__all__ = ['TEMPLATE_MODEL_BASEMODEL']

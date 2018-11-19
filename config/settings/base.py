@@ -33,14 +33,10 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
-            'builtins': [
-                'baseapp.templatetags.html_debug',
-            ],
+            'builtins': ['baseapp.templatetags.html_debug'],
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
@@ -49,7 +45,7 @@ TEMPLATES = [
                 'baseapp.context_processors.django_environment_variable',
             ],
         },
-    },
+    }
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -61,9 +57,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
-)
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
@@ -71,6 +65,4 @@ MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'baseapp.User'
 
 # add your newly created apps here!
-INSTALLED_APPS += [
-    'django_extensions',
-]
+INSTALLED_APPS += ['django_extensions']

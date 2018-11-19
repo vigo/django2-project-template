@@ -1,3 +1,5 @@
-from .basemodel import *                # isort:skip # noqa
-from .django import *                   # isort:skip # noqa
-from .softdelete import *               # isort:skip # noqa
+# isort:skip_file
+# flake8: noqa
+from .basemodel import *
+from .django import *
+from .softdelete import *

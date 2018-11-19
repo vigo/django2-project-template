@@ -13,9 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from ..models import User
 from ..widgets import AdminImageFileWidget
 
-__all__ = [
-    'UserAdmin',
-]
+__all__ = ['UserAdmin']
 
 
 class UserChangeForm(forms.ModelForm):
@@ -25,25 +23,14 @@ class UserChangeForm(forms.ModelForm):
         help_text=_(
             'Raw passwords are not stored, so there is no way to see this '
             'user\'s password, but you can change the password using '
-            '<a href="../password/">this form</a>.',
+            '<a href="../password/">this form</a>.'
         ),
     )
 
     class Meta:
         model = User
-        fields = (
-            'email',
-            'first_name',
-            'last_name',
-            'password',
-            'is_active',
-            'is_staff',
-            'is_superuser',
-        )
-        labels = {
-            'first_name': _('first name').title(),
-            'last_name': _('last name').title(),
-        }
+        fields = ('email', 'first_name', 'last_name', 'password', 'is_active', 'is_staff', 'is_superuser')
+        labels = {'first_name': _('first name').title(), 'last_name': _('last name').title()}  # pylint: disable=E1101
 
     def clean_password(self):
         return self.initial['password']
@@ -51,14 +38,8 @@ class UserChangeForm(forms.ModelForm):
 
 class UserCreationForm(forms.ModelForm):
 
-    password1 = forms.CharField(
-        label=_('Password'),
-        widget=forms.PasswordInput,
-    )
-    password2 = forms.CharField(
-        label=_('Password confirmation'),
-        widget=forms.PasswordInput,
-    )
+    password1 = forms.CharField(label=_('Password'), widget=forms.PasswordInput)
+    password2 = forms.CharField(label=_('Password confirmation'), widget=forms.PasswordInput)
 
     class Meta:
         """
@@ -67,10 +48,7 @@ class UserCreationForm(forms.ModelForm):
 
         model = User
         fields = ('first_name', 'last_name')
-        labels = {
-            'first_name': _('first name').title(),
-            'last_name': _('last name').title(),
-        }
+        labels = {'first_name': _('first name').title(), 'last_name': _('last name').title()}  # pylint: disable=E1101
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -97,46 +75,22 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email', 'first_name', 'middle_name', 'last_name')
     ordering = ('email',)
     fieldsets = (
-        (_('User information'), {'fields': (
-            'email',
-            'password',
-            'first_name',
-            'middle_name',
-            'last_name',
-            'avatar',
-        )}),
-        (_('Permissions'), {'fields': (
-            'is_active',
-            'is_staff',
-            'is_superuser',
-            'groups',
-            'user_permissions',
-        )}),
+        (_('User information'), {'fields': ('email', 'password', 'first_name', 'middle_name', 'last_name', 'avatar')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
     )
     add_fieldsets = (
-        (None, {
-            'classes': ('wide',),
-            'fields': (
-                'email',
-                'first_name',
-                'last_name',
-                'password1',
-                'password2',
-            ),
-        }),
+        (None, {'classes': ('wide',), 'fields': ('email', 'first_name', 'last_name', 'password1', 'password2')}),
     )
-    formfield_overrides = {
-        models.FileField: {'widget': AdminImageFileWidget},
-    }
+    formfield_overrides = {models.FileField: {'widget': AdminImageFileWidget}}
 
     def user_profile_image(self, obj):
         if obj.avatar:
-            return format_html('<img style="max-height: 200px;" src="{0}" alt="{1}">',
-                               obj.avatar.url,
-                               obj.get_full_name(),
-                               )
+            return format_html(
+                '<img style="max-height: 200px;" src="{0}" alt="{1}">', obj.avatar.url, obj.get_full_name()
+            )
         else:
             return '---'
+
     user_profile_image.short_description = _('Profile Image')
 
 

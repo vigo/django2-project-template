@@ -1,2 +1,4 @@
-from .models import *                   # isort:skip # noqa
-from .admins import *                   # isort:skip # noqa
+# isort:skip_file
+# flake8: noqa
+from .models import *
+from .admins import *

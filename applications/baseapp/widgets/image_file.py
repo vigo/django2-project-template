@@ -4,9 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from PIL import Image
 
-__all__ = [
-    'AdminImageFileWidget',
-]
+__all__ = ['AdminImageFileWidget']
 
 
 def is_image(file):
@@ -36,12 +34,12 @@ class AdminImageFileWidget(AdminFileWidget):
         if value:
             possible_image = is_image(value)
             if possible_image:
-                widget = '' \
-                    '<div class="admin-image-preview {object_name}">' \
-                    '<img style="max-height: 200px;" src="{image_url}">' \
-                    '<p class="file-upload">{dimensions}: {width} x {height}</p>' \
-                    '</div>' \
-                    '{widget}' \
+                widget = (
+                    '<div class="admin-image-preview {object_name}">'
+                    '<img style="max-height: 200px;" src="{image_url}">'
+                    '<p class="file-upload">{dimensions}: {width} x {height}</p>'
+                    '</div>'
+                    '{widget}'
                     ''.format(
                         object_name='{0}-preview'.format(name),
                         image_url='{0}{1}'.format(settings.MEDIA_URL, value),
@@ -50,4 +48,5 @@ class AdminImageFileWidget(AdminFileWidget):
                         height=possible_image[1],
                         widget=widget,
                     )
+                )
         return widget

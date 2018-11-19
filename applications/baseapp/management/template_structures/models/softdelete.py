@@ -26,6 +26,4 @@ class {model_name}(BaseModelWithSoftDelete):
 """
 
 
-__all__ = [
-    'TEMPLATE_MODEL_SOFTDELETEMODEL',
-]
+__all__ = ['TEMPLATE_MODEL_SOFTDELETEMODEL']

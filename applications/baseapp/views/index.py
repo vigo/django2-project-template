@@ -4,9 +4,7 @@ from django.views.generic.base import TemplateView
 from ..mixins import HtmlDebugMixin
 from ..utils import console, numerify, urlify
 
-__all__ = [
-    'IndexView',
-]
+__all__ = ['IndexView']
 
 console = console(source=__name__)
 
@@ -22,6 +20,6 @@ class IndexView(HtmlDebugMixin, TemplateView):
         kwargs = super().get_context_data(**kwargs)
 
         query_string_p = numerify(self.request.GET.get('p'))
-        # console(query_string_p, type(query_string_p))
-        # console.dir(self.request.user)
+        console(query_string_p, type(query_string_p))
+        console.dir(self.request.user)
         return kwargs

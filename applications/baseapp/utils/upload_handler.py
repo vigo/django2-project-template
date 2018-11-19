@@ -5,9 +5,7 @@ from django.utils.text import slugify
 
 from baseapp.utils import urlify
 
-__all__ = [
-    'save_file',
-]
+__all__ = ['save_file']
 
 
 def save_file(instance, filename, upload_to='upload/%Y/%m/%d/'):
@@ -37,11 +35,7 @@ def save_file(instance, filename, upload_to='upload/%Y/%m/%d/'):
 
     file_basename, file_extension = os.path.splitext(filename)
     file_savename = '{safe_basename}{extension}'.format(
-        safe_basename=slugify(urlify(file_basename)),
-        extension=file_extension.lower(),
+        safe_basename=slugify(urlify(file_basename)), extension=file_extension.lower()
     )
     now = datetime.datetime.now()
-    return '{upload_to}{file_savename}'.format(
-        upload_to=now.strftime(upload_to),
-        file_savename=file_savename,
-    )
+    return '{upload_to}{file_savename}'.format(upload_to=now.strftime(upload_to), file_savename=file_savename)

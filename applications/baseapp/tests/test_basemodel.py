@@ -16,12 +16,15 @@ class BaseModelTestCase(TestCase):
         self.assertEqual(self.post.status, BasicPost.STATUS_ONLINE)
 
     def test_basemodel_queryset(self):
-        self.assertQuerysetEqual(BasicPost.objects_bm.all().order_by('id'), [
-            '<BasicPost: Test Post 1>',
-            '<BasicPost: Test Post 2>',
-            '<BasicPost: Test Post 3>',
-            '<BasicPost: Test Post 4>',
-        ])
+        self.assertQuerysetEqual(
+            BasicPost.objects_bm.all().order_by('id'),
+            [
+                '<BasicPost: Test Post 1>',
+                '<BasicPost: Test Post 2>',
+                '<BasicPost: Test Post 3>',
+                '<BasicPost: Test Post 4>',
+            ],
+        )
         self.assertQuerysetEqual(BasicPost.objects_bm.actives().order_by('id'), ['<BasicPost: Test Post 1>'])
         self.assertQuerysetEqual(BasicPost.objects_bm.offlines(), ['<BasicPost: Test Post 3>'])
         self.assertQuerysetEqual(BasicPost.objects_bm.deleted(), ['<BasicPost: Test Post 2>'])

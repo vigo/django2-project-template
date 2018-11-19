@@ -1,9 +1,7 @@
 from django.utils import translation
 from django.utils.cache import patch_vary_headers
 
-__all__ = [
-    'CustomLocaleMiddleware',
-]
+__all__ = ['CustomLocaleMiddleware']
 
 
 class CustomLocaleMiddleware(object):

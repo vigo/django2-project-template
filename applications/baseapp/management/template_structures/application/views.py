@@ -22,6 +22,4 @@ class {app_name_title}View(HtmlDebugMixin, TemplateView):
 """
 
 
-__all__ = [
-    'TEMPLATE_VIEWS',
-]
+__all__ = ['TEMPLATE_VIEWS']

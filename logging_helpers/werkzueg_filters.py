@@ -1,8 +1,6 @@
 from django.conf import settings
 
-__all__ = [
-    'werkzueg_filter_extenstions_callback',
-]
+__all__ = ['werkzueg_filter_extenstions_callback']
 
 
 def werkzueg_filter_extenstions_callback(record):

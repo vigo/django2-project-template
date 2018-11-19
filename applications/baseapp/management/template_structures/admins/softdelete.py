@@ -19,6 +19,4 @@ class {model_name}Admin(BaseAdminWithSoftDelete):
 """
 
 
-__all__ = [
-    'TEMPLATE_ADMIN_SOFTDELETEMODEL',
-]
+__all__ = ['TEMPLATE_ADMIN_SOFTDELETEMODEL']

@@ -9,6 +9,4 @@ class {app_name_title}Config(AppConfig):
 """
 
 
-__all__ = [
-    'TEMPLATE_APPS',
-]
+__all__ = ['TEMPLATE_APPS']

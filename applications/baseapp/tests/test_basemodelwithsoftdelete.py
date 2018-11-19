@@ -20,10 +20,9 @@ class BaseModelWithSoftDeleteTestCase(TestCase):
             self.assertEqual(post.status, Post.STATUS_ONLINE)
 
     def test_basemodelwithsoftdelete_queryset(self):
-        self.assertQuerysetEqual(self.category.posts.all().order_by('id'), [
-            '<Post: Python post 1>',
-            '<Post: Python post 2>',
-        ])
+        self.assertQuerysetEqual(
+            self.category.posts.all().order_by('id'), ['<Post: Python post 1>', '<Post: Python post 2>']
+        )
         self.assertQuerysetEqual(Category.objects_bm.actives(), ['<Category: Python>'])
         self.assertQuerysetEqual(Category.objects_bm.offlines(), [])
         self.assertQuerysetEqual(Category.objects_bm.deleted(), [])
@@ -34,7 +33,6 @@ class BaseModelWithSoftDeleteTestCase(TestCase):
         self.assertEqual(deleted_category, (3, {'baseapp.Category': 1, 'baseapp.Post': 2}))
         self.assertQuerysetEqual(Category.objects_bm.deleted(), ['<Category: Python>'])
         self.assertQuerysetEqual(Category.objects.all(), ['<Category: Python>'])
-        self.assertQuerysetEqual(Post.objects_bm.deleted().order_by('id'), [
-            '<Post: Python post 1>',
-            '<Post: Python post 2>',
-        ])
+        self.assertQuerysetEqual(
+            Post.objects_bm.deleted().order_by('id'), ['<Post: Python post 1>', '<Post: Python post 2>']
+        )
