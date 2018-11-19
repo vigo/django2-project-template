@@ -638,11 +638,23 @@ All the required modules are defined under `requirements/development.pip`:
 
 ```python
 # requirements/development.pip
--r base.pip
 ipython==7.1.1
 Werkzeug==0.14.1
 django-debug-toolbar==1.10.1
 coverage==4.5.2
+isort==4.3.4
+black==18.9b0
+flake8==3.6.0
+flake8-bandit==1.0.2
+flake8-blind-except==0.1.1
+flake8-bugbear==18.8.0
+flake8-builtins==1.4.1
+flake8-import-order==0.18
+flake8-polyfill==1.0.2
+flake8-print==3.1.0
+flake8-quotes==1.0.0
+flake8-string-format==0.2.3
+pylint==2.1.1
 ```
 
 ### `test.example.py`
@@ -1490,6 +1502,10 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2018-11-19**
+
+- Linters and formatters added.
 
 **2018-11-16**
 
