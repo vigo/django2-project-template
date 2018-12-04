@@ -30,7 +30,7 @@ class BaseModelTestCase(TestCase):
 
     def test_basemodel_queryset(self):
         self.assertQuerysetEqual(
-            BasicPost.objects_bm.all().order_by('id'),
+            BasicPost.objects.all().order_by('id'),
             [
                 '<BasicPost: Test Post 1>',
                 '<BasicPost: Test Post 2>',
@@ -39,18 +39,18 @@ class BaseModelTestCase(TestCase):
             ],
         )
         self.assertQuerysetEqual(
-            BasicPost.objects_bm.actives().order_by('id'),
+            BasicPost.objects.actives().order_by('id'),
             ['<BasicPost: Test Post 1>'],
         )
         self.assertQuerysetEqual(
-            BasicPost.objects_bm.offlines(),
+            BasicPost.objects.offlines(),
             ['<BasicPost: Test Post 3>'],
         )
         self.assertQuerysetEqual(
-            BasicPost.objects_bm.deleted(),
+            BasicPost.objects.deleted(),
             ['<BasicPost: Test Post 2>'],
         )
         self.assertQuerysetEqual(
-            BasicPost.objects_bm.drafts(),
+            BasicPost.objects.drafts(),
             ['<BasicPost: Test Post 4>'],
         )

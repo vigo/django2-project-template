@@ -42,7 +42,7 @@ class BaseAdminWithSoftDelete(BaseAdmin):
     hide_deleted_at = True
 
     def get_queryset(self, request):
-        qs = self.model.objects_bm.get_queryset()
+        qs = self.model.objects.get_queryset()
         if request.GET.get('status__exact', None):
             if (
                 numerify(request.GET.get('status__exact'))

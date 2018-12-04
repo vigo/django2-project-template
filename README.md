@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
 ![Django](https://img.shields.io/badge/django-2.1.3-green.svg)
-![Version](https://img.shields.io/badge/version-1.0.1-yellow.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-yellow.svg)
 
 # Django Project Starter Template
 
@@ -760,7 +760,9 @@ This is a common model. By default, `BaseModel` contains these fields:
 - `updated_at`
 - `status`
 
-Also has custom manager called: `objects_bm`. There are 4 basic status types:
+We are overriding the default manager. `BaseModel` uses `BaseModelQuerySet` as
+manager, `BaseModelWithSoftDelete` uses `BaseModelWithSoftDeleteManager`.
+There are 4 basic status types:
 
 ```python
 STATUS_OFFLINE = 0
@@ -769,13 +771,13 @@ STATUS_DELETED = 2
 STATUS_DRAFT = 3
 ```
 
-Custom manager has custom querysets against these statuses such as:
+You can make these queries:
 
 ```python
->>> Post.objects_bm.deleted()  # filters: status = STATUS_DELETED
->>> Post.objects_bm.actives()  # filters: status = STATUS_ONLINE
->>> Post.objects_bm.offlines() # filters: status = STATUS_OFFLINE
->>> Post.objects_bm.drafts()   # filters: status = STATUS_DRAFT
+>>> Post.objects.deleted()  # filters: status = STATUS_DELETED
+>>> Post.objects.actives()  # filters: status = STATUS_ONLINE
+>>> Post.objects.offlines() # filters: status = STATUS_OFFLINE
+>>> Post.objects.drafts()   # filters: status = STATUS_DRAFT
 ```
 
 ## `BaseModelWithSoftDelete`
@@ -794,7 +796,7 @@ This works exactly like Django’s `delete()`. Broadcasts `pre_delete` and
 a dictionary with the number of deletion-marks per object type.
 
 ```python
->>> Post.objects_bm.all()
+>>> Post.objects.all()
 
 SELECT "blog_post"."id",
        "blog_post"."created_at",
@@ -812,7 +814,7 @@ Execution time: 0.000135s [Database: default]
 
 <BaseModelWithSoftDeleteQuerySet [<Post: Python post 1>, <Post: Python post 2>, <Post: Python post 3>]>
 
->>> Category.objects_bm.all()
+>>> Category.objects.all()
 
 SELECT "blog_category"."id",
        "blog_category"."created_at",
@@ -826,14 +828,14 @@ SELECT "blog_category"."id",
 
 <BaseModelWithSoftDeleteQuerySet [<Category: Python>]>
 
->>> Category.objects_bm.delete()
+>>> Category.objects.delete()
 (4, {'blog.Category': 1, 'blog.Post': 3})
 
->>> Category.objects_bm.all()
+>>> Category.objects.all()
 <BaseModelWithSoftDeleteQuerySet []>       # rows are still there! don’t panic!
 
->>> Category.objects.all()
-<QuerySet [<Category: Python>]>
+>>> Category.objects.deleted()
+<BaseModelWithSoftDeleteQuerySet [<Category: Python>]>
 
 ```
 
@@ -1406,46 +1408,7 @@ $ rake test:coverage
 ```bash
 $ DJANGO_ENV=test python manage.py test baseapp -v 2                                 # or
 $ DJANGO_ENV=test python manage.py test baseapp.tests.test_user.CustomUserTestCase   # run single unit
-$ rake test:baseapp
-```
-
----
-
-## Notes
-
-If you created models via management command or rake task, you’ll have admin
-file automatically and generated against your model type. If you created a model
-with `BaseModelWithSoftDelete`, you’ll have `BaseAdminWithSoftDelete` set.
-
-`BaseAdminWithSoftDelete` uses `objects_bm` in `get_queryset` and by default,
-you’ll have extra actions and soft delete feature. If you don’t want to use
-`objects_bm` manager, you need to override it manually:
-
-```python
-# example: blog/admin/post.py
-
-from django.contrib import admin
-
-from baseapp.admin import BaseAdminWithSoftDelete
-
-from ..models import Post
-
-
-__all__ = [
-    'PostAdmin',
-]
-
-
-class PostAdmin(BaseAdminWithSoftDelete):
-    # sticky_list_filter = None
-    # hide_deleted_at = False
-    
-    def get_queryset(self, request):
-        return self.model.objects.get_queryset()  # this line!
-
-
-admin.site.register(Post, PostAdmin)
-
+$ rake test:run[baseapp]
 ```
 
 ---
@@ -1503,6 +1466,11 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2018-12-04**
+
+- Update: `BaseModel` and `BaseModelWithSoftDelete` now override `objects` via
+  their own managers.
 
 **2018-11-30**
 

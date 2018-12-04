@@ -160,8 +160,7 @@ class BaseModel(models.Model):
         verbose_name=_('Status'),
     )
 
-    objects = models.Manager()
-    objects_bm = BaseModelQuerySet.as_manager()
+    objects = BaseModelQuerySet.as_manager()
 
     class Meta:
         abstract = True
@@ -173,8 +172,7 @@ class BaseModelWithSoftDelete(BaseModel):
         null=True, blank=True, verbose_name=_('Deleted At')
     )
 
-    objects = models.Manager()
-    objects_bm = BaseModelWithSoftDeleteManager()
+    objects = BaseModelWithSoftDeleteManager()
 
     class Meta:
         abstract = True

@@ -36,17 +36,17 @@ class BaseModelWithSoftDeleteTestCase(TestCase):
             ],
         )
         self.assertQuerysetEqual(
-            Category.objects_bm.actives(),
+            Category.objects.actives(),
             ['<Category: Python>'],
         )
         self.assertQuerysetEqual(
-            Category.objects_bm.offlines(), []
+            Category.objects.offlines(), []
         )
         self.assertQuerysetEqual(
-            Category.objects_bm.deleted(), []
+            Category.objects.deleted(), []
         )
         self.assertQuerysetEqual(
-            Category.objects_bm.drafts(), []
+            Category.objects.drafts(), []
         )
 
     def test_softdelete(self):
@@ -56,14 +56,11 @@ class BaseModelWithSoftDeleteTestCase(TestCase):
             (3, {'baseapp.Category': 1, 'baseapp.Post': 2}),
         )
         self.assertQuerysetEqual(
-            Category.objects_bm.deleted(),
+            Category.objects.deleted(),
             ['<Category: Python>'],
         )
         self.assertQuerysetEqual(
-            Category.objects.all(), ['<Category: Python>']
-        )
-        self.assertQuerysetEqual(
-            Post.objects_bm.deleted().order_by('id'),
+            Post.objects.deleted().order_by('id'),
             [
                 '<Post: Python post 1>',
                 '<Post: Python post 2>',
