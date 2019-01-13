@@ -23,6 +23,9 @@ DATABASES = {
     }
 }
 
+# uncomment for PostgreSQL
+# DATABASES = {'default': {'ENGINE': 'django.db.backends.postgresql', 'NAME': 'NAME_OF_YOUR_DB'}}
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),  # noqa: F405
 )
@@ -77,7 +80,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        'main': {
+        'app': {
             'handlers': ['console_custom'],
             'level': 'DEBUG',
         },

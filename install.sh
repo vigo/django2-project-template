@@ -18,6 +18,7 @@ color_8=$(tput setaf 8) # gray
 color_r=$(tput sgr0)    # reset
 
 AVAILABLE_OPTIONS=(
+    "Django 2.1.5"
     "Django 2.0.5"
     "Django 2.1.3"
     "Cancel and quit"
@@ -28,6 +29,10 @@ PS3="Select option:"
 select i in "${AVAILABLE_OPTIONS[@]}"
 do
     case $i in
+        "Django 2.1.5")
+            PACKAGE="django-2.1.5"
+            break
+            ;;
         "Django 2.0.5")
             PACKAGE="django-2.0.5"
             break
@@ -59,7 +64,6 @@ mv "django2-project-template-${PACKAGE}" "${PROJECT_NAME}" &&
 rm template.zip &&
 cd "${PROJECT_NAME}" &&
 rm -f LICENSE.txt
-rm -f README.md
 rm -f README.md
 rm -f install.sh
 cp config/settings/development.example.py config/settings/development.py &&

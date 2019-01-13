@@ -12,7 +12,7 @@ from baseapp.utils import save_file as custom_save_file
 
 __all__ = ['User']
 
-logger = logging.getLogger('main')
+logger = logging.getLogger('app')
 
 
 class UserManager(BaseUserManager):

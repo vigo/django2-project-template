@@ -12,23 +12,31 @@ from ..template_structures import (
     application as application_templates,
 )
 
-TEMPLATE_MODELS_INIT = """# from .MODEL_FILE import *
+TEMPLATE_MODELS_INIT = """# isort:skip_file
+# flake8: noqa
+# from .MODEL_FILE import *
 
 """
 
-TEMPLATE_VIEWS_INIT = """# from .VIEWS_FILE import *
+TEMPLATE_VIEWS_INIT = """# isort:skip_file
+# flake8: noqa
+# from .VIEWS_FILE import *
 
 from .index import *
 
 """
 
-TEMPLATE_TESTS_INIT = """# from .TESTS_FILE import *
+TEMPLATE_TESTS_INIT = """# isort:skip_file
+# flake8: noqa
+# from .TESTS_FILE import *
 
 from .index import *
 
 """
 
-TEMPLATE_ADMIN_INIT = """# from .ADMIN_FILE import *
+TEMPLATE_ADMIN_INIT = """# isort:skip_file
+# flake8: noqa
+# from .ADMIN_FILE import *
 
 """
 

@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
-![Django](https://img.shields.io/badge/django-2.1.3-green.svg)
-![Version](https://img.shields.io/badge/version-1.1.0-yellow.svg)
+![Django](https://img.shields.io/badge/django-2.1.5-green.svg)
+![Version](https://img.shields.io/badge/version-1.2.0-yellow.svg)
 
 # Django Project Starter Template
 
@@ -23,6 +23,7 @@ environment via; `python -m venv /path/to/your/environment`
 ```bash
 # example
 $ mkvirtualenv my_projects_env
+
 # or make it active:
 $ workon my_projects_env
 ```
@@ -40,10 +41,12 @@ export DJANGO_SECRET="YOUR-SECRET-HERE" # will fix it in a second.
 then;
 
 ```bash
-# for django 2.1.3
-$ curl -L https://github.com/vigo/django2-project-template/archive/django-2.1.3.zip > template.zip
+# for django X.Y.Z
+# check https://github.com/vigo/django2-project-template/releases
+
+$ curl -L https://github.com/vigo/django2-project-template/archive/django-X.Y.Z.zip > template.zip
 $ unzip template.zip
-$ mv django2-project-template-django-2.1.3 my_project && rm template.zip
+$ mv django2-project-template-django-X.Y.Z my_project && rm template.zip
 $ cd my_project/
 $ cp config/settings/development.example.py config/settings/development.py
 $ cp config/settings/test.example.py config/settings/test.py
@@ -62,13 +65,14 @@ $ pip install -r requirements/development.pip
 $ git init # now you can start your own repo!
 ```
 
-This template comes with custom User model. Please take a look at it. If you
+This template comes with custom **User** model. Please take a look at it. If you
 need to add/change fields, please do so. If you change anything, please run `makemigrations`
 to keep track of your db. Then continue to work:
 
 ```bash
 $ python manage.py migrate
 $ python manage.py createsuperuser
+
 # enter: Email, First Name, Last Name and password
 $ python manage.py runserver_plus # or
 $ rake
@@ -91,7 +95,7 @@ admin.site.site_header = _('Your site header')
 
 ```
 
-Do not forget to compile your locale messages file.
+Do not forget to compile your locale messages files.
 
 ---
 
@@ -101,13 +105,14 @@ Do not forget to compile your locale messages file.
 - Custom `BaseModel`
 - Custom `BaseModelWithSoftDelete`
 - Custom manager for `BaseModel` and `BaseModelWithSoftDelete`
-- More useful Django Application structure!
+- Better Django Application structure! (*imho*)
 - Settings abstraction: Development / Production / Heroku / Test
-- Requirement abstraction depending on your environment!
-- Custom logger and log formatters
+- Requirements abstraction depending on your environment!
+- Custom logger and log formatters for development server
+- Basic logging configuration for production server
 - App and Model creator management commands
 - Custom Locale middleware
-- Debug Mixins for your HTML templates
+- Debug Mixin for your HTML templates
 - Handy utils: `console`, `console.dir()`, `numerify`, `urlify`, `save_file`
 - File widget for Django Admin: `AdminImageFileWidget`
 - Easy naming for your admin site!
@@ -436,8 +441,8 @@ $ rake
 Performing system checks...
 
 System check identified no issues (0 silenced).
-September 21, 2017 - 13:34:54
-Django version 1.11.4, using settings 'config.settings.development'
+XXXXXX YY, ZZZZ - AA:BB:CC
+Django version X.Y.Z, using settings 'config.settings.development'
 Starting development server at http://127.0.0.1:8000/
 Quit the server with CONTROL-C.
 ```
@@ -519,9 +524,9 @@ need to create a copy of it! (*if you follow along from the beginning, you’ve 
 All the base/common required Python packages/modules are defined under `requirements/base.pip`:
 
 ```python
-Django==2.1.3
-Pillow==5.3.0
 django-extensions==2.1.3
+Pillow==5.4.1
+django-extensions==2.1.4
 ```
 
 ### `base.py`
@@ -639,15 +644,15 @@ simple passwords such as `1234`. `MEDIA_ROOT` is set to basedir’s `media` fold
 All the required modules are defined under `requirements/development.pip`:
 
 ```python
-# requirements/development.pip
+-r base.pip
 ipython==7.1.1
 Werkzeug==0.14.1
-django-debug-toolbar==1.10.1
+django-debug-toolbar==1.11
 coverage==4.5.2
 isort==4.3.4
 black==18.9b0
 flake8==3.6.0
-flake8-bandit==1.0.2
+flake8-bandit==2.0.0
 flake8-blind-except==0.1.1
 flake8-bugbear==18.8.0
 flake8-builtins==1.4.1
@@ -655,7 +660,7 @@ flake8-polyfill==1.0.2
 flake8-print==3.1.0
 flake8-quotes==1.0.0
 flake8-string-format==0.2.3
-pylint==2.1.1
+pylint==2.2.2
 ```
 
 ### `test.example.py`
@@ -686,18 +691,16 @@ ALLOWED_HOSTS = [
 All the required modules are defined under `requirements/heroku.pip`:
 
 ```python
-# requirements/heroku.pip
 -r base.pip
 gunicorn==19.9.0
 psycopg2-binary==2.7.6.1
 dj-database-url==0.5.0
-whitenoise==4.1
+whitenoise==4.1.2
 ```
 
 By default, Heroku requires `requirements.txt`. Therefore we have it too :)
 
 ```python
-# requirements.txt
 -r requirements/heroku.pip
 ```
 
@@ -843,9 +846,14 @@ SELECT "blog_category"."id",
 `status` field:
 
 - `.all()`
-- `.delete()`
-- `.undelete()`
-- `.deleted()`
+- `.offlines()` : filters if `BaseModel.STATUS_OFFLINE` is set
+- `.actives()` : filters if `BaseModel.STATUS_ONLINE` is set
+- `.deleted()` : filters if `BaseModel.STATUS_DELETED` is set and `deleted_at` is not `NULL`
+- `.drafts()` : filters if `BaseModel.STATUS_DRAFT` is set
+- `.delete()` : soft delete on given object.
+- `.undelete()` : recover soft deleted on given object.
+- `.hard_delete()` : this is real delete. this method erases given object.
+
 
 When soft-delete enabled (*during model creation*), Django admin will
 automatically use `BaseAdminWithSoftDelete` which is inherited from:
@@ -903,7 +911,7 @@ Werkzeug’s output. Example usage:
 ```python
 import logging
 
-logger = logging.getLogger('main')      # config/setting/development.py
+logger = logging.getLogger('app')      # config/setting/development.py
 logger.warning('This is Warning')
 ```
 
@@ -911,6 +919,9 @@ logger.warning('This is Warning')
 You can configure it via `WERKZUEG_FILTER_EXTENSTIONS`. Value is a `list` of
 file extensions: `['css', 'js', 'png', 'jpg', 'svg', 'gif', 'woff']` All
 those extensions will not be shown at development server log...
+
+You can also customize production/heroku logging (under `config/settings/`)
+options too.
 
 ---
 
@@ -1236,9 +1247,9 @@ rake new:application[name_of_application]                        # Create new Dj
 rake new:model[name_of_application,name_of_model,type_of_model]  # Create new Model for given application
 rake run_server                                                  # Run server
 rake shell                                                       # Run shell+
+rake test:browse_coverage[port]                                  # Browse test coverage
 rake test:coverage[cli_args]                                     # Show test coverage (default: '--show-missing --ignore-errors --skip-covered')
-rake test:run[name_of_application,verbose]                       # Run tests for given application
-```
+rake test:run[name_of_application,verbose]                       # Run tests for given application```
 
 Default task is `run_server`. Just type `rake` that’s it! `runserver` uses
 `runserver_plus`. This means you have lots of debugging options!
@@ -1401,6 +1412,11 @@ Get the test report. Default is `--show-missing --ignore-errors --skip-covered` 
 $ rake test:coverage
 ```
 
+### `rake test:browse_coverage[port]`
+
+Serves generated html coverages under `htmlcov` folder via `python`. Default port
+is `9001`
+
 ---
 
 ## Run Tests Manually
@@ -1466,6 +1482,19 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2019-01-13**
+
+- Fix: Recovers related model items. Now works 100% correct.
+- Add: Hard Delete feature. (*for BaseModelWithSoftDelete usage*)
+- Fix: Wrong translations
+
+**2019-01-12**
+
+- Django version upgrade to: 2.1.5
+- Upgrade: required python packages for dev, test, prod etc...
+- Fix: Missing locale generator for JavaScript
+- Add: Production logging configuration
 
 **2018-12-04**
 

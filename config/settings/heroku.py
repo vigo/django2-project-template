@@ -1,3 +1,5 @@
+import logging
+
 import dj_database_url
 
 from .base import *  # noqa: F403
@@ -53,3 +55,51 @@ MIDDLEWARE.insert(  # noqa: F405
     'whitenoise.middleware.WhiteNoiseMiddleware',
 )
 # fmt: on
+
+LOGGING_CONFIG = None
+LOGLEVEL = os.environ.get(  # noqa: F405
+    'LOGLEVEL', 'info'
+).upper()
+
+logging.config.dictConfig(
+    {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'default': {
+                'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
+            }
+        },
+        'handlers': {
+            'mail_admins': {
+                'level': 'ERROR',
+                'class': 'django.utils.log.AdminEmailHandler',
+            },
+            'stdout': {
+                'level': 'INFO',
+                'class': 'logging.StreamHandler',
+                'formatter': 'default',
+                'stream': sys.stdout,  # noqa: F405
+            },
+            'stderr': {
+                'level': 'ERROR',
+                'class': 'logging.StreamHandler',
+                'formatter': 'default',
+                'stream': sys.stderr,  # noqa: F405
+            },
+        },
+        'loggers': {
+            '': {'level': 'DEBUG', 'handlers': ['stdout']},
+            'app': {
+                'level': LOGLEVEL,
+                'handlers': ['stdout'],
+                'propagate': False,
+            },
+            'django.request': {
+                'handlers': ['mail_admins'],
+                'level': 'ERROR',
+                'propagate': False,
+            },
+        },
+    }
+)

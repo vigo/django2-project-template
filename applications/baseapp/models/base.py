@@ -4,23 +4,25 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from ..utils import console
+
 __all__ = ['BaseModel', 'BaseModelWithSoftDelete']
 
+console = console(source=__name__)
 
-logger = logging.getLogger('main')
+logger = logging.getLogger('app')
 
 
 class BaseModelQuerySet(models.QuerySet):
     """
     Common QuerySet for BaseModel and BaseModelWithSoftDelete.
-    Both querysets have:
 
-    - `.actives()`: Returns `status` = `STATUS_ONLINE`
-    - `.deleted()`: Returns `status` = `STATUS_DELETED`
-    - `.offlines()`: Returns `status` = `STATUS_OFFLINE`
-    - `.drafts()`: Returns `status` = `STATUS_DRAFT`
+    Available methods are:
 
-    methods.
+    - `.actives()` : filters `status` is `STATUS_ONLINE`
+    - `.deleted()` : filters `status` is `STATUS_DELETED`
+    - `.offlines()`: filters `status` is `STATUS_OFFLINE`
+    - `.drafts()`  : filters `status` is `STATUS_DRAFT`
 
     """
 
@@ -41,15 +43,45 @@ class BaseModelWithSoftDeleteQuerySet(BaseModelQuerySet):
     """
     Available methods are:
 
-    - `.all()`: Mimics deleted records. Return only if the `deleted_at` value is NULL!
-    - `.deleted()`: Returns soft deleted objects.
-    - `.actives()`: Returns `status` = `STATUS_ONLINE`
-    - `.offlines()`: Returns `status` = `STATUS_OFFLINE`
-    - `.drafts()`: Returns `status` = `STATUS_DRAFT`
-    - `.delete()`: Soft deletes give objects.
-    - `.undelete()`: Recovers (sets `status` to `STATUS_ONLINE`) give objects.
+    - `.all()`        : mimics deleted records.
+    - `.actives()`    : filters `status` is `STATUS_ONLINE`
+    - `.offlines()`   : filters `status` is `STATUS_OFFLINE`
+    - `.drafts()`     : filters `status` is `STATUS_DRAFT`
+    - `.deleted()`    : returns soft deleted objects.
+    - `.delete()`     : soft deletes given objects.
+    - `.undelete()`   : recovers given soft deleted object. fixes status and deleted_at values.
+    - `.hard_delete()`: real delete method. no turning back!
 
     """
+
+    def all(self):  # noqa: A003
+        return self.filter(deleted_at__isnull=True).exclude(
+            status=BaseModel.STATUS_DELETED
+        )
+
+    def actives(self):
+        return self.all().filter(
+            status=BaseModel.STATUS_ONLINE
+        )
+
+    def offlines(self):
+        return self.all().filter(
+            status=BaseModel.STATUS_OFFLINE
+        )
+
+    def drafts(self):
+        return self.all().filter(
+            status=BaseModel.STATUS_DRAFT
+        )
+
+    def delete(self):
+        return self._delete_or_undelete()
+
+    def undelete(self):
+        return self._delete_or_undelete(True)
+
+    def hard_delete(self):
+        return super().delete()
 
     def _delete_or_undelete(self, undelete=False):
         processed_instances = {}
@@ -73,35 +105,27 @@ class BaseModelWithSoftDeleteQuerySet(BaseModelQuerySet):
             processed_instances,
         )
 
-    def all(self):  # noqa: A003
-        return self.filter(deleted_at__isnull=True)
+
+class BaseModelManager(models.Manager):
+    def get_queryset(self):
+        return BaseModelQuerySet(self.model, using=self._db)
 
     def actives(self):
-        return self.all().filter(
-            status=BaseModel.STATUS_ONLINE
-        )
+        return self.get_queryset().actives()
+
+    def deleted(self):
+        return self.get_queryset().deleted()
 
     def offlines(self):
-        return self.all().filter(
-            status=BaseModel.STATUS_OFFLINE
-        )
+        return self.get_queryset().offlines()
 
     def drafts(self):
-        return self.all().filter(
-            status=BaseModel.STATUS_DRAFT
-        )
-
-    def delete(self):
-        return self._delete_or_undelete()
-
-    def undelete(self):
-        return self._delete_or_undelete(True)
+        return self.get_queryset().drafts()
 
 
-class BaseModelWithSoftDeleteManager(models.Manager):
+class BaseModelWithSoftDeleteManager(BaseModelManager):
     """
     This is a manager for `BaseModelWithSoftDelete` instances.
-    Do not forget! `.all()` will never return soft-deleted objects!
     """
 
     def get_queryset(self):
@@ -112,23 +136,14 @@ class BaseModelWithSoftDeleteManager(models.Manager):
     def all(self):  # noqa: A003
         return self.get_queryset().all()
 
-    def deleted(self):
-        return self.get_queryset().deleted()
-
-    def actives(self):
-        return self.get_queryset().actives()
-
-    def offlines(self):
-        return self.get_queryset().offlines()
-
-    def drafts(self):
-        return self.get_queryset().drafts()
-
     def delete(self):
         return self.get_queryset().delete()
 
     def undelete(self):
         return self.get_queryset().undelete()
+
+    def hard_delete(self):
+        return self.get_queryset().hard_delete()
 
 
 class BaseModel(models.Model):
@@ -160,7 +175,7 @@ class BaseModel(models.Model):
         verbose_name=_('Status'),
     )
 
-    objects = BaseModelQuerySet.as_manager()
+    objects = BaseModelManager()
 
     class Meta:
         abstract = True
@@ -176,6 +191,9 @@ class BaseModelWithSoftDelete(BaseModel):
 
     class Meta:
         abstract = True
+
+    def hard_delete(self):
+        super().delete()
 
     def delete(self, *args, **kwargs):
         return self._delete_or_undelete()
@@ -234,9 +252,18 @@ class BaseModelWithSoftDelete(BaseModel):
                     self, accessor_name
                 )
                 related_model_instance_count = 0
+
+                related_model_query = (
+                    related_model_instances.all()
+                )
+                if call_method == 'undelete':
+                    related_model_query = (
+                        related_model_instances.deleted()
+                    )
+
                 for (
                     related_model_instance
-                ) in related_model_instances.all():
+                ) in related_model_query:
                     getattr(
                         related_model_instance, call_method
                     )()

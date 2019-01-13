@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django-base-project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-02 14:16+0300\n"
+"POT-Creation-Date: 2019-01-13 16:52+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Uğur Özyılmazel <ugurozyilmazel@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,142 +18,181 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: applications/baseapp/admin/base.py:27
+#: applications/baseapp/admin/base.py:28 applications/baseapp/admin/base.py:45
 msgid "1 record was"
 msgstr "1 kayıt"
 
-#: applications/baseapp/admin/base.py:29
+#: applications/baseapp/admin/base.py:31 applications/baseapp/admin/base.py:48
 #, python-format
 msgid "%(number_of_rows)s records were"
 msgstr "%(number_of_rows)s kayıt"
 
-#: applications/baseapp/admin/base.py:30
+#: applications/baseapp/admin/base.py:34
 #, python-format
 msgid "%(message_bit)s successfully marked as active"
 msgstr "%(message_bit)s aktif olarak işaretlendi."
 
-#: applications/baseapp/admin/base.py:58
+#: applications/baseapp/admin/base.py:50
+#, python-format
+msgid "%(message_bit)s deleted"
+msgstr "%(message_bit)s silindi."
+
+#: applications/baseapp/admin/base.py:86
 #, python-format
 msgid "Recover selected %(verbose_name_plural)s"
-msgstr "Seçili %(verbose_name_plural)s nesnelerini aktif hale getir"
+msgstr "Seçili silinmiş %(verbose_name_plural)s nesnelerini geri getir"
 
-#: applications/baseapp/admin/user.py:21 applications/baseapp/admin/user.py:52
+#: applications/baseapp/admin/base.py:97
+#, python-format
+msgid "Hard delete selected %(verbose_name_plural)s"
+msgstr "Seçili %(verbose_name_plural)s nesnelerini gerçekten sil"
+
+#: applications/baseapp/admin/user.py:37
+msgid "User information"
+msgstr "Kullanıcı Bilgileri"
+
+#: applications/baseapp/admin/user.py:50
+msgid "Permissions"
+msgstr ""
+
+#: applications/baseapp/admin/user.py:92
+#: applications/baseapp/models/user.py:113
+msgid "Profile Image"
+msgstr "Profil Fotoğrafı"
+
+#: applications/baseapp/forms/user.py:16 applications/baseapp/forms/user.py:47
 msgid "Password"
 msgstr ""
 
-#: applications/baseapp/admin/user.py:23
+#: applications/baseapp/forms/user.py:18
 msgid ""
 "Raw passwords are not stored, so there is no way to see this user's "
 "password, but you can change the password using <a href=\"../password/"
 "\">this form</a>."
 msgstr ""
 
-#: applications/baseapp/admin/user.py:41 applications/baseapp/admin/user.py:68
-#: applications/baseapp/models/user.py:72
+#: applications/baseapp/forms/user.py:36 applications/baseapp/forms/user.py:62
+#: applications/baseapp/models/user.py:100
 msgid "first name"
 msgstr ""
 
-#: applications/baseapp/admin/user.py:42 applications/baseapp/admin/user.py:69
-#: applications/baseapp/models/user.py:82
+#: applications/baseapp/forms/user.py:37 applications/baseapp/forms/user.py:63
+#: applications/baseapp/models/user.py:109
 msgid "last name"
 msgstr ""
 
-#: applications/baseapp/admin/user.py:56
+#: applications/baseapp/forms/user.py:50
 msgid "Password confirmation"
 msgstr ""
 
-#: applications/baseapp/admin/user.py:76
+#: applications/baseapp/forms/user.py:75
 msgid "Passwords don't match"
 msgstr ""
 
-#: applications/baseapp/admin/user.py:97
-msgid "User information"
-msgstr "Kullanıcı Bilgileri"
-
-#: applications/baseapp/admin/user.py:105
-msgid "Permissions"
-msgstr ""
-
-#: applications/baseapp/admin/user.py:137
-#: applications/baseapp/models/user.py:86
-msgid "Profile Image"
-msgstr "Profil Fotoğrafı"
-
-#: applications/baseapp/models/base.py:137
+#: applications/baseapp/models/base.py:160
 msgid "Offline"
 msgstr "Kapalı"
 
-#: applications/baseapp/models/base.py:138
+#: applications/baseapp/models/base.py:161
 msgid "Online"
 msgstr "Yayında"
 
-#: applications/baseapp/models/base.py:139
+#: applications/baseapp/models/base.py:162
 msgid "Deleted"
 msgstr "Silinmiş"
 
-#: applications/baseapp/models/base.py:140
+#: applications/baseapp/models/base.py:163
 msgid "Draft"
 msgstr "Taslak"
 
-#: applications/baseapp/models/base.py:145
-#: applications/baseapp/models/user.py:60
+#: applications/baseapp/models/base.py:167
+#: applications/baseapp/models/user.py:91
 msgid "Created At"
 msgstr "Oluşturma Tarihi"
 
-#: applications/baseapp/models/base.py:149
-#: applications/baseapp/models/user.py:64
+#: applications/baseapp/models/base.py:170
+#: applications/baseapp/models/user.py:94
 msgid "Updated At"
 msgstr "Güncelleme Tarihi"
 
-#: applications/baseapp/models/base.py:154
+#: applications/baseapp/models/base.py:175
 msgid "Status"
 msgstr "Durum"
 
-#: applications/baseapp/models/base.py:168
+#: applications/baseapp/models/base.py:187
 msgid "Deleted At"
 msgstr "Silinme Tarihi"
 
-#: applications/baseapp/models/user.py:26
+#: applications/baseapp/models/user.py:35
 msgid "Users must have an email address"
 msgstr ""
 
-#: applications/baseapp/models/user.py:68
+#: applications/baseapp/models/user.py:97
 msgid "email address"
 msgstr ""
 
-#: applications/baseapp/models/user.py:78
+#: applications/baseapp/models/user.py:106
 msgid "middle name"
 msgstr "göbek adı"
 
-#: applications/baseapp/models/user.py:92
+#: applications/baseapp/models/user.py:118
 msgid "active"
 msgstr ""
 
-#: applications/baseapp/models/user.py:96
+#: applications/baseapp/models/user.py:121
 msgid "staff status"
 msgstr ""
 
-#: applications/baseapp/models/user.py:103
+#: applications/baseapp/models/user.py:128
 msgid "user"
 msgstr ""
 
-#: applications/baseapp/models/user.py:104
+#: applications/baseapp/models/user.py:129
 msgid "users"
 msgstr ""
 
-#: applications/baseapp/widgets/image_file.py:49
+#: applications/baseapp/widgets/image_file.py:52
 msgid "Dimensions"
 msgstr "Boyutları"
 
-#: config/urls.py:10
+#: applications/blog/apps.py:6 applications/blog/apps.py:7
+msgid "Blog"
+msgstr ""
+
+#: applications/blog/models/category.py:15
+msgid "title"
+msgstr ""
+
+#: applications/blog/models/category.py:20
+#: applications/blog/models/category.py:21 applications/blog/models/post.py:24
+msgid "Category"
+msgstr ""
+
+#: applications/blog/models/post.py:18
+msgid "Author"
+msgstr ""
+
+#: applications/blog/models/post.py:28
+msgid "Title"
+msgstr ""
+
+#: applications/blog/models/post.py:31
+msgid "Body"
+msgstr ""
+
+#: applications/blog/models/post.py:36 applications/blog/models/post.py:37
+msgid "Post"
+msgstr ""
+
+#: config/urls.py:7
 msgid "Your admin index title"
 msgstr "Admin listesi başlığı"
 
-#: config/urls.py:11
+#: config/urls.py:8
 msgid "Your site title"
 msgstr "Siteniniz başlığı"
 
-#: config/urls.py:12
+#: config/urls.py:9
 msgid "Your site header"
 msgstr "Marka ya da proje başlığı"
 
@@ -169,14 +208,22 @@ msgstr ""
 msgid "Welcome,"
 msgstr ""
 
-#: templates/baseapp/index.html:8
-msgid "Welcome to Django"
+#: templates/baseapp/index.html:4
+msgid "Example page"
 msgstr ""
 
 #: templates/baseapp/index.html:9
-msgid "It worked!"
+msgid "Welcome to Django"
 msgstr ""
 
 #: templates/baseapp/index.html:10
-msgid "Template variables"
+msgid "It worked!"
+msgstr ""
+
+#: templates/baseapp/index.html:14
+msgid "Variable"
+msgstr ""
+
+#: templates/baseapp/index.html:15
+msgid "Value"
 msgstr ""
