@@ -1,12 +1,13 @@
-TEMPLATE_VIEWS = """from django.views.generic.base import TemplateView
+TEMPLATE_VIEWS = """import logging
+
+from django.views.generic.base import TemplateView
 
 from baseapp.mixins import HtmlDebugMixin
 from baseapp.utils import console
 
-__all__ = [
-    '{app_name_title}View',
-]
+__all__ = ['{app_name_title}View']
 
+logger = logging.getLogger('app')
 console = console(source=__name__)
 
 

@@ -64,7 +64,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         app_name = options.pop('app_name')[0]
-        model_name = options.pop('model_name')[0].title()
+        model_name = options.pop('model_name')[0]
+        model_name_title = model_name.title()
         model_type = options.pop('model_type')
 
         try:
@@ -100,14 +101,14 @@ class Command(BaseCommand):
         admin_init_file = os.path.join(app_dir, 'admin', '__init__.py')
 
         content_model_file = TEMPLATE_MODELS[model_type].format(
-            model_name=model_name, app_name=app_name
+            model_name=model_name, app_name=app_name, model_name_title=model_name_title
         )
         content_init_file = 'from .{0} import *\n'.format(
             dash_seperated_file_base_name.lower()
         )
 
         content_admin_file = TEMPLATE_ADMINS[model_type].format(
-            model_name=model_name, app_name=app_name
+            model_name=model_name, app_name=app_name, model_name_title=model_name_title
         )
 
         self.create_or_modify_file(model_file, content_model_file)

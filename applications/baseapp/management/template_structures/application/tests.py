@@ -1,11 +1,12 @@
-TEMPLATE_TESTS = """from django.test import TestCase
+TEMPLATE_TESTS = """import logging
+
+from django.test import TestCase
 
 from baseapp.utils import console
 
-__all__ = [
-    '{app_name_title}BasicTestCase',
-]
+__all__ = ['{app_name_title}BasicTestCase']
 
+logger = logging.getLogger('app')
 console = console(source=__name__)
 
 

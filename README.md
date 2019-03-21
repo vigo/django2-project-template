@@ -195,15 +195,16 @@ You’ll see `Hello from Blog` page and If you check `blog/views/index.py` you�
 and example usage of `HtmlDebugMixin` and `console` util. 
 
 ```python
+import logging
+
 from django.views.generic.base import TemplateView
 
 from baseapp.mixins import HtmlDebugMixin
 from baseapp.utils import console
 
-__all__ = [
-    'BlogView',
-]
+__all__ = ['BlogView']
 
+logger = logging.getLogger('app')
 console = console(source=__name__)
 
 
@@ -266,27 +267,27 @@ This creates `blog/models/post.py` and `blog/admin/post.py` files:
 ```python
 # blog/models/post.py
 
+import logging
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from baseapp.models import BaseModelWithSoftDelete
+from baseapp.utils import console
 
+__all__ = ['Post']
 
-__all__ = [
-    'Post',
-]
+logger = logging.getLogger('app')
+console = console(source=__name__)
 
 
 class Post(BaseModelWithSoftDelete):
-    title = models.CharField(
-        max_length=255,
-        verbose_name=_('title'),
-    )
+    title = models.CharField(max_length=255, verbose_name=_('title'))
 
     class Meta:
         app_label = 'blog'
-        verbose_name = _('Post')
-        verbose_name_plural = _('Post')
+        verbose_name = _('post')
+        verbose_name_plural = _('post')
     
     def __str__(self):
         return self.title
@@ -323,15 +324,19 @@ Now It’s time to fix our models by hand!
 ```python
 # blog/models/post.py
 
+import logging
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from baseapp.models import BaseModelWithSoftDelete
+from baseapp.utils import console
 
-__all__ = [
-    'Post',
-]
+__all__ = ['Post']
+
+logger = logging.getLogger('app')
+console = console(source=__name__)
 
 
 class Post(BaseModelWithSoftDelete):
@@ -339,26 +344,26 @@ class Post(BaseModelWithSoftDelete):
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='posts',
-        verbose_name=_('Author'),
+        verbose_name=_('author'),
     )
     category = models.ForeignKey(
         to='Category',
         on_delete=models.CASCADE,
         related_name='posts',
-        verbose_name=_('Category'),
+        verbose_name=_('category'),
     )
     title = models.CharField(
         max_length=255,
-        verbose_name=_('Title'),
+        verbose_name=_('title'),
     )
     body = models.TextField(
-        verbose_name=_('Body'),
+        verbose_name=_('body'),
     )
 
     class Meta:
         app_label = 'blog'
-        verbose_name = _('Post')
-        verbose_name_plural = _('Post')
+        verbose_name = _('post')
+        verbose_name_plural = _('posts')  # check pluralization
 
     def __str__(self):
         return self.title
@@ -371,15 +376,18 @@ field:
 ```python
 # blog/models/category.py
 
+import logging
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from baseapp.models import BaseModelWithSoftDelete
+from baseapp.utils import console
 
+__all__ = ['Category']
 
-__all__ = [
-    'Category',
-]
+logger = logging.getLogger('app')
+console = console(source=__name__)
 
 
 class Category(BaseModelWithSoftDelete):
@@ -390,8 +398,8 @@ class Category(BaseModelWithSoftDelete):
 
     class Meta:
         app_label = 'blog'
-        verbose_name = _('Category')
-        verbose_name_plural = _('Category')
+        verbose_name = _('category')
+        verbose_name_plural = _('categories')
     
     def __str__(self):
         return self.title
@@ -546,7 +554,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'baseapp',                          # our helper app
+    'baseapp.apps.BaseappConfig',  # our helper app
 ]
 ```
 
@@ -561,51 +569,51 @@ INSTALLED_APPS += [
 
 Django Extension adds great functionalities:
 
-- `admin_generator`
-- `clean_pyc`
-- `clear_cache`
-- `compile_pyc`
-- `create_command`
-- `create_jobs`
-- `create_template_tags`
-- `delete_squashed_migrations`
-- `describe_form`
-- `drop_test_database`
-- `dumpscript`
-- `export_emails`
-- `find_template`
-- `generate_password`
-- `generate_secret_key`
-- `graph_models`
-- `mail_debug`
-- `merge_model_instances`
-- `notes`
-- `passwd`
-- `pipchecker`
-- `print_settings`
-- `print_user_for_session`
-- `reset_db`
-- `reset_schema`
-- `runjob`
-- `runjobs`
-- `runprofileserver`
-- `runscript`
-- `runserver_plus`
-- `set_default_site`
-- `set_fake_emails`
-- `set_fake_passwords`
-- `shell_plus`
-- `show_template_tags`
-- `show_templatetags`
-- `show_urls`
-- `sqlcreate`
-- `sqldiff`
-- `sqldsn`
-- `sync_s3`
-- `syncdata`
-- `unreferenced_files`
-- `update_permissions`
-- `validate_templates`
+    admin_generator
+    clean_pyc
+    clear_cache
+    compile_pyc
+    create_command
+    create_jobs
+    create_template_tags
+    delete_squashed_migrations
+    describe_form
+    drop_test_database
+    dumpscript
+    export_emails
+    find_template
+    generate_password
+    generate_secret_key
+    graph_models
+    mail_debug
+    merge_model_instances
+    notes
+    passwd
+    pipchecker
+    print_settings
+    print_user_for_session
+    reset_db
+    reset_schema
+    runjob
+    runjobs
+    runprofileserver
+    runscript
+    runserver_plus
+    set_default_site
+    set_fake_emails
+    set_fake_passwords
+    shell_plus
+    show_template_tags
+    show_templatetags
+    show_urls
+    sqlcreate
+    sqldiff
+    sqldsn
+    sync_s3
+    syncdata
+    unreferenced_files
+    update_permissions
+    validate_templates
 
 One of my favorite: `python manage.py show_urls` :)
 
@@ -685,7 +693,7 @@ Add your heroku domain here:
 
 ```python
 ALLOWED_HOSTS = [
-    'lit-eyrie-63238.herokuapp.com', # example heroku domain
+    'lit-eyrie-63238.herokuapp.com',  # example heroku domain
 ]
 ```
 
@@ -872,25 +880,25 @@ automatically generated.
 Example for `Post` model admin.
 
 ```python
+import logging
+
 from django.contrib import admin
 
 from baseapp.admin import BaseAdminWithSoftDelete
+from baseapp.utils import console
 
 from ..models import Post
 
+__all__ = ['PostAdmin']
 
-__all__ = [
-    'PostAdmin',
-]
+logger = logging.getLogger('app')
+console = console(source=__name__)
 
-
+@admin.register(Post)
 class PostAdmin(BaseAdminWithSoftDelete):
     # sticky_list_filter = None
     # hide_deleted_at = False
     pass
-
-
-admin.site.register(Post, PostAdmin)
 
 ```
 
@@ -949,9 +957,18 @@ anything from view to html template...
 ```python
 # example: views.py
 
+import logging
+
 from django.views.generic.base import TemplateView
 
 from baseapp.mixins import HtmlDebugMixin
+from baseapp.utils import console
+
+__all__ = ['IndexView']
+
+logger = logging.getLogger('app')
+console = console(source=__name__)
+
 
 class IndexView(HtmlDebugMixin, TemplateView):
     template_name = 'index.html'
@@ -967,8 +984,7 @@ class IndexView(HtmlDebugMixin, TemplateView):
 `{% hdbg %}` tag added by default in to your `templates/base.html`:
 
 ```django
-{% load static %}
-{% load i18n %}
+{% load static i18n %}
 
 <!DOCTYPE html>
 <html>
@@ -1483,6 +1499,13 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2019-03-22**
+
+- Line width fixed to 88 chars
+- All code generators now inject `console` and `logger` (model, admin, view, test)
+- Fix: `BaseModelWithSoftDelete` relation with standard model
+- Upgrade: Django 2.1.7 and other packages
 
 **2019-01-13**
 
