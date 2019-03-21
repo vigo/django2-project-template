@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
 ![Django](https://img.shields.io/badge/django-2.1.7-green.svg)
-![Version](https://img.shields.io/badge/version-1.3.0-yellow.svg)
+![Version](https://img.shields.io/badge/version-1.3.1-yellow.svg)
 
 # Django Project Starter Template
 
@@ -137,7 +137,7 @@ $ rake new:application[blog]
     - Do not forget to add your `blog` to `INSTALLED_APPS` under `config/settings/base.py`:
 
     INSTALLED_APPS += [
-        'blog',
+        'blog.apps.BlogConfig',
     ]
 
     - Do not forget to fix your `config/settings/urls.py`:
@@ -162,7 +162,7 @@ Fix your `config/settings/base.py`, add this newly created app to your `INSTALLE
 AUTH_USER_MODEL = 'baseapp.User'
 
 INSTALLED_APPS += [
-    'blog',
+    'blog.apps.BlogConfig',
 ]
 
 ```

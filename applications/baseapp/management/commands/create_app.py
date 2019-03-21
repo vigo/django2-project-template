@@ -1,6 +1,7 @@
 import errno
 import os
 import time
+import re
 from importlib import import_module
 
 from django.conf import settings
@@ -76,7 +77,7 @@ USER_REMINDER = """
     - Do not forget to add your `{app_name}` to `INSTALLED_APPS` under `config/settings/base.py`:
 
     INSTALLED_APPS += [
-        '{app_name}',
+        '{app_name}.apps.{inital_caps_appname}Config',
     ]
 
     - Do not forget to fix your `config/settings/urls.py`:
@@ -105,6 +106,9 @@ class Command(CustomBaseCommand):
 
     def handle(self, *args, **options):
         app_name = options.pop('name')[0]
+        inital_caps_appname = ''.join(
+            map(lambda t: t.title(), re.split('[^a-zA-Z0-9]', app_name))
+        )
 
         try:
             import_module(app_name)
@@ -152,7 +156,13 @@ class Command(CustomBaseCommand):
         self.stdout.write(
             self.style.SUCCESS('"{0}" application created.'.format(app_name))
         )
-        self.stdout.write(self.style.NOTICE(USER_REMINDER.format(app_name=app_name)))
+        self.stdout.write(
+            self.style.NOTICE(
+                USER_REMINDER.format(
+                    app_name=app_name, inital_caps_appname=inital_caps_appname
+                )
+            )
+        )
 
     def generate_files(self, files_list, root_path, render_params):
         for single_file in files_list:
