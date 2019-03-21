@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
-![Django](https://img.shields.io/badge/django-2.1.5-green.svg)
-![Version](https://img.shields.io/badge/version-1.2.0-yellow.svg)
+![Django](https://img.shields.io/badge/django-2.1.7-green.svg)
+![Version](https://img.shields.io/badge/version-1.3.0-yellow.svg)
 
 # Django Project Starter Template
 
@@ -524,9 +524,10 @@ need to create a copy of it! (*if you follow along from the beginning, you’ve 
 All the base/common required Python packages/modules are defined under `requirements/base.pip`:
 
 ```python
-django-extensions==2.1.3
+Django==2.1.7
 Pillow==5.4.1
-django-extensions==2.1.4
+django-extensions==2.1.6
+python-slugify==3.0.0
 ```
 
 ### `base.py`
@@ -645,14 +646,14 @@ All the required modules are defined under `requirements/development.pip`:
 
 ```python
 -r base.pip
-ipython==7.1.1
-Werkzeug==0.14.1
+ipython==7.3.0
+Werkzeug==0.15.0
 django-debug-toolbar==1.11
-coverage==4.5.2
-isort==4.3.4
-black==18.9b0
-flake8==3.6.0
-flake8-bandit==2.0.0
+coverage==4.5.3
+isort==4.3.15
+black==19.3b0
+flake8==3.7.7
+flake8-bandit==2.1.0
 flake8-blind-except==0.1.1
 flake8-bugbear==18.8.0
 flake8-builtins==1.4.1
@@ -660,7 +661,7 @@ flake8-polyfill==1.0.2
 flake8-print==3.1.0
 flake8-quotes==1.0.0
 flake8-string-format==0.2.3
-pylint==2.2.2
+pylint==2.3.1
 ```
 
 ### `test.example.py`
@@ -693,7 +694,7 @@ All the required modules are defined under `requirements/heroku.pip`:
 ```python
 -r base.pip
 gunicorn==19.9.0
-psycopg2-binary==2.7.6.1
+psycopg2-binary==2.7.7
 dj-database-url==0.5.0
 whitenoise==4.1.2
 ```

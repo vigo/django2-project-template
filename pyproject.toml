@@ -1,5 +1,5 @@
 [tool.black]
-line-length = 60
+line-length = 88
 py36 = true
 skip-string-normalization = true
 quiet = true

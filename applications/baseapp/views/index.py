@@ -16,11 +16,7 @@ class IndexView(HtmlDebugMixin, TemplateView):
         self.hdbg('This', 'is', 'an', 'example', 'of')
         self.hdbg('self.hdbg', 'usage')
         self.hdbg(self.request.META)
-        self.hdbg(
-            slugify(
-                urlify('Merhaba Dünya! Ben Uğur Özyılmazel')
-            )
-        )
+        self.hdbg(slugify(urlify('Merhaba Dünya! Ben Uğur Özyılmazel')))
         kwargs = super().get_context_data(**kwargs)
 
         query_string_p = numerify(self.request.GET.get('p'))

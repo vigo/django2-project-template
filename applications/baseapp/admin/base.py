@@ -20,25 +20,21 @@ class BaseAdmin(admin.ModelAdmin):
     def get_list_filter(self, request):
         list_filter = list(super().get_list_filter(request))
         if self.sticky_list_filter:
-            list_filter = list(
-                self.sticky_list_filter
-            ) + list(list_filter)
+            list_filter = list(self.sticky_list_filter) + list(list_filter)
         return list_filter
 
 
 def recover_selected(modeladmin, request, queryset):
-    number_of_rows_recovered, recovered_items = (
-        queryset.undelete()
-    )
+    number_of_rows_recovered, recovered_items = queryset.undelete()
     if number_of_rows_recovered == 1:
         message_bit = _('1 record was')
     else:
-        message_bit = _(
-            '%(number_of_rows)s records were'
-        ) % dict(number_of_rows=number_of_rows_recovered)
-    message = _(
-        '%(message_bit)s successfully marked as active'
-    ) % dict(message_bit=message_bit)
+        message_bit = _('%(number_of_rows)s records were') % dict(
+            number_of_rows=number_of_rows_recovered
+        )
+    message = _('%(message_bit)s successfully marked as active') % dict(
+        message_bit=message_bit
+    )
     modeladmin.message_user(request, message)
     return None
 
@@ -55,28 +51,20 @@ def hard_delete_selected(modeladmin, request, queryset):
             raise PermissionDenied
         n = queryset.count()
         if n:
-            number_of_rows_deleted, deleted_items = (
-                queryset.hard_delete()
-            )
+            number_of_rows_deleted, deleted_items = queryset.hard_delete()
             if number_of_rows_deleted == 1:
                 message_bit = _('1 record was')
             else:
-                message_bit = _(
-                    '%(number_of_rows)s records were'
-                ) % dict(
+                message_bit = _('%(number_of_rows)s records were') % dict(
                     number_of_rows=number_of_rows_deleted
                 )
-            message = _('%(message_bit)s deleted') % dict(
-                message_bit=message_bit
-            )
+            message = _('%(message_bit)s deleted') % dict(message_bit=message_bit)
             modeladmin.message_user(request, message)
         return None
 
     objects_name = model_ngettext(queryset)
     if perms_needed or protected:
-        title = _('Cannot delete %(name)s') % {
-            'name': objects_name
-        }
+        title = _('Cannot delete %(name)s') % {'name': objects_name}
     else:
         title = _('Are you sure?')
 
@@ -97,9 +85,7 @@ def hard_delete_selected(modeladmin, request, queryset):
     request.current_app = modeladmin.admin_site.name
 
     return TemplateResponse(
-        request,
-        'admin/hard_delete_selected_confirmation.html',
-        context,
+        request, 'admin/hard_delete_selected_confirmation.html', context
     )
 
 
@@ -110,10 +96,7 @@ class BaseAdminWithSoftDelete(BaseAdmin):
     def get_queryset(self, request):
         qs = self.model.objects.get_queryset()
         if request.GET.get('status__exact', None):
-            if (
-                numerify(request.GET.get('status__exact'))
-                == BaseModel.STATUS_DELETED
-            ):
+            if numerify(request.GET.get('status__exact')) == BaseModel.STATUS_DELETED:
                 return qs.deleted()
         return qs.all()
 
@@ -131,9 +114,7 @@ class BaseAdminWithSoftDelete(BaseAdmin):
                 recover_selected=(
                     recover_selected,
                     'recover_selected',
-                    _(
-                        'Recover selected %(verbose_name_plural)s'
-                    ),
+                    _('Recover selected %(verbose_name_plural)s'),
                 )
             )
         )
@@ -142,9 +123,7 @@ class BaseAdminWithSoftDelete(BaseAdmin):
                 hard_delete_selected=(
                     hard_delete_selected,
                     'hard_delete_selected',
-                    _(
-                        'Hard delete selected %(verbose_name_plural)s'
-                    ),
+                    _('Hard delete selected %(verbose_name_plural)s'),
                 )
             )
         )

@@ -1,11 +1,7 @@
 import os
 import sys
 
-BASE_DIR = os.path.dirname(
-    os.path.dirname(
-        os.path.dirname(os.path.abspath(__file__))
-    )
-)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SECRET_KEY = os.environ.get('DJANGO_SECRET')
 
 sys.path.append(os.path.join(BASE_DIR, 'applications'))

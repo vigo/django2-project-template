@@ -16,9 +16,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(  # noqa: F405
-            BASE_DIR,  # noqa: F405
-            'db',
-            'development.sqlite3',  # noqa: F405
+            BASE_DIR, 'db', 'development.sqlite3'  # noqa: F405  # noqa: F405
         ),
     }
 }
@@ -26,21 +24,11 @@ DATABASES = {
 # uncomment for PostgreSQL
 # DATABASES = {'default': {'ENGINE': 'django.db.backends.postgresql', 'NAME': 'NAME_OF_YOUR_DB'}}
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),  # noqa: F405
-)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # noqa: F405
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # noqa: F405
 
-WERKZUEG_FILTER_EXTENSTIONS = [
-    'css',
-    'js',
-    'png',
-    'jpg',
-    'svg',
-    'gif',
-    'woff',
-]
+WERKZUEG_FILTER_EXTENSTIONS = ['css', 'js', 'png', 'jpg', 'svg', 'gif', 'woff']
 
 LOGGING = {
     'version': 1,
@@ -80,10 +68,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        'app': {
-            'handlers': ['console_custom'],
-            'level': 'DEBUG',
-        },
+        'app': {'handlers': ['console_custom'], 'level': 'DEBUG'},
         # enable this block if you want to see SQL queries :)
         # 'django.db.backends': {
         #     'handlers': ['console_sql'],
@@ -93,9 +78,7 @@ LOGGING = {
 }
 
 # middlewares for development purposes only
-MIDDLEWARE += [  # noqa: F405
-    'debug_toolbar.middleware.DebugToolbarMiddleware'
-]
+MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']  # noqa: F405
 
 # apps for development purposes only
 INSTALLED_APPS += ['debug_toolbar']  # noqa: F405

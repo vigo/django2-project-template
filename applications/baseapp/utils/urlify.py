@@ -42,12 +42,7 @@ def urlify(value, language='tr'):
     """
 
     return ''.join(
-        map(
-            lambda char: LETTER_TRANSFORM_MAP[language].get(
-                char, char
-            ),
-            iter(value),
-        )
+        map(lambda char: LETTER_TRANSFORM_MAP[language].get(char, char), iter(value))
     ).lower()
 
 

@@ -1,6 +1,5 @@
 TEMPLATE_HTML = """{{% extends "base.html" %}}
-{{% load static %}}
-{{% load i18n %}}
+{{% load static i18n %}}
 
 {{% block title %}}{app_name_title} Application{{% endblock %}}
 

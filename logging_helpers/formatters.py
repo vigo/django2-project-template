@@ -3,10 +3,7 @@ import re
 
 from django.core.management.color import color_style
 
-__all__ = [
-    'CustomWerkzeugLogFormatter',
-    'CustomSqlLogFormatter',
-]
+__all__ = ['CustomWerkzeugLogFormatter', 'CustomSqlLogFormatter']
 
 ansi_escape = re.compile(r'\x1b[^m]*m')
 
@@ -45,9 +42,7 @@ class CustomWerkzeugLogFormatter(logging.Formatter):
 
         levelname = record.levelname.lower()
         levelstyle = self.style.SUCCESS
-        record.levelname = '{0:.<14}'.format(
-            record.levelname
-        )
+        record.levelname = '{0:.<14}'.format(record.levelname)
 
         if levelname == 'warning':
             levelstyle = self.style.WARNING
@@ -70,8 +65,6 @@ class CustomSqlLogFormatter(logging.Formatter):
 
     def format(self, record):  # noqa: A003
         record.levelname = '{0:.<14}'.format('SQL')
-        record.levelname = self.style.HTTP_INFO(
-            record.levelname
-        )
+        record.levelname = self.style.HTTP_INFO(record.levelname)
         record.sql = self.style.SQL_KEYWORD(record.sql)
         return super().format(record)

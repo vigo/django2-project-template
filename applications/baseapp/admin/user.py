@@ -18,19 +18,9 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = (
-        'user_profile_image',
-        'email',
-        'first_name',
-        'last_name',
-    )
+    list_display = ('user_profile_image', 'email', 'first_name', 'last_name')
     list_display_links = ('email',)
-    search_fields = (
-        'email',
-        'first_name',
-        'middle_name',
-        'last_name',
-    )
+    search_fields = ('email', 'first_name', 'middle_name', 'last_name')
     ordering = ('email',)
     fieldsets = (
         (
@@ -74,9 +64,7 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
-    formfield_overrides = {
-        models.FileField: {'widget': AdminImageFileWidget}
-    }
+    formfield_overrides = {models.FileField: {'widget': AdminImageFileWidget}}
 
     def user_profile_image(self, obj):
         if obj.avatar:
@@ -88,9 +76,7 @@ class UserAdmin(BaseUserAdmin):
         else:
             return '---'
 
-    user_profile_image.short_description = _(
-        'Profile Image'
-    )
+    user_profile_image.short_description = _('Profile Image')
 
 
 admin.site.register(User, UserAdmin)

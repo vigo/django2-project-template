@@ -8,9 +8,7 @@ from django.core.management.base import CommandError
 from django.utils.text import capfirst
 
 from ..base import CustomBaseCommand
-from ..template_structures import (
-    application as application_templates,
-)
+from ..template_structures import application as application_templates
 
 TEMPLATE_MODELS_INIT = """# isort:skip_file
 # flake8: noqa
@@ -100,17 +98,10 @@ class Command(CustomBaseCommand):
         '`applications/` directory.'
     )
 
-    missing_args_message = (
-        'You must provide an application name.'
-    )
+    missing_args_message = 'You must provide an application name.'
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            'name',
-            nargs=1,
-            type=str,
-            help='Name of your application',
-        )
+        parser.add_argument('name', nargs=1, type=str, help='Name of your application')
 
     def handle(self, *args, **options):
         app_name = options.pop('name')[0]
@@ -126,15 +117,9 @@ class Command(CustomBaseCommand):
                 % app_name  # noqa: C812
             )
 
-        applications_dir = os.path.join(
-            settings.BASE_DIR, 'applications'
-        )
-        templates_dir = os.path.join(
-            settings.BASE_DIR, 'templates'
-        )
-        new_application_dir = os.path.join(
-            applications_dir, app_name
-        )
+        applications_dir = os.path.join(settings.BASE_DIR, 'applications')
+        templates_dir = os.path.join(settings.BASE_DIR, 'templates')
+        new_application_dir = os.path.join(applications_dir, app_name)
 
         render_params = dict(
             app_name_title=app_name.title(),
@@ -143,75 +128,39 @@ class Command(CustomBaseCommand):
         )
 
         self.mkdir(new_application_dir)
-        self.touch(
-            os.path.join(new_application_dir, '__init__.py')
-        )
+        self.touch(os.path.join(new_application_dir, '__init__.py'))
 
         for package in APP_DIR_STRUCTURE.get('packages'):
-            package_dir = os.path.join(
-                new_application_dir, package.get('name')
-            )
+            package_dir = os.path.join(new_application_dir, package.get('name'))
             self.mkdir(package_dir)
-            self.touch(
-                os.path.join(package_dir, '__init__.py')
-            )
+            self.touch(os.path.join(package_dir, '__init__.py'))
             if package.get('files', False):
-                self.generate_files(
-                    package.get('files'),
-                    package_dir,
-                    render_params,
-                )
+                self.generate_files(package.get('files'), package_dir, render_params)
 
         for template in APP_DIR_STRUCTURE.get('templates'):
-            template_dir = os.path.join(
-                templates_dir, app_name
-            )
-            template_html_path = os.path.join(
-                template_dir, template.get('name')
-            )
+            template_dir = os.path.join(templates_dir, app_name)
+            template_html_path = os.path.join(template_dir, template.get('name'))
             self.mkdir(template_dir)
             self.touch(template_html_path)
             if template.get('render', False):
-                rendered_content = template.get(
-                    'render'
-                ).format(**render_params)
-                self.create_file_with_content(
-                    template_html_path, rendered_content
-                )
+                rendered_content = template.get('render').format(**render_params)
+                self.create_file_with_content(template_html_path, rendered_content)
 
         self.generate_files(
-            APP_DIR_STRUCTURE.get('files'),
-            new_application_dir,
-            render_params,
+            APP_DIR_STRUCTURE.get('files'), new_application_dir, render_params
         )
         self.stdout.write(
-            self.style.SUCCESS(
-                '"{0}" application created.'.format(
-                    app_name
-                )
-            )
+            self.style.SUCCESS('"{0}" application created.'.format(app_name))
         )
-        self.stdout.write(
-            self.style.NOTICE(
-                USER_REMINDER.format(app_name=app_name)
-            )
-        )
+        self.stdout.write(self.style.NOTICE(USER_REMINDER.format(app_name=app_name)))
 
-    def generate_files(
-        self, files_list, root_path, render_params
-    ):
+    def generate_files(self, files_list, root_path, render_params):
         for single_file in files_list:
-            file_path = os.path.join(
-                root_path, single_file.get('name')
-            )
+            file_path = os.path.join(root_path, single_file.get('name'))
             self.touch(file_path)
             if single_file.get('render', False):
-                rendered_content = single_file.get(
-                    'render'
-                ).format(**render_params)
-                self.create_file_with_content(
-                    file_path, rendered_content
-                )
+                rendered_content = single_file.get('render').format(**render_params)
+                self.create_file_with_content(file_path, rendered_content)
 
     def mkdir(self, dirname):
         try:

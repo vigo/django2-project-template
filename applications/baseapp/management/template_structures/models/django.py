@@ -1,25 +1,13 @@
 TEMPLATE_MODEL_DJANGO = """from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-# fmt: off
-__all__ = [
-    '{model_name}',
-]
+__all__ = ['{model_name}']
 
 
 class {model_name}(models.Model):
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('Created At'),
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('Updated At'),
-    )
-    title = models.CharField(
-        max_length=255,
-        verbose_name=_('title'),
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('updated at'))
+    title = models.CharField(max_length=255, verbose_name=_('title'))
 
     class Meta:
         app_label = '{app_name}'
@@ -28,7 +16,6 @@ class {model_name}(models.Model):
 
     def __str__(self):
         return self.title
-# fmt: on
 
 """
 

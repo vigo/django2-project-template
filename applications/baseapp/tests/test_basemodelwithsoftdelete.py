@@ -9,60 +9,33 @@ class BaseModelWithSoftDeleteTestCase(TestCase):
         category = Category.objects.create(title='Python')
         cls.category = category
         cls.posts = [
-            Post.objects.create(
-                category=category, title='Python post 1'
-            ),
-            Post.objects.create(
-                category=category, title='Python post 2'
-            ),
+            Post.objects.create(category=category, title='Python post 1'),
+            Post.objects.create(category=category, title='Python post 2'),
         ]
 
     def test_basemodelwithsoftdelete_fields(self):
         self.assertEqual(self.category.pk, self.category.id)
-        self.assertEqual(
-            self.category.status, Post.STATUS_ONLINE
-        )
+        self.assertEqual(self.category.status, Post.STATUS_ONLINE)
         for post in self.posts:
-            self.assertEqual(
-                post.status, Post.STATUS_ONLINE
-            )
+            self.assertEqual(post.status, Post.STATUS_ONLINE)
 
     def test_basemodelwithsoftdelete_queryset(self):
         self.assertQuerysetEqual(
             self.category.posts.all().order_by('id'),
-            [
-                '<Post: Python post 1>',
-                '<Post: Python post 2>',
-            ],
+            ['<Post: Python post 1>', '<Post: Python post 2>'],
         )
-        self.assertQuerysetEqual(
-            Category.objects.actives(),
-            ['<Category: Python>'],
-        )
-        self.assertQuerysetEqual(
-            Category.objects.offlines(), []
-        )
-        self.assertQuerysetEqual(
-            Category.objects.deleted(), []
-        )
-        self.assertQuerysetEqual(
-            Category.objects.drafts(), []
-        )
+        self.assertQuerysetEqual(Category.objects.actives(), ['<Category: Python>'])
+        self.assertQuerysetEqual(Category.objects.offlines(), [])
+        self.assertQuerysetEqual(Category.objects.deleted(), [])
+        self.assertQuerysetEqual(Category.objects.drafts(), [])
 
     def test_softdelete(self):
         deleted_category = self.category.delete()
         self.assertEqual(
-            deleted_category,
-            (3, {'baseapp.Category': 1, 'baseapp.Post': 2}),
+            deleted_category, (3, {'baseapp.Category': 1, 'baseapp.Post': 2})
         )
-        self.assertQuerysetEqual(
-            Category.objects.deleted(),
-            ['<Category: Python>'],
-        )
+        self.assertQuerysetEqual(Category.objects.deleted(), ['<Category: Python>'])
         self.assertQuerysetEqual(
             Post.objects.deleted().order_by('id'),
-            [
-                '<Post: Python post 1>',
-                '<Post: Python post 2>',
-            ],
+            ['<Post: Python post 1>', '<Post: Python post 2>'],
         )

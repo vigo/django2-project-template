@@ -6,27 +6,20 @@ from .base_models import BasicPost
 class BaseModelTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):  # noqa: N802
-        cls.post = BasicPost.objects.create(
-            title='Test Post 1'
-        )
+        cls.post = BasicPost.objects.create(title='Test Post 1')
         cls.post_status_deleted = BasicPost.objects.create(
-            title='Test Post 2',
-            status=BasicPost.STATUS_DELETED,
+            title='Test Post 2', status=BasicPost.STATUS_DELETED
         )
         cls.post_status_offline = BasicPost.objects.create(
-            title='Test Post 3',
-            status=BasicPost.STATUS_OFFLINE,
+            title='Test Post 3', status=BasicPost.STATUS_OFFLINE
         )
         cls.post_status_draft = BasicPost.objects.create(
-            title='Test Post 4',
-            status=BasicPost.STATUS_DRAFT,
+            title='Test Post 4', status=BasicPost.STATUS_DRAFT
         )
 
     def test_basemodel_fields(self):
         self.assertEqual(self.post.pk, self.post.id)
-        self.assertEqual(
-            self.post.status, BasicPost.STATUS_ONLINE
-        )
+        self.assertEqual(self.post.status, BasicPost.STATUS_ONLINE)
 
     def test_basemodel_queryset(self):
         self.assertQuerysetEqual(
@@ -39,18 +32,14 @@ class BaseModelTestCase(TestCase):
             ],
         )
         self.assertQuerysetEqual(
-            BasicPost.objects.actives().order_by('id'),
-            ['<BasicPost: Test Post 1>'],
+            BasicPost.objects.actives().order_by('id'), ['<BasicPost: Test Post 1>']
         )
         self.assertQuerysetEqual(
-            BasicPost.objects.offlines(),
-            ['<BasicPost: Test Post 3>'],
+            BasicPost.objects.offlines(), ['<BasicPost: Test Post 3>']
         )
         self.assertQuerysetEqual(
-            BasicPost.objects.deleted(),
-            ['<BasicPost: Test Post 2>'],
+            BasicPost.objects.deleted(), ['<BasicPost: Test Post 2>']
         )
         self.assertQuerysetEqual(
-            BasicPost.objects.drafts(),
-            ['<BasicPost: Test Post 4>'],
+            BasicPost.objects.drafts(), ['<BasicPost: Test Post 4>']
         )

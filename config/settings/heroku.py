@@ -12,36 +12,21 @@ ALLOWED_HOSTS = [
 ]
 DATABASES = {'default': db_from_env}
 
-SECURE_PROXY_SSL_HEADER = (
-    'HTTP_X_FORWARDED_PROTO',
-    'https',
-)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'
-    },
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-STATICFILES_STORAGE = (
-    'whitenoise.django.GzipManifestStaticFilesStorage'
-)
-STATIC_ROOT = os.path.join(  # noqa: F405
-    BASE_DIR, 'staticfiles'  # noqa: F405
-)
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # noqa: F405  # noqa: F405
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),  # noqa: F405
-)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # noqa: F405
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # noqa: F405
 
 # fmt: off
@@ -57,18 +42,14 @@ MIDDLEWARE.insert(  # noqa: F405
 # fmt: on
 
 LOGGING_CONFIG = None
-LOGLEVEL = os.environ.get(  # noqa: F405
-    'LOGLEVEL', 'info'
-).upper()
+LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()  # noqa: F405
 
 logging.config.dictConfig(
     {
         'version': 1,
         'disable_existing_loggers': False,
         'formatters': {
-            'default': {
-                'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
-            }
+            'default': {'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'}
         },
         'handlers': {
             'mail_admins': {
@@ -90,11 +71,7 @@ logging.config.dictConfig(
         },
         'loggers': {
             '': {'level': 'DEBUG', 'handlers': ['stdout']},
-            'app': {
-                'level': LOGLEVEL,
-                'handlers': ['stdout'],
-                'propagate': False,
-            },
+            'app': {'level': LOGLEVEL, 'handlers': ['stdout'], 'propagate': False},
             'django.request': {
                 'handlers': ['mail_admins'],
                 'level': 'ERROR',

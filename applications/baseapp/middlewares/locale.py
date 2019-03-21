@@ -34,8 +34,6 @@ class CustomLocaleMiddleware(object):
         response = self.get_response(request)
 
         patch_vary_headers(response, ('Accept-Language',))
-        response[
-            'Content-Language'
-        ] = translation.get_language()
+        response['Content-Language'] = translation.get_language()
         translation.deactivate()
         return response
