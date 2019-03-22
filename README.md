@@ -140,7 +140,7 @@ $ rake new:application[blog]
         'blog.apps.BlogConfig',
     ]
 
-    - Do not forget to fix your `config/settings/urls.py`:
+    - Do not forget to fix your `config/urls.py`:
     
     # ...
     urlpatterns = [
@@ -167,11 +167,11 @@ INSTALLED_APPS += [
 
 ```
 
-Now, if you fix your `config/settings/urls.py` you’ll be able to see demo
+Now, if you fix your `config/urls.py` you’ll be able to see demo
 pages for your app:
 
 ```python
-# config/settings/urls.py
+# config/urls.py
 :
 :
 urlpatterns = [

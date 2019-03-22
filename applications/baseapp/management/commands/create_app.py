@@ -80,7 +80,7 @@ USER_REMINDER = """
         '{app_name}.apps.{inital_caps_appname}Config',
     ]
 
-    - Do not forget to fix your `config/settings/urls.py`:
+    - Do not forget to fix your `config/urls.py`:
 
     # ...
     urlpatterns = [
