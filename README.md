@@ -92,7 +92,6 @@ You can fix your Django Admin titles now. Go to `config/urls.py` and fix:
 admin.site.index_title = _('Your admin index title')
 admin.site.site_title = _('Your site title')
 admin.site.site_header = _('Your site header')
-
 ```
 
 Do not forget to compile your locale messages files.
@@ -150,7 +149,6 @@ $ rake new:application[blog]
         # ..
     ]
     # ...
-
 ```
 
 Fix your `config/settings/base.py`, add this newly created app to your `INSTALLED_APPS`:
@@ -164,7 +162,6 @@ AUTH_USER_MODEL = 'baseapp.User'
 INSTALLED_APPS += [
     'blog.apps.BlogConfig',
 ]
-
 ```
 
 Now, if you fix your `config/urls.py` you’ll be able to see demo
@@ -216,7 +213,6 @@ class BlogView(HtmlDebugMixin, TemplateView):
         kwargs = super().get_context_data(**kwargs)
         console.dir(self.request.user)
         return kwargs
-
 ```
 
 Let’s look at our `blog` application structure:
@@ -259,7 +255,6 @@ Post model added to admin/__init__.py
     - `blog/admin/post.py`
 
     Please check your models before running `makemigrations` ok?
-
 ```
 
 This creates `blog/models/post.py` and `blog/admin/post.py` files:
@@ -287,12 +282,10 @@ class Post(BaseModelWithSoftDelete):
     class Meta:
         app_label = 'blog'
         verbose_name = _('post')
-        verbose_name_plural = _('post')
+        verbose_name_plural = _('posts')
     
     def __str__(self):
         return self.title
-
-
 ```
 
 and `Category` model:
@@ -316,7 +309,6 @@ Category model added to admin/__init__.py
     - `blog/admin/category.py`
 
     Please check your models before running `makemigrations` ok?
-
 ```
 
 Now It’s time to fix our models by hand!
@@ -352,13 +344,8 @@ class Post(BaseModelWithSoftDelete):
         related_name='posts',
         verbose_name=_('category'),
     )
-    title = models.CharField(
-        max_length=255,
-        verbose_name=_('title'),
-    )
-    body = models.TextField(
-        verbose_name=_('body'),
-    )
+    title = models.CharField(max_length=255, verbose_name=_('title'))
+    body = models.TextField(verbose_name=_('body'))
 
     class Meta:
         app_label = 'blog'
@@ -367,7 +354,6 @@ class Post(BaseModelWithSoftDelete):
 
     def __str__(self):
         return self.title
-
 ```
 
 We’ll keep `blog/models/category.py` same, `Category` will have only `title`
@@ -391,19 +377,15 @@ console = console(source=__name__)
 
 
 class Category(BaseModelWithSoftDelete):
-    title = models.CharField(
-        max_length=255,
-        verbose_name=_('title'),
-    )
+    title = models.CharField(max_length=255, verbose_name=_('title'))
 
     class Meta:
         app_label = 'blog'
         verbose_name = _('category')
         verbose_name_plural = _('categories')
-    
+
     def __str__(self):
         return self.title
-
 ```
 
 
@@ -848,7 +830,6 @@ SELECT "blog_category"."id",
 
 >>> Category.objects.deleted()
 <BaseModelWithSoftDeleteQuerySet [<Category: Python>]>
-
 ```
 
 `BaseModelWithSoftDeleteQuerySet` has these query options according to
@@ -899,7 +880,6 @@ class PostAdmin(BaseAdminWithSoftDelete):
     # sticky_list_filter = None
     # hide_deleted_at = False
     pass
-
 ```
 
 By default, `deleted_at` excluded from admin form like `created_at` and
@@ -978,7 +958,6 @@ class IndexView(HtmlDebugMixin, TemplateView):
         self.hdbg('self.hdbg', 'usage')
         self.hdbg(self.request.__dict__)
         return kwargs
-
 ```
 
 `{% hdbg %}` tag added by default in to your `templates/base.html`:
@@ -1169,7 +1148,6 @@ class MyModel(models.Model):
         upload_to='my_custom_uploader',
         verbose_name=_('Profile Image'),
     )
-
 ```
 
 ## `AdminImageFileWidget`
@@ -1183,7 +1161,6 @@ class MyAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.FileField: {'widget': AdminImageFileWidget},
     }
-
 ```
 
 This widget uses `Pillow` (*Python Image Library*) which ships with your `base.pip`
@@ -1239,7 +1216,6 @@ can customize look and feel here:
     }
 </style>
 {% endblock %}
-
 ```
 
 This adds a basic HTML element via CSS to the `<body>` tag.
@@ -1467,7 +1443,6 @@ class Page(models.Model):
 # YOUR_APP/models/__init__.py
 # append:
 from .page import *
-
 ```
 
 Now make migrations etc... Use it as `from YOUR_APP.models import Page` :)

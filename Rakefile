@@ -33,7 +33,7 @@ namespace :new do
 
 
   AVAILABLE_MODEL_TYPES = ['django', 'basemodel', 'softdelete']
-  desc "Create new Model for given application"
+  desc "Create new Model for given application: #{AVAILABLE_MODEL_TYPES.join(',')}"
   task :model, [:name_of_application, :name_of_model, :type_of_model] => [:check_development_environment] do |t, args|
     args.with_defaults(:type_of_model => "django")
     abort "Please provide: 'name_of_application'" unless args.name_of_application

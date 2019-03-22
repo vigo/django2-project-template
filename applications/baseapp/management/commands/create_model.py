@@ -64,7 +64,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         app_name = options.pop('app_name')[0]
-        model_name = options.pop('model_name')[0]
+
+        model_name = options.pop('model_name')[0].lower()
         model_name_title = model_name.title()
         model_type = options.pop('model_type')
 

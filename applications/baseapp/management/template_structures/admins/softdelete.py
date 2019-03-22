@@ -7,7 +7,6 @@ from baseapp.utils import console
 
 from ..models import {model_name_title}
 
-
 __all__ = ['{model_name_title}Admin']
 
 logger = logging.getLogger('app')
