@@ -2,6 +2,7 @@
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
 ![Django](https://img.shields.io/badge/django-2.1.7-green.svg)
 ![Version](https://img.shields.io/badge/version-1.3.1-yellow.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c73fb40b38f5455abd34d496bbc52b9b)](https://www.codacy.com/app/vigo/django2-project-template?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vigo/django2-project-template&amp;utm_campaign=Badge_Grade)
 
 # Django Project Starter Template
 
