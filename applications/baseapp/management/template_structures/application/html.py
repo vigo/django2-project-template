@@ -1,3 +1,7 @@
+"""
+HTML template for app generator
+"""
+
 TEMPLATE_HTML = """{{% extends "base.html" %}}
 {{% load static i18n %}}
 

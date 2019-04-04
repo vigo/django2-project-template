@@ -21,7 +21,4 @@ def hdbg(context):
     hdbg_data = context.get('hdbg_data', [])
     for row in hdbg_data:
         out.append(escape(pprint.pformat(row)))
-    return format_html(
-        '<div id="baseapp-debug"><pre>{0}</pre></div>',
-        mark_safe('\n'.join(out)),  # noqa: S703,S308
-    )
+    return format_html('<div id="baseapp-debug"><pre>{0}</pre></div>', mark_safe('\n'.join(out)))  # noqa: S703,S308

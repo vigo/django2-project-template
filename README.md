@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
-![Django](https://img.shields.io/badge/django-2.1.7-green.svg)
-![Version](https://img.shields.io/badge/version-1.3.1-yellow.svg)
+![Django](https://img.shields.io/badge/django-2.2-green.svg)
+![Version](https://img.shields.io/badge/version-2.0-yellow.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c73fb40b38f5455abd34d496bbc52b9b)](https://www.codacy.com/app/vigo/django2-project-template?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vigo/django2-project-template&amp;utm_campaign=Badge_Grade)
 
 # Django Project Starter Template
@@ -12,10 +12,24 @@ Django releases as much as I can!
 ## Requirements
 
 - Latest `Python 3.7.0` runtime environment.
+- `PostgreSQL`
 - `pip`, `virtualenv`, `virtualenvwrapper`
 - If you like to run Rake Tasks, you need `Ruby` too but not required: `2.5.0`
 
 ## Installation
+
+macOS user can install `PostgreSQL` from [Homebrew](https://brew.sh):
+
+```bash
+$ brew install postgres  # if you need to
+```
+
+Don’t forget to start your database server before continue. Now create your
+database:
+
+```bash
+$ createdb my_project_dev
+```
 
 Please use `virtualenvwrapper` and create your environment and activate it.
 With Python 3.3+, you don’t need to install `virtualenv`. You can create your
@@ -29,7 +43,7 @@ $ mkvirtualenv my_projects_env
 $ workon my_projects_env
 ```
 
-You need to declare **2 environment** variables. I always put my project
+You need to declare **3 environment** variables. I always put my project
 specific environment variables under `virtualenvwrapper`’s `postactivate`
 file. Open your `~/.virtualenvs/my_projects_env/bin/postactivate` and add
 these lines (*or set it manually*):
@@ -37,6 +51,7 @@ these lines (*or set it manually*):
 ```bash
 export DJANGO_ENV="development"
 export DJANGO_SECRET="YOUR-SECRET-HERE" # will fix it in a second.
+export DATABASE_URL="postgres://localhost:5432/my_project_dev"
 ```
 
 then;
@@ -67,8 +82,18 @@ $ git init # now you can start your own repo!
 ```
 
 This template comes with custom **User** model. Please take a look at it. If you
-need to add/change fields, please do so. If you change anything, please run `makemigrations`
-to keep track of your db. Then continue to work:
+need to add/change fields, please do so. Default app language is set to `en-us` and
+timezone is set to `UTC`. I use:
+
+```python
+# config/settings/base.py
+
+LANGUAGE_CODE = 'tr'
+TIME_ZONE = 'Europe/Istanbul'
+```
+
+If you change anything, please run `makemigrations` to keep track of your db.
+Then continue to work:
 
 ```bash
 $ python manage.py migrate
@@ -218,6 +243,7 @@ class BlogView(HtmlDebugMixin, TemplateView):
 
 Let’s look at our `blog` application structure:
 
+```bash
     applications/blog/
     ├── admin
     │   └── __init__.py
@@ -234,6 +260,7 @@ Let’s look at our `blog` application structure:
     ├── __init__.py
     ├── apps.py
     └── urls.py
+```
 
 Now lets add `Post` model with **soft-delete** feature!
 
@@ -447,9 +474,10 @@ Open `http://127.0.0.1:8000/admin/` and use your superuser credentials.
 What I’ve changed ?
 
 - All Django apps live under `applications/` folder.
-- All of the models live under `models/` folder.
-- All of the views live under `views/` folder.
-- All of the admin files live under `admin/` folder.
+- All of the models live under generated app’s `models/` folder.
+- All of the views live under generated app’s `views/` folder.
+- All of the tests live under generated app’s `tests/` folder.
+- All of the admin files live under generated app’s `admin/` folder.
 - Every app should contain It’s own `urls.py`.
 - All settings related files will live under `config/settings/` folder.
 - Every environment has It’s own setting such as `config/settings/development.py`.
@@ -460,38 +488,34 @@ What I’ve changed ?
 
 Here is directory/file structure:
 
-    .
-    ├── applications
-    │   └── baseapp
-    ├── config
-    │   ├── settings
-    │   ├── __init__.py
-    │   ├── urls.py
-    │   └── wsgi.py
-    ├── db
-    ├── locale
-    │   └── tr
-    ├── logging_helpers
-    │   ├── __init__.py
-    │   ├── formatters.py
-    │   └── werkzueg_filters.py
-    ├── requirements
-    │   ├── base.pip
-    │   ├── development.pip
-    │   └── heroku.pip
-    ├── static
-    │   └── css
-    ├── templates
-    │   ├── admin
-    │   ├── baseapp
-    │   └── base.html
-    ├── Procfile
-    ├── Rakefile
-    ├── manage.py
-    ├── requirements.txt
-    ├── runtime.txt
-    └── setup.cfg
-
+```bash
+.
+├── applications
+│   └── baseapp
+├── config
+│   ├── settings
+│   ├── __init__.py
+│   ├── urls.py
+│   └── wsgi.py
+├── db
+├── locale
+│   └── tr
+├── requirements
+│   ├── base.pip
+│   ├── development.pip
+│   └── heroku.pip
+├── static
+│   └── css
+├── templates
+│   ├── admin
+│   ├── baseapp
+│   └── base.html
+├── Procfile
+├── Rakefile
+├── manage.py
+├── requirements.txt
+└── runtime.txt
+```
 
 ---
 
@@ -514,11 +538,13 @@ need to create a copy of it! (*if you follow along from the beginning, you’ve 
 
 All the base/common required Python packages/modules are defined under `requirements/base.pip`:
 
-```python
-Django==2.1.7
-Pillow==5.4.1
+```bash
+Django==2.2
+Pillow==6.0.0
 django-extensions==2.1.6
-python-slugify==3.0.0
+python-slugify==3.0.2
+psycopg2-binary==2.8
+dj-database-url==0.5.0
 ```
 
 ### `base.py`
@@ -552,60 +578,61 @@ INSTALLED_APPS += [
 
 Django Extension adds great functionalities:
 
-    admin_generator
-    clean_pyc
-    clear_cache
-    compile_pyc
-    create_command
-    create_jobs
-    create_template_tags
-    delete_squashed_migrations
-    describe_form
-    drop_test_database
-    dumpscript
-    export_emails
-    find_template
-    generate_password
-    generate_secret_key
-    graph_models
-    mail_debug
-    merge_model_instances
-    notes
-    passwd
-    pipchecker
-    print_settings
-    print_user_for_session
-    reset_db
-    reset_schema
-    runjob
-    runjobs
-    runprofileserver
-    runscript
-    runserver_plus
-    set_default_site
-    set_fake_emails
-    set_fake_passwords
-    shell_plus
-    show_template_tags
-    show_templatetags
-    show_urls
-    sqlcreate
-    sqldiff
-    sqldsn
-    sync_s3
-    syncdata
-    unreferenced_files
-    update_permissions
-    validate_templates
+```bash
+admin_generator
+clean_pyc
+clear_cache
+compile_pyc
+create_command
+create_jobs
+create_template_tags
+delete_squashed_migrations
+describe_form
+drop_test_database
+dumpscript
+export_emails
+find_template
+generate_password
+generate_secret_key
+graph_models
+mail_debug
+merge_model_instances
+notes
+passwd
+pipchecker
+print_settings
+print_user_for_session
+reset_db
+reset_schema
+runjob
+runjobs
+runprofileserver
+runscript
+runserver_plus
+set_default_site
+set_fake_emails
+set_fake_passwords
+shell_plus
+show_template_tags
+show_templatetags
+show_urls
+sqlcreate
+sqldiff
+sqldsn
+sync_s3
+syncdata
+unreferenced_files
+update_permissions
+validate_templates
+```
 
 One of my favorite: `python manage.py show_urls` :)
 
 ### `development.py`
 
 Logging is enabled only in development mode. Our development server
-uses Werkzeug and we have special filter which is defined in `LOGGING['filters']`.
-With `WERKZUEG_FILTER_EXTENSTIONS` option in `settings` you can skip
-displaying specified extensions from development server logs.
+uses [Werkzeug][03] and we have special filter which is defined in `LOGGIN_SKIP_THESE_EXTENSIONS`.
+You can skip displaying specified extensions from development server logs.
 
 You can un-comment `django.db.backends` if you want to see the SQL queries.
 Example:
@@ -615,14 +642,10 @@ LOGGING = {
     :
     :
     'loggers': {
-        :
-        :
-        'django.db.backends': {
-            'handlers': ['console_sql'],
-            'level': 'DEBUG',
-        },
-        
-    }
+        'app': {'handlers': ['console'], 'level': 'DEBUG'},
+        'werkzeug': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': True},
+        'django.db.backends': {'handlers': ['console_sql'], 'level': 'DEBUG'},  # un-comment
+    },
 }
 ```
 
@@ -635,13 +658,13 @@ simple passwords such as `1234`. `MEDIA_ROOT` is set to basedir’s `media` fold
 
 All the required modules are defined under `requirements/development.pip`:
 
-```python
+```bash
 -r base.pip
-ipython==7.3.0
-Werkzeug==0.15.0
+ipython==7.4.0
+Werkzeug==0.15.2
 django-debug-toolbar==1.11
 coverage==4.5.3
-isort==4.3.15
+isort==4.3.16
 black==19.3b0
 flake8==3.7.7
 flake8-bandit==2.1.0
@@ -657,15 +680,13 @@ pylint==2.3.1
 
 ### `test.example.py`
 
-Basic settings for running tests. By default it’s configured to work with
-**Sqlite** database in memory mode. For **PostgreSQL** you can change it to:
+Basic settings for running tests. 
 
 ```python
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'my_test_db',
-    },
+    'default': dj_database_url.config(
+        default='postgres://localhost:5432/custom_db_test'
+    )
 }
 ```
 
@@ -682,11 +703,9 @@ ALLOWED_HOSTS = [
 
 All the required modules are defined under `requirements/heroku.pip`:
 
-```python
+```bash
 -r base.pip
 gunicorn==19.9.0
-psycopg2-binary==2.7.7
-dj-database-url==0.5.0
 whitenoise==4.1.2
 ```
 
@@ -892,29 +911,6 @@ recover/make active (*undelete*) multiple objects like deleting items.
 
 ---
 
-## Custom logger and log formatters
-
-Template ships with `CustomWerkzeugLogFormatter` and `CustomSqlLogFormatter`.
-Default development server uses [Werkzeug][03]. Logging is customized against
-Werkzeug’s output. Example usage:
-
-```python
-import logging
-
-logger = logging.getLogger('app')      # config/setting/development.py
-logger.warning('This is Warning')
-```
-
-`werkzueg_filter_extenstions_callback` is stands for extension filtering.
-You can configure it via `WERKZUEG_FILTER_EXTENSTIONS`. Value is a `list` of
-file extensions: `['css', 'js', 'png', 'jpg', 'svg', 'gif', 'woff']` All
-those extensions will not be shown at development server log...
-
-You can also customize production/heroku logging (under `config/settings/`)
-options too.
-
----
-
 ## `CustomLocaleMiddleware`
 
 This is mostly used for our custom projects. Injects `LANGUAGE_CODE` variable to
@@ -922,9 +918,7 @@ This is mostly used for our custom projects. Injects `LANGUAGE_CODE` variable to
 
 ```python
 # add this to your settings/base.py
-MIDDLEWARE += [
-    'baseapp.middlewares.CustomLocaleMiddleware',
-]
+MIDDLEWARE += ['baseapp.middlewares.CustomLocaleMiddleware']
 ```
 
 ---
@@ -1015,29 +1009,31 @@ class IndexView(TemplateView):
 
 Now `console.dir()` outputs to terminal:
 
-    instance of AnonymousUser | <class 'django.utils.functional.SimpleLazyObject'>**
-    (   {   'arg': (   <SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x10c3229e8>>,),
-            'instance_attributes': ['_setupfunc', '_wrapped'],
-            'internal_methods': [   '__class__', '__delattr__', '__dict__',
-                                    '__dir__', '__doc__', '__eq__', '__format__',
-                                    '__ge__', '__getattribute__', '__gt__',
-                                    '__hash__', '__init__', '__init_subclass__',
-                                    '__le__', '__lt__', '__module__', '__ne__',
-                                    '__new__', '__reduce__', '__reduce_ex__',
-                                    '__repr__', '__setattr__', '__sizeof__',
-                                    '__str__', '__subclasshook__', '__weakref__'],
-            'private_methods': ['_groups', '_user_permissions'],
-            'public_attributes': [   'check_password', 'delete',
-                                     'get_all_permissions',
-                                     'get_group_permissions', 'get_username',
-                                     'groups', 'has_module_perms', 'has_perm',
-                                     'has_perms', 'id', 'is_active',
-                                     'is_anonymous', 'is_authenticated',
-                                     'is_staff', 'is_superuser', 'pk', 'save',
-                                     'set_password', 'user_permissions',
-                                     'username'],
-            'public_methods': ['_setupfunc']},)
-    ********************************************************************************
+```bash
+instance of AnonymousUser | <class 'django.utils.functional.SimpleLazyObject'>**
+(   {   'arg': (   <SimpleLazyObject: <django.contrib.auth.models.AnonymousUser object at 0x10c3229e8>>,),
+        'instance_attributes': ['_setupfunc', '_wrapped'],
+        'internal_methods': [   '__class__', '__delattr__', '__dict__',
+                                '__dir__', '__doc__', '__eq__', '__format__',
+                                '__ge__', '__getattribute__', '__gt__',
+                                '__hash__', '__init__', '__init_subclass__',
+                                '__le__', '__lt__', '__module__', '__ne__',
+                                '__new__', '__reduce__', '__reduce_ex__',
+                                '__repr__', '__setattr__', '__sizeof__',
+                                '__str__', '__subclasshook__', '__weakref__'],
+        'private_methods': ['_groups', '_user_permissions'],
+        'public_attributes': [   'check_password', 'delete',
+                                 'get_all_permissions',
+                                 'get_group_permissions', 'get_username',
+                                 'groups', 'has_module_perms', 'has_perm',
+                                 'has_perms', 'id', 'is_active',
+                                 'is_anonymous', 'is_authenticated',
+                                 'is_staff', 'is_superuser', 'pk', 'save',
+                                 'set_password', 'user_permissions',
+                                 'username'],
+        'public_methods': ['_setupfunc']},)
+********************************************************************************
+```
 
 You can set defaults for `console`:
 
@@ -1230,6 +1226,7 @@ Type `rake -T` for list of tasks:
 
 ```bash
 $ rake -T
+
 rake db:migrate[database]                                        # Run migration for given database (default: 'default')
 rake db:roll_back[name_of_application,name_of_migration]         # Roll-back (name of application, name of migration)
 rake db:shell                                                    # run database shell ..
@@ -1238,12 +1235,13 @@ rake db:update[name_of_application,name_of_migration,is_empty]   # Update migrat
 rake locale:compile                                              # Compile locale dictionary
 rake locale:update                                               # Update locale dictionary
 rake new:application[name_of_application]                        # Create new Django application
-rake new:model[name_of_application,name_of_model,type_of_model]  # Create new Model for given application
+rake new:model[name_of_application,name_of_model,type_of_model]  # Create new Model for given application: django,basemodel,softdelete
 rake run_server                                                  # Run server
-rake shell                                                       # Run shell+
+rake shell[repl]                                                 # Run shell+ avail: ipython,bpython default: ipython
 rake test:browse_coverage[port]                                  # Browse test coverage
 rake test:coverage[cli_args]                                     # Show test coverage (default: '--show-missing --ignore-errors --skip-covered')
-rake test:run[name_of_application,verbose]                       # Run tests for given application```
+rake test:run[name_of_application,verbose]                       # Run tests for given application
+```
 
 Default task is `run_server`. Just type `rake` that’s it! `runserver` uses
 `runserver_plus`. This means you have lots of debugging options!
@@ -1379,11 +1377,17 @@ $ rake new:model[blog,Post,basemodel]      # will create model using our `BaseMo
 $ rake new:model[blog,Post,softdelete]     # will create model using our `BaseModelWithSoftDelete`
 ```
 
-### `rake shell`
+### `rake shell[repl]`
 
 Runs Django repl/shell with use `shell_plus` of [django-extensions][01].
  `rake shell`. This loads everything to your shell! Also you can see the
-SQL statements while playing in shell.
+SQL statements while playing in shell. We have two different repls: `ipython` and `bpython`.
+Default repl is: `ipython`
+
+```bash
+$ rake shell
+$ rake shell[bpython]
+```
 
 ### `rake test:run[name_of_application,verbose]`
 
@@ -1452,7 +1456,7 @@ Now make migrations etc... Use it as `from YOUR_APP.models import Page` :)
 
 ## Contributer(s)
 
-* [Uğur "vigo" Özyılmazel](https://github.com/vigo) - Creator, maintainer
+- [Uğur "vigo" Özyılmazel](https://github.com/vigo) - Creator, maintainer
 
 ---
 
@@ -1475,6 +1479,18 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2019-04-11** 
+
+- New Version: 2.0
+- Django upgrade: Django 2.2-LTS
+- New development settings and logging features
+- Default language is set to `en-us`, timezone is set to `UTC`
+- PostgreSQL is default database now!
+- Python packages are upgraded
+- New REPL support: `bpython`
+- BaseModelWithSoftDelete now supports `keep_parents`
+- `pre_undelete` and `post_undelete` signals are welcome
 
 **2019-03-22**
 

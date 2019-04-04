@@ -1,3 +1,7 @@
+"""
+View template for app generator
+"""
+
 TEMPLATE_VIEWS = """import logging
 
 from django.views.generic.base import TemplateView

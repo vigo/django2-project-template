@@ -1,3 +1,7 @@
+"""
+BaseModelWithSoftDelete template for model generator
+"""
+
 TEMPLATE_MODEL_SOFTDELETEMODEL = """import logging
 
 from django.db import models

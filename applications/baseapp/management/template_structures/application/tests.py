@@ -1,3 +1,7 @@
+"""
+Test template for app generator
+"""
+
 TEMPLATE_TESTS = """import logging
 
 from django.test import TestCase

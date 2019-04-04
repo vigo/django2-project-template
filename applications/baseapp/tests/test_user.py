@@ -1,4 +1,5 @@
-# flake8: noqa
+import random
+from string import ascii_letters
 
 from django.test import TestCase
 
@@ -13,7 +14,7 @@ class CustomUserTestCase(TestCase):
             email='foo@bar.com',
             first_name='Uğur',
             last_name='Özyılmazel',
-            password='1234',
+            password=''.join(random.sample(ascii_letters, k=16)),
         )
         self.assertEqual(user.pk, user.id)
         self.assertEqual(user.is_active, True)
@@ -25,7 +26,7 @@ class CustomUserTestCase(TestCase):
             email='foo@bar.com',
             first_name='Uğur',
             last_name='Özyılmazel',
-            password='1234',
+            password=''.join(random.sample(ascii_letters, k=16)),
         )
         user.is_staff = True
         user.save()
@@ -39,7 +40,7 @@ class CustomUserTestCase(TestCase):
             email='foo@bar.com',
             first_name='Uğur',
             last_name='Özyılmazel',
-            password='1234',
+            password=''.join(random.sample(ascii_letters, k=16)),
         )
         user.is_staff = True
         user.is_superuser = True

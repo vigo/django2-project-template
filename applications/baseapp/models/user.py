@@ -1,3 +1,5 @@
+# pylint: disable=R0913,R0903
+
 import logging
 
 from django.contrib.auth.models import (
@@ -22,17 +24,11 @@ class UserManager(BaseUserManager):
 
     use_in_migrations = True
 
-    def create_user(
-        self, email, first_name, last_name, middle_name=None, password=None
-    ):
+    def create_user(self, email, first_name, last_name, middle_name=None, password=None):
         if not email:
             raise ValueError(_('Users must have an email address'))
 
-        user_create_fields = {
-            'email': email,
-            'first_name': first_name,
-            'last_name': last_name,
-        }
+        user_create_fields = {'email': email, 'first_name': first_name, 'last_name': last_name}
 
         if middle_name:
             user_create_fields['middle_name'] = middle_name
@@ -40,17 +36,15 @@ class UserManager(BaseUserManager):
         user = self.model(**user_create_fields)
         user.set_password(password)
         user.save(using=self._db)
-        logger.info(f'{user.get_full_name()} created successfully. PK: {user.pk}')
+        logger.info('%s created successfully. PK: %d', user.get_full_name(), user.pk)
         return user
 
-    def create_superuser(
-        self, email, first_name, last_name, middle_name=None, password=None
-    ):
+    def create_superuser(self, email, first_name, last_name, middle_name=None, password=None):
         user = self.create_user(email, first_name, last_name, middle_name, password)
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
-        logger.info(f'{user.get_full_name()} is set to superuser. PK: {user.pk}')
+        logger.info('%s is set to superuser. PK: %d', user.get_full_name(), user.pk)
         return user
 
 
@@ -67,16 +61,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
     email = models.EmailField(unique=True, verbose_name=_('email address'))
     first_name = models.CharField(max_length=255, verbose_name=_('first name'))
-    middle_name = models.CharField(
-        max_length=255, null=True, blank=True, verbose_name=_('middle name')
-    )
+    middle_name = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('middle name'))
     last_name = models.CharField(max_length=255, verbose_name=_('last name'))
-    avatar = models.FileField(
-        upload_to=save_user_avatar,
-        verbose_name=_('Profile Image'),
-        null=True,
-        blank=True,
-    )
+    avatar = models.FileField(upload_to=save_user_avatar, verbose_name=_('Profile Image'), null=True, blank=True)
     is_active = models.BooleanField(default=True, verbose_name=_('active'))
     is_staff = models.BooleanField(default=False, verbose_name=_('staff status'))
 
@@ -94,14 +81,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
     def get_full_name(self):
-        params = {
-            'first_name': self.first_name,
-            'middle_name': ' ',
-            'last_name': self.last_name,
-        }
+        params = {'first_name': self.first_name, 'middle_name': ' ', 'last_name': self.last_name}
         if self.middle_name:
-            params['middle_name'] = ' {middle_name} '.format(
-                middle_name=self.middle_name
-            )
+            params['middle_name'] = ' {middle_name} '.format(middle_name=self.middle_name)
         full_name = '{first_name}{middle_name}{last_name}'.format(**params)
         return full_name.strip()

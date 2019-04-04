@@ -1,3 +1,5 @@
+# pylint: disable=W0613
+
 from django.conf import settings
 from django.utils import translation
 
@@ -23,10 +25,7 @@ class HtmlDebugMixin:
 
         kwargs = super().get_context_data(**kwargs)
 
-        custom_template_variables = {
-            'IS_DEBUG': settings.DEBUG,
-            'LANG': translation.get_language(),
-        }
+        custom_template_variables = {'IS_DEBUG': settings.DEBUG, 'LANG': translation.get_language()}
         kwargs.update(**custom_template_variables)
 
         if settings.DEBUG:

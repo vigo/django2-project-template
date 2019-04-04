@@ -17,15 +17,17 @@ task :run_server => [:check_development_environment] do
 end
 
 
-desc "Run shell+"
-task :shell => [:check_development_environment] do
-  system "python manage.py shell_plus --print-sql --ipython"
+AVAILABLE_REPLS = ["ipython", "bpython"]
+desc "Run shell+ avail: #{AVAILABLE_REPLS.join(',')} default: #{AVAILABLE_REPLS.first}"
+task :shell, [:repl] => [:check_development_environment]  do |_, args|
+  args.with_defaults(:repl => AVAILABLE_REPLS.first)
+  system "python manage.py shell_plus --print-sql --#{args.repl}"
 end
 
 
 namespace :new do
   desc "Create new Django application"
-  task :application, [:name_of_application] => [:check_development_environment] do |t, args|
+  task :application, [:name_of_application] => [:check_development_environment] do |_, args|
     abort "Please provide: 'name_of_application'" unless args.name_of_application
     
     system "python manage.py create_app #{args.name_of_application}"
@@ -34,7 +36,7 @@ namespace :new do
 
   AVAILABLE_MODEL_TYPES = ['django', 'basemodel', 'softdelete']
   desc "Create new Model for given application: #{AVAILABLE_MODEL_TYPES.join(',')}"
-  task :model, [:name_of_application, :name_of_model, :type_of_model] => [:check_development_environment] do |t, args|
+  task :model, [:name_of_application, :name_of_model, :type_of_model] => [:check_development_environment] do |_, args|
     args.with_defaults(:type_of_model => "django")
     abort "Please provide: 'name_of_application'" unless args.name_of_application
     abort "Please provide: 'name_of_model'" unless args.name_of_model
@@ -62,7 +64,7 @@ end
 
 namespace :db do
   desc "Run migration for given database (default: 'default')"
-  task :migrate, [:database] => [:check_development_environment] do |t, args|
+  task :migrate, [:database] => [:check_development_environment] do |_, args|
     args.with_defaults(:database => "default")
     puts "Running migration for: #{args.database} database..."
     system "python manage.py migrate --database=#{args.database}"
@@ -76,7 +78,7 @@ namespace :db do
   
 
   desc "Show migrations for an application (default: 'all')"
-  task :show, [:name_of_application] => [:check_development_environment] do |t, args|
+  task :show, [:name_of_application] => [:check_development_environment] do |_, args|
     args.with_defaults(:name_of_application => "all")
     single_application_or_all = " #{args.name_of_application}"
     single_application_or_all = "" if args.name_of_application == "all"
@@ -85,7 +87,7 @@ namespace :db do
 
 
   desc "Update migration (name of application, name of migration?, is empty?)"
-  task :update, [:name_of_application, :name_of_migration, :is_empty] => [:check_development_environment] do |t, args|
+  task :update, [:name_of_application, :name_of_migration, :is_empty] => [:check_development_environment] do |_, args|
     abort "Please provide: 'name_of_application'" unless args.name_of_application
 
     args.with_defaults(:name_of_migration => "auto_#{Time.now.strftime('%Y%m%d_%H%M')}")
@@ -100,7 +102,7 @@ namespace :db do
 
   
   desc "Roll-back (name of application, name of migration)"
-  task :roll_back, [:name_of_application, :name_of_migration] => [:check_development_environment] do |t, args|
+  task :roll_back, [:name_of_application, :name_of_migration] => [:check_development_environment] do |_, args|
     abort "Please provide: 'name_of_application'" unless args.name_of_application
     args.with_defaults(:name_of_migration => nil)
     which_application = args.name_of_application
@@ -118,7 +120,7 @@ end
 
 namespace :test do
   desc "Run tests for given application. (default: 'applications' tests everything...)"
-  task :run, [:name_of_application, :verbose] do |t, args|
+  task :run, [:name_of_application, :verbose] do |_, args|
     args.with_defaults(:name_of_application => "applications")
     args.with_defaults(:verbose => 1)
     puts "Running tests for: #{args.name_of_application}"
@@ -127,14 +129,14 @@ namespace :test do
 
 
   desc "Show test coverage (default: '--show-missing --ignore-errors --skip-covered')"
-  task :coverage, [:cli_args] do |t, args|
+  task :coverage, [:cli_args] do |_, args|
     args.with_defaults(:cli_args => "--show-missing --ignore-errors --skip-covered")
     system "coverage report #{args.cli_args}"
   end
   
   
   desc "Browse test coverage"
-  task :browse_coverage, [:port] do |t, args|
+  task :browse_coverage, [:port] do |_, args|
     args.with_defaults(:port => "9001")
     puts "Open your web browser: http://127.0.0.1:#{args.port}"
     system %{

@@ -1,3 +1,5 @@
+# pylint: disable=R0903
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
@@ -23,19 +25,8 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = (
-            'email',
-            'first_name',
-            'last_name',
-            'password',
-            'is_active',
-            'is_staff',
-            'is_superuser',
-        )
-        labels = {
-            'first_name': _('first name').title(),
-            'last_name': _('last name').title(),
-        }
+        fields = ('email', 'first_name', 'last_name', 'password', 'is_active', 'is_staff', 'is_superuser')
+        labels = {'first_name': _('first name').title(), 'last_name': _('last name').title()}
 
     def clean_password(self):
         return self.initial['password']
@@ -44,9 +35,7 @@ class UserChangeForm(forms.ModelForm):
 class UserCreationForm(forms.ModelForm):
 
     password1 = forms.CharField(label=_('Password'), widget=forms.PasswordInput)
-    password2 = forms.CharField(
-        label=_('Password confirmation'), widget=forms.PasswordInput
-    )
+    password2 = forms.CharField(label=_('Password confirmation'), widget=forms.PasswordInput)
 
     class Meta:
         """
@@ -55,10 +44,7 @@ class UserCreationForm(forms.ModelForm):
 
         model = User
         fields = ('first_name', 'last_name')
-        labels = {
-            'first_name': _('first name').title(),
-            'last_name': _('last name').title(),
-        }
+        labels = {'first_name': _('first name').title(), 'last_name': _('last name').title()}
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')

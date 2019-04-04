@@ -4,23 +4,17 @@ import sys
 
 if __name__ == '__main__':
     if not os.environ.get('DJANGO_ENV', False):
-        raise EnvironmentError(
-            'Please define DJANGO_ENV environment variable'
-        )
+        raise EnvironmentError('Please define DJANGO_ENV environment variable')
 
     os.environ.setdefault(
         'DJANGO_SETTINGS_MODULE',
-        'config.settings.{0}'.format(
-            os.environ.get('DJANGO_ENV')
-        ),
+        'config.settings.{0}'.format(os.environ.get('DJANGO_ENV')),
     )
     try:
-        from django.core.management import (
-            execute_from_command_line,
-        )
+        from django.core.management import execute_from_command_line
     except ImportError:
         try:
-            import django  # noqa: F401
+            import django  # noqa: F401 # pylint: disable=W0611
         except ImportError:
             raise ImportError(
                 'Couldn\'t import Django. Are you sure it\'s installed and '

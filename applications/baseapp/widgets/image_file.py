@@ -9,8 +9,8 @@ __all__ = ['AdminImageFileWidget']
 
 def is_image(file):
     try:
-        with Image.open(file) as im:
-            return im.size
+        with Image.open(file) as image_pointer:
+            return image_pointer.size
     except IOError:
         return False
 
@@ -29,9 +29,7 @@ class AdminImageFileWidget(AdminFileWidget):
 
     """
 
-    def render(
-        self, name, value, attrs=None, renderer=None
-    ):
+    def render(self, name, value, attrs=None, renderer=None):
         widget = super().render(name, value, attrs)
         if value:
             possible_image = is_image(value)
@@ -43,12 +41,8 @@ class AdminImageFileWidget(AdminFileWidget):
                     '</div>'
                     '{widget}'
                     ''.format(
-                        object_name='{0}-preview'.format(
-                            name
-                        ),
-                        image_url='{0}{1}'.format(
-                            settings.MEDIA_URL, value
-                        ),
+                        object_name='{0}-preview'.format(name),
+                        image_url='{0}{1}'.format(settings.MEDIA_URL, value),
                         dimensions=_('Dimensions'),
                         width=possible_image[0],
                         height=possible_image[1],

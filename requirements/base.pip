@@ -1,4 +1,6 @@
-Django==2.1.7
-Pillow==5.4.1
+Django==2.2
+Pillow==6.0.0
 django-extensions==2.1.6
-python-slugify==3.0.0
+python-slugify==3.0.2
+psycopg2-binary==2.8
+dj-database-url==0.5.0

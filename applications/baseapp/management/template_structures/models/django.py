@@ -1,3 +1,7 @@
+"""
+Django Model template for model generator
+"""
+
 TEMPLATE_MODEL_DJANGO = """import logging
 
 from django.db import models

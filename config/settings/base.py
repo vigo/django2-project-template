@@ -51,8 +51,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-LANGUAGE_CODE = 'tr'
-TIME_ZONE = 'Europe/Istanbul'
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -64,9 +64,5 @@ MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'baseapp.User'
 
-# fmt: off
 # add your newly created apps here!
-INSTALLED_APPS += [
-    'django_extensions',
-]
-# fmt: on
+INSTALLED_APPS += ['django_extensions']

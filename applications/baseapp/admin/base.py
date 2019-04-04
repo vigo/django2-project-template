@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import admin
 from django.contrib.admin import helpers
 from django.contrib.admin.utils import model_ngettext
@@ -11,9 +13,15 @@ from ..utils import console, numerify
 __all__ = ['BaseAdmin', 'BaseAdminWithSoftDelete']
 
 console = console(source=__name__)
+logger = logging.getLogger('app')
 
 
 class BaseAdmin(admin.ModelAdmin):
+    """
+
+    Base admin for BaseModel
+
+    """
 
     sticky_list_filter = ('status',)
 
@@ -25,39 +33,29 @@ class BaseAdmin(admin.ModelAdmin):
 
 
 def recover_selected(modeladmin, request, queryset):
-    number_of_rows_recovered, recovered_items = queryset.undelete()
+    number_of_rows_recovered, __ = queryset.undelete()  # __ = recovered_items
     if number_of_rows_recovered == 1:
         message_bit = _('1 record was')
     else:
-        message_bit = _('%(number_of_rows)s records were') % dict(
-            number_of_rows=number_of_rows_recovered
-        )
-    message = _('%(message_bit)s successfully marked as active') % dict(
-        message_bit=message_bit
-    )
+        message_bit = _('%(number_of_rows)s records were') % dict(number_of_rows=number_of_rows_recovered)
+    message = _('%(message_bit)s successfully marked as active') % dict(message_bit=message_bit)
     modeladmin.message_user(request, message)
-    return None
 
 
 def hard_delete_selected(modeladmin, request, queryset):
-    opts = modeladmin.model._meta
+    opts = modeladmin.model._meta  # # pylint: disable=W0212
 
-    deletable_objects, model_count, perms_needed, protected = modeladmin.get_deleted_objects(
-        queryset, request
-    )
+    deletable_objects, model_count, perms_needed, protected = modeladmin.get_deleted_objects(queryset, request)
 
     if request.POST.get('post') and not protected:
         if perms_needed:
             raise PermissionDenied
-        n = queryset.count()
-        if n:
-            number_of_rows_deleted, deleted_items = queryset.hard_delete()
+        if queryset.count():
+            number_of_rows_deleted, __ = queryset.hard_delete()  # __ = deleted_items
             if number_of_rows_deleted == 1:
                 message_bit = _('1 record was')
             else:
-                message_bit = _('%(number_of_rows)s records were') % dict(
-                    number_of_rows=number_of_rows_deleted
-                )
+                message_bit = _('%(number_of_rows)s records were') % dict(number_of_rows=number_of_rows_deleted)
             message = _('%(message_bit)s deleted') % dict(message_bit=message_bit)
             modeladmin.message_user(request, message)
         return None
@@ -84,9 +82,7 @@ def hard_delete_selected(modeladmin, request, queryset):
 
     request.current_app = modeladmin.admin_site.name
 
-    return TemplateResponse(
-        request, 'admin/hard_delete_selected_confirmation.html', context
-    )
+    return TemplateResponse(request, 'admin/hard_delete_selected_confirmation.html', context)
 
 
 class BaseAdminWithSoftDelete(BaseAdmin):
@@ -94,11 +90,11 @@ class BaseAdminWithSoftDelete(BaseAdmin):
     hide_deleted_at = True
 
     def get_queryset(self, request):
-        qs = self.model.objects.get_queryset()
+        queryset = self.model.objects.get_queryset()
         if request.GET.get('status__exact', None):
             if numerify(request.GET.get('status__exact')) == BaseModel.STATUS_DELETED:
-                return qs.deleted()
-        return qs.all()
+                return queryset.deleted()
+        return queryset.all()
 
     def get_exclude(self, request, obj=None):
         excluded = super().get_exclude(request, obj=obj)
@@ -111,11 +107,7 @@ class BaseAdminWithSoftDelete(BaseAdmin):
         existing_actions = super().get_actions(request)
         existing_actions.update(
             dict(
-                recover_selected=(
-                    recover_selected,
-                    'recover_selected',
-                    _('Recover selected %(verbose_name_plural)s'),
-                )
+                recover_selected=(recover_selected, 'recover_selected', _('Recover selected %(verbose_name_plural)s'))
             )
         )
         existing_actions.update(

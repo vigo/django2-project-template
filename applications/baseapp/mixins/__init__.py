@@ -1,4 +1,4 @@
 # isort:skip_file
 # flake8: noqa
 
-from .html_debug import *
+from .html_debug import HtmlDebugMixin

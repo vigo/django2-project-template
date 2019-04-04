@@ -8,11 +8,7 @@ admin.site.index_title = _('Your admin index title')
 admin.site.site_title = _('Your site title')
 admin.site.site_header = _('Your site header')
 
-# fmt: off
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('__baseapp__/', include('baseapp.urls', namespace='baseapp')),
-]
+urlpatterns = [path('admin/', admin.site.urls), path('__baseapp__/', include('baseapp.urls', namespace='baseapp'))]
 
 if settings.DEBUG:
     import debug_toolbar
@@ -24,4 +20,3 @@ if settings.DEBUG:
 # add your newly created app's urls here!
 # urlpatterns += [
 # ]
-# fmt: on

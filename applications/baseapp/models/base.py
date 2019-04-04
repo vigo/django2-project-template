@@ -1,15 +1,18 @@
+# pylint: disable=W0212,W0143,R0201
+
 import logging
+from collections import Counter
 
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from ..utils import console
+from .signals import post_undelete, pre_undelete
 
 __all__ = ['BaseModel', 'BaseModelWithSoftDelete']
 
 console = console(source=__name__)
-
 logger = logging.getLogger('app')
 
 
@@ -55,9 +58,7 @@ class BaseModelWithSoftDeleteQuerySet(BaseModelQuerySet):
     """
 
     def all(self):  # noqa: A003
-        return self.filter(deleted_at__isnull=True).exclude(
-            status=BaseModel.STATUS_DELETED
-        )
+        return self.filter(deleted_at__isnull=True).exclude(status=BaseModel.STATUS_DELETED)
 
     def actives(self):
         return self.all().filter(status=BaseModel.STATUS_ONLINE)
@@ -85,9 +86,7 @@ class BaseModelWithSoftDeleteQuerySet(BaseModelQuerySet):
             _count, model_information = getattr(model_instance, call_method)()
             for (app_label, row_amount) in model_information.items():
                 processed_instances.setdefault(app_label, 0)
-                processed_instances[app_label] = (
-                    processed_instances[app_label] + row_amount
-                )
+                processed_instances[app_label] = processed_instances[app_label] + row_amount
         return (sum(processed_instances.values()), processed_instances)
 
 
@@ -148,9 +147,7 @@ class BaseModel(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
-    status = models.IntegerField(
-        choices=STATUS_CHOICES, default=STATUS_ONLINE, verbose_name=_('Status')
-    )
+    status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ONLINE, verbose_name=_('Status'))
 
     objects = BaseModelManager()
 
@@ -160,9 +157,7 @@ class BaseModel(models.Model):
 
 class BaseModelWithSoftDelete(BaseModel):
 
-    deleted_at = models.DateTimeField(
-        null=True, blank=True, verbose_name=_('Deleted At')
-    )
+    deleted_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Deleted At'))
 
     objects = BaseModelWithSoftDeleteManager()
 
@@ -172,64 +167,76 @@ class BaseModelWithSoftDelete(BaseModel):
     def hard_delete(self):
         super().delete()
 
-    def delete(self, *args, **kwargs):
-        return self._delete_or_undelete()
+    def delete(self, using=None, keep_parents=False):
+        return self._delete_or_undelete(using, keep_parents)
 
-    def undelete(self):
-        return self._delete_or_undelete(True)
+    def undelete(self, using=None, keep_parents=False):
+        return self._delete_or_undelete(using, keep_parents, undelete=True)
 
-    def _delete_or_undelete(self, undelete=False):
-        processed_instances = {}
-        call_method = 'undelete' if undelete else 'delete'
+    def _delete_or_undelete_instance(self, instance, method='delete'):
+        if method == 'delete':
+            models.signals.pre_delete.send(sender=instance.__class__, instance=instance)
+            if issubclass(type(instance), BaseModel):
+                instance.status = instance.STATUS_DELETED
+                instance.deleted_at = timezone.now()
+                instance.save()
+            else:
+                instance.delete()
+            models.signals.post_delete.send(sender=instance.__class__, instance=instance)
+            return instance._meta.label
 
-        log_params = {'instance': self, 'label': self._meta.label, 'pk': self.pk}
-        log_message = '{action} on: "{instance} - pk: {pk}" [{label}]'
+        pre_undelete.send(sender=instance.__class__, instance=instance)
+        undelete_label = None
+        if issubclass(type(instance), BaseModel):
+            instance.status = instance.STATUS_ONLINE
+            instance.deleted_at = None
+            instance.save()
+            undelete_label = instance._meta.label
+        post_undelete.send(sender=instance.__class__, instance=instance)
+        return undelete_label
 
-        if call_method == 'delete':
-            models.signals.pre_delete.send(sender=self.__class__, instance=self)
-            status_value = self.STATUS_DELETED
-            deleted_at_value = timezone.now()
-            log_params.update(action='Soft-delete')
-            logger.warning(log_message.format(**log_params))
-        else:
-            status_value = self.STATUS_ONLINE
-            deleted_at_value = None
-            log_params.update(action='Un-delete')
-            logger.warning(log_message.format(**log_params))
+    def _get_instances(self, obj, method):
+        manager_or_model = obj
+        if hasattr(obj, 'get_accessor_name'):
+            manager_or_model = getattr(self, obj.get_accessor_name())
 
-        self.status = status_value
-        self.deleted_at = deleted_at_value
-        self.save()
+        if not issubclass(type(manager_or_model), models.Manager):
+            return [manager_or_model]
 
-        if call_method == 'delete':
-            models.signals.post_delete.send(sender=self.__class__, instance=self)
+        if getattr(obj, 'on_delete', None):
+            if obj.on_delete.__name__ != 'CASCADE':
+                return []
+            if not hasattr(manager_or_model, 'undelete'):
+                return manager_or_model.all()
+            if method == 'undelete':
+                return manager_or_model.deleted()
+            return manager_or_model.actives()
 
-        processed_instances.update({self._meta.label: 1})
+        if hasattr(manager_or_model, 'undelete'):
+            if method == 'undelete':
+                return manager_or_model.deleted()
+            return manager_or_model.actives()
+        return manager_or_model.all()
 
-        for related_object in self._meta.related_objects:
-            if (
-                hasattr(related_object, 'on_delete')
-                and getattr(related_object, 'on_delete') == models.CASCADE
-            ):
-                accessor_name = related_object.get_accessor_name()
-                related_model_instances = getattr(self, accessor_name)
-                related_model_instance_count = 0
+    def _delete_or_undelete(self, using=None, keep_parents=False, undelete=False):
+        using = using or 'default'
+        processed_instances = Counter()
+        method = 'undelete' if undelete else 'delete'
+        processed_label = self._delete_or_undelete_instance(self, method=method)
+        if processed_label is not None:
+            processed_instances[processed_label] += 1
 
-                related_model_query = related_model_instances.all()
-                if call_method == 'undelete' and hasattr(
-                    related_model_instances, 'deleted'
-                ):
-                    related_model_query = related_model_instances.deleted()
-
-                for related_model_instance in related_model_query:
-                    getattr(related_model_instance, call_method)()
-                    processed_instances.setdefault(
-                        related_model_instance._meta.label, related_model_instance_count
-                    )
-                    related_model_instance_count += 1
-                    processed_instances.update(
-                        {
-                            related_model_instance._meta.label: related_model_instance_count
-                        }
-                    )
-        return (sum(processed_instances.values()), processed_instances)
+        if not keep_parents:
+            # many-to-many
+            for m2m_field in self._meta.many_to_many:
+                for instance in self._get_instances(getattr(self, m2m_field.name), method):
+                    processed_label = self._delete_or_undelete_instance(instance, method=method)
+                    if processed_label is not None:
+                        processed_instances[processed_label] += 1
+            # foreign-key
+            for related_object in self._meta.related_objects:
+                for instance in self._get_instances(related_object, method):
+                    processed_label = self._delete_or_undelete_instance(instance, method=method)
+                    if processed_label is not None:
+                        processed_instances[processed_label] += 1
+        return (sum(processed_instances.values()), dict(processed_instances))

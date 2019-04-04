@@ -23,58 +23,21 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email', 'first_name', 'middle_name', 'last_name')
     ordering = ('email',)
     fieldsets = (
-        (
-            _('User information'),
-            {
-                'fields': (
-                    'email',
-                    'password',
-                    'first_name',
-                    'middle_name',
-                    'last_name',
-                    'avatar',
-                )
-            },
-        ),
-        (
-            _('Permissions'),
-            {
-                'fields': (
-                    'is_active',
-                    'is_staff',
-                    'is_superuser',
-                    'groups',
-                    'user_permissions',
-                )
-            },
-        ),
+        (_('User information'), {'fields': ('email', 'password', 'first_name', 'middle_name', 'last_name', 'avatar')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
     )
     add_fieldsets = (
-        (
-            None,
-            {
-                'classes': ('wide',),
-                'fields': (
-                    'email',
-                    'first_name',
-                    'last_name',
-                    'password1',
-                    'password2',
-                ),
-            },
-        ),
+        (None, {'classes': ('wide',), 'fields': ('email', 'first_name', 'last_name', 'password1', 'password2')}),
     )
     formfield_overrides = {models.FileField: {'widget': AdminImageFileWidget}}
 
+    # pylint: disable=R0201
     def user_profile_image(self, obj):
         if obj.avatar:
             return format_html(
-                '<img style="max-height: 200px;" src="{0}" alt="{1}">',
-                obj.avatar.url,
-                obj.get_full_name(),
+                '<img style="max-height: 200px;" src="{0}" alt="{1}">', obj.avatar.url, obj.get_full_name()
             )
-        else:
-            return '---'
+        return '---'
 
     user_profile_image.short_description = _('Profile Image')
 

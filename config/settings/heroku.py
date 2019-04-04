@@ -1,3 +1,5 @@
+# pylint: disable=W0401,W0614,C0103
+
 import logging
 
 import dj_database_url
@@ -15,9 +17,7 @@ DATABASES = {'default': db_from_env}
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
@@ -48,14 +48,9 @@ logging.config.dictConfig(
     {
         'version': 1,
         'disable_existing_loggers': False,
-        'formatters': {
-            'default': {'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'}
-        },
+        'formatters': {'default': {'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'}},
         'handlers': {
-            'mail_admins': {
-                'level': 'ERROR',
-                'class': 'django.utils.log.AdminEmailHandler',
-            },
+            'mail_admins': {'level': 'ERROR', 'class': 'django.utils.log.AdminEmailHandler'},
             'stdout': {
                 'level': 'INFO',
                 'class': 'logging.StreamHandler',
@@ -72,11 +67,7 @@ logging.config.dictConfig(
         'loggers': {
             '': {'level': 'DEBUG', 'handlers': ['stdout']},
             'app': {'level': LOGLEVEL, 'handlers': ['stdout'], 'propagate': False},
-            'django.request': {
-                'handlers': ['mail_admins'],
-                'level': 'ERROR',
-                'propagate': False,
-            },
+            'django.request': {'handlers': ['mail_admins'], 'level': 'ERROR', 'propagate': False},
         },
     }
 )

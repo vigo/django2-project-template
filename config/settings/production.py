@@ -1,3 +1,5 @@
+# pylint: disable=W0401,W0614,C0103
+
 import logging.config
 
 import dj_database_url
@@ -16,18 +18,10 @@ DATABASES = {'default': dj_database_url.config()}
 
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 # Production only apps
@@ -38,43 +32,26 @@ AUTH_PASSWORD_VALIDATORS = [
 # Ubuntu ...
 FILE_UPLOAD_PERMISSIONS = 0o644
 
-PRODUCTION_BASE_PATH = (
-    '/home/deployer/your.domain.com/files/'
-)
+PRODUCTION_BASE_PATH = '/home/deployer/your.domain.com/files/'
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(  # noqa: F405
-    PRODUCTION_BASE_PATH, 'static_root/'
-)
+STATIC_ROOT = os.path.join(PRODUCTION_BASE_PATH, 'static_root/')  # noqa: F405
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(  # noqa: F405
-    PRODUCTION_BASE_PATH, 'media_root/'
-)
+MEDIA_ROOT = os.path.join(PRODUCTION_BASE_PATH, 'media_root/')  # noqa: F405
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),  # noqa: F405
-)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # noqa: F405
 
 LOGGING_CONFIG = None
-LOGLEVEL = os.environ.get(  # noqa: F405
-    'LOGLEVEL', 'info'
-).upper()
+LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()  # noqa: F405
 
 logging.config.dictConfig(
     {
         'version': 1,
         'disable_existing_loggers': False,
-        'formatters': {
-            'default': {
-                'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
-            }
-        },
+        'formatters': {'default': {'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'}},
         'handlers': {
-            'mail_admins': {
-                'level': 'ERROR',
-                'class': 'django.utils.log.AdminEmailHandler',
-            },
+            'mail_admins': {'level': 'ERROR', 'class': 'django.utils.log.AdminEmailHandler'},
             'stdout': {
                 'level': 'INFO',
                 'class': 'logging.StreamHandler',
@@ -90,16 +67,8 @@ logging.config.dictConfig(
         },
         'loggers': {
             '': {'level': 'DEBUG', 'handlers': ['stdout']},
-            'app': {
-                'level': LOGLEVEL,
-                'handlers': ['stdout'],
-                'propagate': False,
-            },
-            'django.request': {
-                'handlers': ['mail_admins'],
-                'level': 'ERROR',
-                'propagate': False,
-            },
+            'app': {'level': LOGLEVEL, 'handlers': ['stdout'], 'propagate': False},
+            'django.request': {'handlers': ['mail_admins'], 'level': 'ERROR', 'propagate': False},
         },
     }
 )

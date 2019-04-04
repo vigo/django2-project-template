@@ -1,3 +1,7 @@
+"""
+BaseModel template for model generator
+"""
+
 TEMPLATE_ADMIN_BASEMODEL = """import logging
 
 from django.contrib import admin

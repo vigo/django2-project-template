@@ -1,3 +1,7 @@
+"""
+URL template for app generator
+"""
+
 TEMPLATE_URLS = """from django.urls import path
 
 from .views import {app_name_title}View

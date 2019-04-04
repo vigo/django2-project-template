@@ -1,3 +1,7 @@
+"""
+BaseModelWithSoftDelete template for model generator
+"""
+
 TEMPLATE_ADMIN_SOFTDELETEMODEL = """import logging
 
 from django.contrib import admin

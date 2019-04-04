@@ -1,3 +1,5 @@
+# pylint: disable=W0613
+
 import datetime
 import os
 
@@ -38,6 +40,5 @@ def save_file(instance, filename, upload_to='upload/%Y/%m/%d/'):
         safe_basename=slugify(urlify(file_basename)), extension=file_extension.lower()
     )
     now = datetime.datetime.now()
-    return '{upload_to}{file_savename}'.format(
-        upload_to=now.strftime(upload_to), file_savename=file_savename
-    )
+
+    return '{upload_to}{file_savename}'.format(upload_to=now.strftime(upload_to), file_savename=file_savename)

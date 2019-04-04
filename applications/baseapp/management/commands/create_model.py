@@ -1,3 +1,5 @@
+# pylint: disable=R0201,R0914
+
 import os
 import re
 from importlib import import_module
@@ -46,20 +48,14 @@ class Command(BaseCommand):
     MODEL_TYPE_CHOISES = ['django', 'basemodel', 'softdelete']
 
     def create_or_modify_file(self, filename, content, mode='w'):
-        with open(filename, mode) as f:
-            f.write(content)
+        with open(filename, mode) as file_pointer:
+            file_pointer.write(content)
 
     def add_arguments(self, parser):
-        parser.add_argument(
-            'app_name', nargs=1, type=str, help='Name of your application'
-        )
+        parser.add_argument('app_name', nargs=1, type=str, help='Name of your application')
         parser.add_argument('model_name', nargs=1, type=str, help='Name of your model')
         parser.add_argument(
-            'model_type',
-            nargs='?',
-            default='django',
-            choices=self.MODEL_TYPE_CHOISES,
-            help='Type of your model',
+            'model_type', nargs='?', default='django', choices=self.MODEL_TYPE_CHOISES, help='Type of your model'
         )
 
     def handle(self, *args, **options):
@@ -72,80 +68,48 @@ class Command(BaseCommand):
         try:
             import_module(app_name)
         except ImportError:
-            raise CommandError(
-                '%s is not exists. Please pass existing application name.' % app_name
-            )
+            raise CommandError('%s does not exists. Please pass existing application name.' % app_name)
 
-        if model_name.lower() in [
-            model.__name__.lower()
-            for model in apps.get_app_config(app_name).get_models()
-        ]:
+        if model_name.lower() in [model.__name__.lower() for model in apps.get_app_config(app_name).get_models()]:
             raise CommandError(
-                '%s model is already exists in %s. Please try non-existing model name.'
-                % (model_name, app_name)
+                '%s model is already exists in %s. Please try non-existing model name.' % (model_name, app_name)
             )
 
         app_dir = os.path.join(settings.BASE_DIR, 'applications', app_name)
 
-        dash_seperated_file_base_name = '_'.join(
-            [m for m in re.split('([A-Z][a-z]+)', model_name) if m]
-        )
+        dash_seperated_file_base_name = '_'.join([m for m in re.split('([A-Z][a-z]+)', model_name) if m])
 
-        model_file = os.path.join(
-            app_dir, 'models', '{0}.py'.format(dash_seperated_file_base_name.lower())
-        )
+        model_file = os.path.join(app_dir, 'models', '{0}.py'.format(dash_seperated_file_base_name.lower()))
         model_init_file = os.path.join(app_dir, 'models', '__init__.py')
 
-        admin_file = os.path.join(
-            app_dir, 'admin', '{0}.py'.format(dash_seperated_file_base_name.lower())
-        )
+        admin_file = os.path.join(app_dir, 'admin', '{0}.py'.format(dash_seperated_file_base_name.lower()))
         admin_init_file = os.path.join(app_dir, 'admin', '__init__.py')
 
         content_model_file = TEMPLATE_MODELS[model_type].format(
             model_name=model_name, app_name=app_name, model_name_title=model_name_title
         )
-        content_init_file = 'from .{0} import *\n'.format(
-            dash_seperated_file_base_name.lower()
-        )
+        content_init_file = 'from .{0} import *\n'.format(dash_seperated_file_base_name.lower())
 
         content_admin_file = TEMPLATE_ADMINS[model_type].format(
             model_name=model_name, app_name=app_name, model_name_title=model_name_title
         )
 
         self.create_or_modify_file(model_file, content_model_file)
-        self.stdout.write(
-            self.style.SUCCESS(
-                'models/{0} created.'.format(os.path.basename(model_file))
-            )
-        )
+        self.stdout.write(self.style.SUCCESS('models/{0} created.'.format(os.path.basename(model_file))))
 
         self.create_or_modify_file(admin_file, content_admin_file)
-        self.stdout.write(
-            self.style.SUCCESS(
-                'admin/{0} created.'.format(os.path.basename(admin_file))
-            )
-        )
+        self.stdout.write(self.style.SUCCESS('admin/{0} created.'.format(os.path.basename(admin_file))))
 
         self.create_or_modify_file(model_init_file, content_init_file, 'a')
-        self.stdout.write(
-            self.style.SUCCESS(
-                '{0} model added to models/__init__.py'.format(model_name)
-            )
-        )
+        self.stdout.write(self.style.SUCCESS('{0} model added to models/__init__.py'.format(model_name)))
 
         self.create_or_modify_file(admin_init_file, content_init_file, 'a')
-        self.stdout.write(
-            self.style.SUCCESS(
-                '{0} model added to admin/__init__.py'.format(model_name)
-            )
-        )
+        self.stdout.write(self.style.SUCCESS('{0} model added to admin/__init__.py'.format(model_name)))
 
         self.stdout.write(
             self.style.NOTICE(
                 USER_REMINDER.format(
-                    app_name=app_name,
-                    model_name=model_name,
-                    model_name_lower=dash_seperated_file_base_name.lower(),
+                    app_name=app_name, model_name=model_name, model_name_lower=dash_seperated_file_base_name.lower()
                 )
             )
         )

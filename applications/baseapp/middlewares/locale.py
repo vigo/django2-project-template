@@ -1,10 +1,12 @@
+# pylint: disable=R0903
+
 from django.utils import translation
 from django.utils.cache import patch_vary_headers
 
 __all__ = ['CustomLocaleMiddleware']
 
 
-class CustomLocaleMiddleware(object):
+class CustomLocaleMiddleware:
     """
     `/en/path/to/page/` sets `request.LANGUAGE_CODE` to `en` otherwise `tr`.
 
