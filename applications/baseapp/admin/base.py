@@ -4,11 +4,14 @@ from django.contrib import admin
 from django.contrib.admin import helpers
 from django.contrib.admin.utils import model_ngettext
 from django.core.exceptions import PermissionDenied
+from django.db import models
+from django.forms import TextInput
 from django.template.response import TemplateResponse
 from django.utils.translation import ugettext_lazy as _
 
 from ..models import BaseModel
 from ..utils import console, numerify
+from ..widgets import AdminImageFileWidget
 
 __all__ = ['BaseAdmin', 'BaseAdminWithSoftDelete']
 
@@ -24,6 +27,11 @@ class BaseAdmin(admin.ModelAdmin):
     """
 
     sticky_list_filter = ('status',)
+
+    formfield_overrides = {
+        models.ImageField: {'widget': AdminImageFileWidget},
+        models.CharField: {'widget': TextInput(attrs={'size': 100})},
+    }
 
     def get_list_filter(self, request):
         list_filter = list(super().get_list_filter(request))

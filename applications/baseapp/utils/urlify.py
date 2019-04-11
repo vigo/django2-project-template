@@ -1,47 +1,32 @@
-LETTER_TRANSFORM_MAP = {
-    'tr': {
-        'ç': 'c',
-        'Ç': 'c',
-        'ğ': 'g',
-        'Ğ': 'g',
-        'ı': 'i',
-        'I': 'i',
-        'İ': 'i',
-        'ö': 'o',
-        'Ö': 'o',
-        'ş': 's',
-        'Ş': 's',
-        'ü': 'u',
-        'Ü': 'u',
-    }
-}
-
+from slugify import slugify
 
 __all__ = ['urlify']
 
 
-def urlify(value, language='tr'):
+def urlify(value):
     """
-    This is a pre-processor for django's slugify function.
+    This is small wrapper for `slugify`. Original function can be used:
+
+        from slugify import slugify
 
     Example usage:
 
-        from django.utils.text import slugify
+        from baseapp.utils import urlify
 
-        corrected_text = slugify(urlify('Merhaba Dünya!'))
+        corrected_text = urlify('Merhaba Dünya!')
 
     >>> urlify('Merhaba Dünya')
-    'merhaba dunya'
+    'merhaba-dunya'
 
     >>> urlify('Uğur Özyılmazel')
-    'ugur ozyilmazel'
+    'ugur-ozyilmazel'
 
-    >>> urlify('ç ğ ü Ç Ğ Ü ı İ')
-    'c g u c g u i i'
+    >>> urlify('çğüÇ ĞÜıİ')
+    'cguc-guii'
 
     """
 
-    return ''.join(map(lambda char: LETTER_TRANSFORM_MAP[language].get(char, char), iter(value))).lower()
+    return slugify(value)
 
 
 if __name__ == '__main__':

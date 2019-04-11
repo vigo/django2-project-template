@@ -3,6 +3,7 @@ from django.contrib.auth.admin import (
     UserAdmin as BaseUserAdmin,
 )
 from django.db import models
+from django.forms import TextInput
 from django.utils.html import format_html
 from django.utils.translation import ugettext_lazy as _
 
@@ -29,7 +30,10 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {'classes': ('wide',), 'fields': ('email', 'first_name', 'last_name', 'password1', 'password2')}),
     )
-    formfield_overrides = {models.FileField: {'widget': AdminImageFileWidget}}
+    formfield_overrides = {
+        models.FileField: {'widget': AdminImageFileWidget},
+        models.CharField: {'widget': TextInput(attrs={'size': 100})},
+    }
 
     # pylint: disable=R0201
     def user_profile_image(self, obj):

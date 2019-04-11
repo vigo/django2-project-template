@@ -21,6 +21,7 @@ AVAILABLE_REPLS = ["ipython", "bpython"]
 desc "Run shell+ avail: #{AVAILABLE_REPLS.join(',')} default: #{AVAILABLE_REPLS.first}"
 task :shell, [:repl] => [:check_development_environment]  do |_, args|
   args.with_defaults(:repl => AVAILABLE_REPLS.first)
+  abort "Please provide valid repl: #{AVAILABLE_REPLS.join(',')}" unless AVAILABLE_REPLS.include?(args.repl)
   system "python manage.py shell_plus --print-sql --#{args.repl}"
 end
 
@@ -40,7 +41,7 @@ namespace :new do
     args.with_defaults(:type_of_model => "django")
     abort "Please provide: 'name_of_application'" unless args.name_of_application
     abort "Please provide: 'name_of_model'" unless args.name_of_model
-    abort "Please provide valide model tyoe: #{AVAILABLE_MODEL_TYPES.join(',')}" unless AVAILABLE_MODEL_TYPES.include?(args.type_of_model)
+    abort "Please provide valid model type: #{AVAILABLE_MODEL_TYPES.join(',')}" unless AVAILABLE_MODEL_TYPES.include?(args.type_of_model)
     
     system "python manage.py create_model #{args.name_of_application} #{args.name_of_model} #{args.type_of_model}"
   end

@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
 ![Django](https://img.shields.io/badge/django-2.2-green.svg)
-![Version](https://img.shields.io/badge/version-2.0-yellow.svg)
+![Version](https://img.shields.io/badge/version-2.1-yellow.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c73fb40b38f5455abd34d496bbc52b9b)](https://www.codacy.com/app/vigo/django2-project-template?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vigo/django2-project-template&amp;utm_campaign=Badge_Grade)
 
 # Django Project Starter Template
@@ -54,6 +54,7 @@ export DJANGO_SECRET="YOUR-SECRET-HERE" # will fix it in a second.
 export DATABASE_URL="postgres://localhost:5432/my_project_dev"
 ```
 
+then trigger `workon my_projects_env`, this reloads environment variables.
 then;
 
 ```bash
@@ -110,7 +111,8 @@ Now, please generate your secret via:
 $ python manage.py generate_secret_key
 ```
 
-and fix your `~/.virtualenvs/my_projects_env/bin/postactivate`
+and fix your `~/.virtualenvs/my_projects_env/bin/postactivate` and hit 
+`workon my_projects_env` for reloading environment variables.
 
 You can fix your Django Admin titles now. Go to `config/urls.py` and fix:
 
@@ -151,7 +153,7 @@ Let’s create `blog` application. We’ll have two models. `Post` and `Category
 First, create application:
 
 ```bash
-$ python manage.py baseapp_create_app blog
+$ python manage.py create_app blog
 
 # or
 
@@ -265,7 +267,7 @@ Let’s look at our `blog` application structure:
 Now lets add `Post` model with **soft-delete** feature!
 
 ```bash
-$ python manage.py baseapp_create_model blog Post softdelete
+$ python manage.py create_model blog Post softdelete
 
 # or
 
@@ -319,7 +321,7 @@ class Post(BaseModelWithSoftDelete):
 and `Category` model:
 
 ```bash
-$ python manage.py baseapp_create_model blog Category softdelete
+$ python manage.py create_model blog Category softdelete
 
 # or
 
@@ -1085,11 +1087,9 @@ from baseapp.utils import numerify
 
 ## `baseapp.utils.urlify`
 
-Turkish language and Django’s `slugify` are not working well together. This
-little pre-processor will prep string for slugification :)
+Small wrapper function for `slugify`.
 
 ```python
-from django.utils.text import slugify
 from baseapp.utils import urlify
 
 >>> slugify(urlify('Merhaba Dünya!'))
@@ -1146,6 +1146,28 @@ class MyModel(models.Model):
         verbose_name=_('Profile Image'),
     )
 ```
+
+## `baseapp.utils.storage`
+
+`OverwriteStorage` helps you to overwrite file when uploading from django
+admin. Example usage:
+
+```python
+# in a model
+from baseapp.utils.storage image OverwriteStorage
+
+class MyModel(models.Model):
+    :
+    :
+    photo = models.ImageField(
+        upload_to=save_media_photo,
+        storage=OverwriteStorage(),
+    )
+    :
+    :
+```
+
+Add `storage` option in you file related fields.
 
 ## `AdminImageFileWidget`
 
