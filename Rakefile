@@ -125,7 +125,7 @@ namespace :test do
     args.with_defaults(:name_of_application => "applications")
     args.with_defaults(:verbose => 1)
     puts "Running tests for: #{args.name_of_application}"
-    system "DJANGO_ENV=test coverage run --source='.' manage.py test #{args.name_of_application} -v #{args.verbose}"
+    system "DJANGO_ENV=test coverage run --source='.' manage.py test #{args.name_of_application} -v #{args.verbose} --failfast"
   end
 
 

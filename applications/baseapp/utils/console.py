@@ -1,3 +1,6 @@
+# pylint: disable=R0912,W0603
+
+import os
 import pprint
 import shutil
 import sys
@@ -233,7 +236,7 @@ class Console:
 def console(**options):
     global DEBUG, TERMINAL_COLUMNS
 
-    if DEBUG:
+    if DEBUG or os.getenv('DJANGO_ENV', 'not_available') == 'test':
         if 'width' not in options.keys():
             options.update(width=TERMINAL_COLUMNS)
         return Console(**options)

@@ -1,7 +1,10 @@
 from django.db import connections
 from django.test import TestCase
 
+from ..utils import console
 from .base_models import Category, Member, Person, Post
+
+console = console(source=__name__)
 
 
 class BaseModelWithSoftDeleteTestCase(TestCase):
@@ -26,14 +29,11 @@ class BaseModelWithSoftDeleteTestCase(TestCase):
 
     def test_softdelete_for_many_to_many(self):
         deleted_member = self.member.delete()
-        self.assertEqual(deleted_member, (3, {'baseapp.Member': 1, 'baseapp.Person': 2}))
+        self.assertEqual(deleted_member, (3, {'baseapp.Member': 1, 'baseapp.Member_members': 2}))
         self.assertQuerysetEqual(Member.objects.all(), [])
         self.assertQuerysetEqual(Member.objects.actives(), [])
         self.assertQuerysetEqual(Member.objects.deleted(), ['<Member: Membership>'])
-
-        self.assertQuerysetEqual(
-            self.member.members.deleted(), ['<Person: Person 1>', '<Person: Person 2>'], ordered=False
-        )
+        self.assertQuerysetEqual(self.member.members.all(), [])
 
     def test_basemodelwithsoftdelete_fields(self):
         """Test fields"""
@@ -64,11 +64,6 @@ class BaseModelWithSoftDeleteTestCase(TestCase):
             Post.objects.deleted().order_by('id'), ['<Post: Python post 1>', '<Post: Python post 2>']
         )
 
-    def test_softdelete_and_keep_parents_active(self):
-        """Test soft deletion with keep_parents"""
-        deleted_category = self.category.delete(keep_parents=True)
-        self.assertEqual(deleted_category, (1, {'baseapp.Category': 1}))
-
     def test_softdelete_undelete(self):
         """Test undelete feature"""
         deleted_category = self.category.delete()
@@ -76,16 +71,6 @@ class BaseModelWithSoftDeleteTestCase(TestCase):
         undeleted_items = self.category.undelete()
         self.assertEqual(undeleted_items, (3, {'baseapp.Category': 1, 'baseapp.Post': 2}))
         self.assertQuerysetEqual(Post.objects.deleted(), [])
-
-    def test_undelete_and_keep_parents_active(self):
-        """Test undelete feature with keep_parents"""
-        deleted_category = self.category.delete()
-        self.assertEqual(deleted_category, (3, {'baseapp.Category': 1, 'baseapp.Post': 2}))
-        undeleted_items = self.category.undelete(keep_parents=True)
-        self.assertEqual(undeleted_items, (1, {'baseapp.Category': 1}))
-        self.assertQuerysetEqual(
-            Post.objects.deleted().order_by('id'), ['<Post: Python post 1>', '<Post: Python post 2>']
-        )
 
     def test_softdelete_all(self):
         deleted_posts = Post.objects.delete()

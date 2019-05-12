@@ -94,11 +94,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 INTERNAL_IPS = ['127.0.0.1']
 
-# uncomment if you don't want to use DATABASE_URL environment variable
-# DATABASES = {
-#     'default': dj_database_url.config(default='postgres://localhost:5432/custom_db_dev')
-# }
-
+# DATABASE_URL environment variable...
 DATABASES = {'default': dj_database_url.config()}
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # noqa: F405

@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
 ![Django](https://img.shields.io/badge/django-2.2-green.svg)
-![Version](https://img.shields.io/badge/version-2.1-yellow.svg)
+![Version](https://img.shields.io/badge/version-3.0.0-yellow.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c73fb40b38f5455abd34d496bbc52b9b)](https://www.codacy.com/app/vigo/django2-project-template?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vigo/django2-project-template&amp;utm_campaign=Badge_Grade)
 
 # Django Project Starter Template
@@ -28,7 +28,19 @@ Don’t forget to start your database server before continue. Now create your
 database:
 
 ```bash
-$ createdb my_project_dev
+$ createdb -E UTF8 -T template0 my_project_dev
+
+# or createdb with locale
+$ createdb -E UTF8 -T template0 --lc-collate=tr_TR.UTF-8 --lc-ctype=tr_TR.UTF-8 my_project_dev
+
+# or postgres from docker
+$ PGPASSWORD=YOUR-POSTGRES-PASSWORD createdb -h localhost -U postgres -E UTF8 -T template0 my_project_dev
+
+# grant privileges
+$ PGPASSWORD=YOUR-POSTGRES-PASSWORD psql -h localhost -U postgres -d my_project_dev -c "GRANT ALL PRIVILEGES ON DATABASE my_project_dev TO postgres;"
+
+# check
+$ PGPASSWORD=YOUR-POSTGRES-PASSWORD psql -h localhost -U postgres -l
 ```
 
 Please use `virtualenvwrapper` and create your environment and activate it.
@@ -43,18 +55,33 @@ $ mkvirtualenv my_projects_env
 $ workon my_projects_env
 ```
 
-You need to declare **3 environment** variables. I always put my project
-specific environment variables under `virtualenvwrapper`’s `postactivate`
-file. Open your `~/.virtualenvs/my_projects_env/bin/postactivate` and add
-these lines (*or set it manually*):
+You need to declare `DATABASE_URL` and `TEST_DATABASE_URL` for postgres
+connection and `DJANGO_SECRET` for settings. I always put my project specific
+environment variables under `virtualenvwrapper`’s `postactivate` file. Open
+your `~/.virtualenvs/my_projects_env/bin/postactivate` and add (*or set it
+manually*):
 
 ```bash
-export DJANGO_ENV="development"
-export DJANGO_SECRET="YOUR-SECRET-HERE" # will fix it in a second.
+export DATABASE_URL="postgres://postgres:YOUR-POSTGRES-PASSWORD@localhost:5432/my_project_dev"
+export TEST_DATABASE_URL="postgres://postgres:YOUR-POSTGRES-PASSWORD@localhost:5432/my_project_dev"
+# or
+# export TEST_DATABASE_URL="${DATABASE_URL}"  # django adds prefix to table name: `test_`
+
+# or for osx/homebrew postgres usage;
 export DATABASE_URL="postgres://localhost:5432/my_project_dev"
+export DJANGO_SECRET="WE-WILL-FIX-THIS"
 ```
 
-then trigger `workon my_projects_env`, this reloads environment variables.
+By default, `DJANGO_ENV` environment variable is set to `development`. We’ll
+fix `DJANGO_SECRET` variable after completing package installation.
+
+When you deploy your app, you need to set:
+
+- `DJANGO_ENV` to `production` or whatever your settings file name is (`config/settings/YOUR-ENVIRONMENT.py`)
+- `DATABASE_URL` to your PostgreSQL’s url
+- `DJANGO_SECRET` to morew securly generated secret.
+
+Now trigger `workon my_projects_env`, this reloads environment variables.
 then;
 
 ```bash
@@ -111,8 +138,8 @@ Now, please generate your secret via:
 $ python manage.py generate_secret_key
 ```
 
-and fix your `~/.virtualenvs/my_projects_env/bin/postactivate` and hit 
-`workon my_projects_env` for reloading environment variables.
+and fix your `~/.virtualenvs/my_projects_env/bin/postactivate`, edit `DJANGO_SECRET` 
+variable and hit `workon my_projects_env` for reloading environment variables.
 
 You can fix your Django Admin titles now. Go to `config/urls.py` and fix:
 
