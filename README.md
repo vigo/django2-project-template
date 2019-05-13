@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
 ![Django](https://img.shields.io/badge/django-2.2-green.svg)
-![Version](https://img.shields.io/badge/version-3.0.0-yellow.svg)
+![Version](https://img.shields.io/badge/version-3.0.1-yellow.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c73fb40b38f5455abd34d496bbc52b9b)](https://www.codacy.com/app/vigo/django2-project-template?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vigo/django2-project-template&amp;utm_campaign=Badge_Grade)
 
 # Django Project Starter Template
@@ -72,14 +72,12 @@ export DATABASE_URL="postgres://localhost:5432/my_project_dev"
 export DJANGO_SECRET="WE-WILL-FIX-THIS"
 ```
 
-By default, `DJANGO_ENV` environment variable is set to `development`. We’ll
-fix `DJANGO_SECRET` variable after completing package installation.
+By default, `DJANGO_ENV` environment variable is set to `development` via
+`manage.py`. For production usage, `DJANGO_ENV` environment variable is set to
+`production` via `wsgi.py`. This means, if you don’t set `DJANGO_ENV` variable,
+app sets it for you. 
 
-When you deploy your app, you need to set:
-
-- `DJANGO_ENV` to `production` or whatever your settings file name is (`config/settings/YOUR-ENVIRONMENT.py`)
-- `DATABASE_URL` to your PostgreSQL’s url
-- `DJANGO_SECRET` to morew securly generated secret.
+We’ll fix `DJANGO_SECRET` variable after completing package installation.
 
 Now trigger `workon my_projects_env`, this reloads environment variables.
 then;
@@ -764,9 +762,14 @@ $ heroku run python manage.py createsuperuser
 If you are using different platform or OS, such as Ubuntu or your custom
 servers, you can follow the settings and requirements conventions. If you name
 it `production`, create your `config/settings/production.py` and
-`requirements/production.pip`. You must set you `DJANGO_ENV` to `production`
-and don’t forget to set `DJANGO_ENV` and `DJANGO_SECRET` on your production
-server!
+`requirements/production.pip`. 
+
+You need to set these environment variables in to your production server
+environment:
+
+- `DJANGO_ENV` to `production`
+- `DATABASE_URL` to your PostgreSQL’s url
+- `DJANGO_SECRET` to more securly generated secret.
 
 ---
 
@@ -826,10 +829,9 @@ You can make these queries:
 ## `BaseModelWithSoftDelete`
 
 This model inherits from `BaseModel` and provides fake deletion which is
-probably called **SOFT DELETE**. Works with related objects who has
-`on_delete` option is set to `models.CASCADE`. This means, when you call
-model’s `delete()` method or QuerySet’s `delete()` method, it acts like delete
-action but never deletes the data.
+probably called **SOFT DELETE**. This means, when you call model’s `delete()`
+method or QuerySet’s `delete()` method, it acts like delete action but never
+deletes the data.
 
 Just sets the status field to `STATUS_DELETED` and sets `deleted_at` field to
 **NOW**.
@@ -837,6 +839,9 @@ Just sets the status field to `STATUS_DELETED` and sets `deleted_at` field to
 This works exactly like Django’s `delete()`. Broadcasts `pre_delete` and
 `post_delete` signals and returns the number of objects marked as deleted and
 a dictionary with the number of deletion-marks per object type.
+
+You can call `hard_delete()` method to delete an instance or a queryset
+actually.
 
 ```python
 >>> Post.objects.all()
@@ -1528,6 +1533,15 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2019-05-13**
+
+- New Version: 3.0
+- Fix soft-deletion feature
+- `DJANGO_ENV` variable usage enhanced.
+- Integrate `dj_database_url` to development/test environments too...
+- Use `TEST_DATABASE_URL` for testing database.
+- Additional information for PostgreSQL via Docker usage.
 
 **2019-04-11** 
 
