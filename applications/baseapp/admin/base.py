@@ -9,8 +9,7 @@ from django.forms import TextInput
 from django.template.response import TemplateResponse
 from django.utils.translation import ugettext_lazy as _
 
-from ..models import BaseModel
-from ..utils import console, numerify
+from ..utils import console
 from ..widgets import AdminImageFileWidget
 
 __all__ = ['BaseAdmin', 'BaseAdminWithSoftDelete']
@@ -98,10 +97,9 @@ class BaseAdminWithSoftDelete(BaseAdmin):
     hide_deleted_at = True
 
     def get_queryset(self, request):
-        queryset = self.model.objects.get_queryset()
-        if request.GET.get('status__exact', None):
-            if numerify(request.GET.get('status__exact')) == BaseModel.STATUS_DELETED:
-                return queryset.deleted()
+        queryset = super().get_queryset(request)
+        if request.GET:
+            return queryset
         return queryset.all()
 
     def get_exclude(self, request, obj=None):
