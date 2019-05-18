@@ -55,17 +55,15 @@ $ mkvirtualenv my_projects_env
 $ workon my_projects_env
 ```
 
-You need to declare `DATABASE_URL` and `TEST_DATABASE_URL` for postgres
-connection and `DJANGO_SECRET` for settings. I always put my project specific
-environment variables under `virtualenvwrapper`’s `postactivate` file. Open
-your `~/.virtualenvs/my_projects_env/bin/postactivate` and add (*or set it
+You need to declare `DATABASE_URL` for postgres connection and `DJANGO_SECRET`
+for settings. I always put my project specific environment variables under
+`virtualenvwrapper`’s `postactivate` file. Open your
+`~/.virtualenvs/my_projects_env/bin/postactivate` and add (*or set it
 manually*):
 
 ```bash
+# docker/postgres usage;
 export DATABASE_URL="postgres://postgres:YOUR-POSTGRES-PASSWORD@localhost:5432/my_project_dev"
-export TEST_DATABASE_URL="postgres://postgres:YOUR-POSTGRES-PASSWORD@localhost:5432/my_project_dev"
-# or
-# export TEST_DATABASE_URL="${DATABASE_URL}"  # django adds prefix to table name: `test_`
 
 # or for osx/homebrew postgres usage;
 export DATABASE_URL="postgres://localhost:5432/my_project_dev"
@@ -708,14 +706,6 @@ pylint==2.3.1
 ### `test.example.py`
 
 Basic settings for running tests. 
-
-```python
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://localhost:5432/custom_db_test'
-    )
-}
-```
 
 ### `heroku.py`
 
