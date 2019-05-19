@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Page not found error" %} (404){% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <h1 class="title">{% trans "Page not found error" %}</h1>
+        {% if exception %}<p class="subtitle">{{ exception }}</p>{% endif %}
+        <p class="subtitle">{% blocktrans %}Requested page: <strong>{{ request_path }}</strong>{% endblocktrans %}</p>
+    </div>
+</section>
+{% endblock %}

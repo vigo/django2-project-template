@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
 ![Django](https://img.shields.io/badge/django-2.2-green.svg)
-![Version](https://img.shields.io/badge/version-3.0.1-yellow.svg)
+![Version](https://img.shields.io/badge/version-3.1.0-yellow.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c73fb40b38f5455abd34d496bbc52b9b)](https://www.codacy.com/app/vigo/django2-project-template?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vigo/django2-project-template&amp;utm_campaign=Badge_Grade)
 
 # Django Project Starter Template
@@ -167,6 +167,7 @@ Do not forget to compile your locale messages files.
 - File widget for Django Admin: `AdminImageFileWidget`
 - Easy naming for your admin site!
 - `DJANGO_ENV` indicator for your admin site!
+- Custom and configurable error pages: `400`, `403`, `404`, `500`
 
 ---
 
@@ -947,6 +948,14 @@ MIDDLEWARE += ['baseapp.middlewares.CustomLocaleMiddleware']
 
 ---
 
+## Custom Error Pages
+
+You have browsable (only in development mode) and customizable error handler
+functions and html templates now!. Templates are under `templates/custom_errors/`
+folder. Handlers are under `baseapp/views/http_errors.py`
+
+---
+
 ## `HtmlDebugMixin`
 
 `HtmlDebugMixin` injects `{{ IS_DEBUG }}` and `{{ LANG }}` template variables
@@ -1523,6 +1532,12 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2019-05-19**
+
+- Fix: Soft-deleted items are now editable (Issue #19)
+- Remove `TEST_DATABASE_URL`, It was useless :)
+- Add custom error pages (Issue #10)
 
 **2019-05-13**
 
