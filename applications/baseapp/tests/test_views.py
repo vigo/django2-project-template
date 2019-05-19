@@ -30,7 +30,8 @@ class ViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Welcome to Django')
-        self.assertEqual(response.context.get('DJANGO_ENVIRONMENT_NAME', None), 'test')
+        environment_name = response.context.get('DJANGO_ENVIRONMENT_NAME', None)
+        self.assertTrue(environment_name in ['test', 'travis'])
 
         templates = list(map(lambda t: t.name, response.templates))
         self.assertTrue('baseapp/index.html' in templates)
