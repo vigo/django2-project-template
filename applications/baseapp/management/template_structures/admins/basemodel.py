@@ -6,7 +6,7 @@ TEMPLATE_ADMIN_BASEMODEL = """import logging
 
 from django.contrib import admin
 
-from baseapp.admin import BaseAdmin
+from baseapp.admin import CustomBaseModelAdmin
 from baseapp.utils import console
 
 from ..models import {model_name_title}
@@ -18,7 +18,7 @@ console = console(source=__name__)
 
 
 @admin.register({model_name_title})
-class {model_name_title}Admin(BaseAdmin):
+class {model_name_title}Admin(CustomBaseModelAdmin):
     # sticky_list_filter = None
     pass
 

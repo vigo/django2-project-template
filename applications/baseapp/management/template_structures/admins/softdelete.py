@@ -6,7 +6,7 @@ TEMPLATE_ADMIN_SOFTDELETEMODEL = """import logging
 
 from django.contrib import admin
 
-from baseapp.admin import BaseAdminWithSoftDelete
+from baseapp.admin import CustomBaseModelAdminWithSoftDelete
 from baseapp.utils import console
 
 from ..models import {model_name_title}
@@ -18,7 +18,7 @@ console = console(source=__name__)
 
 
 @admin.register({model_name_title})
-class {model_name_title}Admin(BaseAdminWithSoftDelete):
+class {model_name_title}Admin(CustomBaseModelAdminWithSoftDelete):
     # sticky_list_filter = None
     # hide_deleted_at = False
     pass

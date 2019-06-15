@@ -12,13 +12,13 @@ from django.utils.translation import ugettext_lazy as _
 from ..utils import console
 from ..widgets import AdminImageFileWidget
 
-__all__ = ['BaseAdmin', 'BaseAdminWithSoftDelete']
+__all__ = ['CustomBaseModelAdmin', 'CustomBaseModelAdminWithSoftDelete']
 
 console = console(source=__name__)
 logger = logging.getLogger('app')
 
 
-class BaseAdmin(admin.ModelAdmin):
+class CustomBaseModelAdmin(admin.ModelAdmin):
     """
 
     Base admin for BaseModel
@@ -92,7 +92,7 @@ def hard_delete_selected(modeladmin, request, queryset):
     return TemplateResponse(request, 'admin/hard_delete_selected_confirmation.html', context)
 
 
-class BaseAdminWithSoftDelete(BaseAdmin):
+class CustomBaseModelAdminWithSoftDelete(CustomBaseModelAdmin):
 
     hide_deleted_at = True
 

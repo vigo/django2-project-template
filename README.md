@@ -891,12 +891,12 @@ SELECT "blog_category"."id",
 
 
 When soft-delete enabled (*during model creation*), Django admin will
-automatically use `BaseAdminWithSoftDelete` which is inherited from:
- `BaseAdmin` <- `admin.ModelAdmin`.
+automatically use `CustomBaseModelAdminWithSoftDelete` which is inherited from:
+ `CustomBaseModelAdmin` <- `admin.ModelAdmin`.
 
 ---
 
-## `BaseAdmin`, `BaseAdminWithSoftDelete`
+## `CustomBaseModelAdmin`, `CustomBaseModelAdminWithSoftDelete`
 
 Inherits from `admin.ModelAdmin`. By default, adds `status` to `list_filter`.
 You can disable this via setting `sticky_list_filter = None`. When model is
@@ -910,7 +910,7 @@ import logging
 
 from django.contrib import admin
 
-from baseapp.admin import BaseAdminWithSoftDelete
+from baseapp.admin import CustomBaseModelAdminWithSoftDelete
 from baseapp.utils import console
 
 from ..models import Post
@@ -921,7 +921,7 @@ logger = logging.getLogger('app')
 console = console(source=__name__)
 
 @admin.register(Post)
-class PostAdmin(BaseAdminWithSoftDelete):
+class PostAdmin(CustomBaseModelAdminWithSoftDelete):
     # sticky_list_filter = None
     # hide_deleted_at = False
     pass
@@ -929,9 +929,9 @@ class PostAdmin(BaseAdminWithSoftDelete):
 
 By default, `deleted_at` excluded from admin form like `created_at` and
 `updated_at` fields. You can also override this via `hide_deleted_at` attribute.
-Comment/Uncomment lines according to your needs! This works only in `BaseAdminWithSoftDelete`.
+Comment/Uncomment lines according to your needs! This works only in `CustomBaseModelAdminWithSoftDelete`.
 
-`BaseAdminWithSoftDelete` also comes with special admin action. You can
+`CustomBaseModelAdminWithSoftDelete` also comes with special admin action. You can
 recover/make active (*undelete*) multiple objects like deleting items.
 
 ---

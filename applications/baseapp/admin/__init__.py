@@ -2,4 +2,4 @@
 # flake8: noqa
 
 from .user import UserAdmin
-from .base import BaseAdmin, BaseAdminWithSoftDelete
+from .base import CustomBaseModelAdmin, CustomBaseModelAdminWithSoftDelete
