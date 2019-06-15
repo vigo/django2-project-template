@@ -86,6 +86,7 @@ LOGGING = {
     'loggers': {
         'app': {'handlers': ['console'], 'level': 'DEBUG'},
         'werkzeug': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': True},
+        'django.server': {'handlers': ['console'], 'level': 'DEBUG', 'propagate': True},
         # 'django.db.backends': {'handlers': ['console_sql'], 'level': 'DEBUG'},
     },
 }
