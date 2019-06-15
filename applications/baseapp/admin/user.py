@@ -38,12 +38,13 @@ class UserAdmin(BaseUserAdmin):
     # pylint: disable=R0201
     def user_profile_image(self, obj):
         if obj.avatar:
-            return format_html(
-                '<img style="max-height: 200px;" src="{0}" alt="{1}">', obj.avatar.url, obj.get_full_name()
-            )
+            return format_html('<img class="thumbnail" src="{0}" alt="{1}">', obj.avatar.url, obj.get_full_name())
         return '---'
 
     user_profile_image.short_description = _('Profile Image')
+
+    class Media:
+        css = {'all': ['admin/baseapp.css']}
 
 
 admin.site.register(User, UserAdmin)

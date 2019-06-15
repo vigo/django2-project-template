@@ -1,0 +1,7 @@
+table#result_list img.thumbnail {
+    max-height: 200px;
+}
+
+.admin-image-preview img.thumbnail {
+    max-height: 200px;
+}
