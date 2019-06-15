@@ -107,3 +107,5 @@ MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']  # noqa: F405
 
 # apps for development purposes only
 INSTALLED_APPS += ['debug_toolbar']  # noqa: F405
+
+DEFAULT_FILE_STORAGE = 'baseapp.storage.FileNotFoundFileSystemStorage'

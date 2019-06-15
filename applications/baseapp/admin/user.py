@@ -38,6 +38,7 @@ class UserAdmin(BaseUserAdmin):
     # pylint: disable=R0201
     def user_profile_image(self, obj):
         if obj.avatar:
+            print('obj.avatar.url', obj.avatar.url)
             return format_html('<img class="thumbnail" src="{0}" alt="{1}">', obj.avatar.url, obj.get_full_name())
         return '---'
 

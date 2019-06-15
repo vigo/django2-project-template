@@ -1507,6 +1507,28 @@ Now make migrations etc... Use it as `from YOUR_APP.models import Page` :)
 
 ---
 
+## New Features
+
+### FileNotFoundFileSystemStorage
+
+After shipping/deploying Django app, users start to upload files, right ?
+Then you need to implement new features etc. You can get the dump of the
+database but what about uploaded files ? Sometimes files are too much or
+too big. If you call, let’s say, a model’s `ImageField`’s `url` property,
+local dev server logs lot’s of **file not found** errors to console.
+
+Also breaks the look of application via broken image signs in browser.
+
+Now, you won’t see any errors... `FileNotFoundFileSystemStorage` is a
+fake storage that handles non existing files. Returns `file-not-found.jpg`
+from `static/` folder.
+
+This is **development purposes** only! Do not use in the production!
+
+You don’t need to change/add anything to your code...
+
+---
+
 ## Contributer(s)
 
 - [Uğur "vigo" Özyılmazel](https://github.com/vigo) - Creator, maintainer
@@ -1540,6 +1562,7 @@ This project is licensed under MIT
 - Fixed logging config for Heroku (#24)
 - Fixed settings for production and Heroku (#23, #22)
 - Fixed base admin model (BaseAdmin) -> CustomBaseModelAdmin and CustomBaseModelAdminWithSoftDelete (#21)
+- Add FileNotFoundFileSystemStorage (#9)
 
 **2019-05-19**
 
