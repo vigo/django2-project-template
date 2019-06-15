@@ -1533,6 +1533,14 @@ This project is licensed under MIT
 
 ## Change Log
 
+**2019-06-15**
+
+- New Version: 3.2.0
+- Fixed and improved AdminImageFileWidget (#25)
+- Fixed logging config for Heroku (#24)
+- Fixed settings for production and Heroku (#23, #22)
+- Fixed base admin model (BaseAdmin) -> CustomBaseModelAdmin and CustomBaseModelAdminWithSoftDelete (#21)
+
 **2019-05-19**
 
 - Fix: Soft-deleted items are now editable (Issue #19)
