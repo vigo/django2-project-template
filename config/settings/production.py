@@ -43,7 +43,7 @@ MEDIA_ROOT = os.path.join(PRODUCTION_BASE_PATH, 'media_root/')  # noqa: F405
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # noqa: F405
 
 LOGGING_CONFIG = None
-LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()  # noqa: F405
+DJANGO_LOG_LEVEL = os.environ.get('DJANGO_LOG_LEVEL', 'error').upper()  # noqa: F405
 
 logging.config.dictConfig(
     {
@@ -67,14 +67,26 @@ logging.config.dictConfig(
         },
         'loggers': {
             '': {'level': 'DEBUG', 'handlers': ['stdout']},
-            'app': {'level': LOGLEVEL, 'handlers': ['stdout'], 'propagate': False},
+            'app': {'level': DJANGO_LOG_LEVEL, 'handlers': ['stdout'], 'propagate': False},
             'django.request': {'handlers': ['mail_admins'], 'level': 'ERROR', 'propagate': False},
         },
     }
 )
 
-ADMINS = (('Your Name', 'your@email.com'),)
-MANAGERS = ADMINS
+SECURE_SSL_HOST = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_PRELOAD = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_SSL_REDIRECT = True
+
+# ADMINS = (('Your Name', 'your@email.com'),)
+# MANAGERS = ADMINS
 
 # Error reporting via email
 # EMAIL_HOST = os.environ.get('EMAIL_HOST')

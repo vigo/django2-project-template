@@ -1,6 +1,6 @@
 # pylint: disable=W0401,W0614,C0103
 
-import logging
+import logging.config
 
 import dj_database_url
 
@@ -71,3 +71,25 @@ logging.config.dictConfig(
         },
     }
 )
+
+SECURE_SSL_HOST = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_PRELOAD = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_SSL_REDIRECT = True
+
+# ADMINS = (('Your Name', 'your@email.com'),)
+# MANAGERS = ADMINS
+
+# Error reporting via email
+# EMAIL_HOST = os.environ.get('EMAIL_HOST')
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+# DEFAULT_FROM_EMAIL = 'os.environ.get('DEFAULT_FROM_EMAIL')
+# EMAIL_SUBJECT_PREFIX = '[MY-SITE-NAME] '
