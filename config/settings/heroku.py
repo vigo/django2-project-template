@@ -23,7 +23,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # noqa: F405  # noqa: F405
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # noqa: F405
@@ -42,7 +42,7 @@ MIDDLEWARE.insert(  # noqa: F405
 # fmt: on
 
 LOGGING_CONFIG = None
-LOGLEVEL = os.environ.get('LOGLEVEL', 'info').upper()  # noqa: F405
+DJANGO_LOG_LEVEL = os.environ.get('DJANGO_LOG_LEVEL', 'error').upper()  # noqa: F405
 
 logging.config.dictConfig(
     {
@@ -66,7 +66,7 @@ logging.config.dictConfig(
         },
         'loggers': {
             '': {'level': 'DEBUG', 'handlers': ['stdout']},
-            'app': {'level': LOGLEVEL, 'handlers': ['stdout'], 'propagate': False},
+            'app': {'level': DJANGO_LOG_LEVEL, 'handlers': ['stdout'], 'propagate': False},
             'django.request': {'handlers': ['mail_admins'], 'level': 'ERROR', 'propagate': False},
         },
     }
