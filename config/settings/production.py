@@ -43,7 +43,7 @@ MEDIA_ROOT = os.path.join(PRODUCTION_BASE_PATH, 'media_root/')  # noqa: F405
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)  # noqa: F405
 
 LOGGING_CONFIG = None
-DJANGO_LOG_LEVEL = os.environ.get('DJANGO_LOG_LEVEL', 'error').upper()  # noqa: F405
+DJANGO_LOG_LEVEL = os.environ.get('DJANGO_LOG_LEVEL', 'INFO')  # noqa: F405
 
 logging.config.dictConfig(
     {
@@ -64,26 +64,36 @@ logging.config.dictConfig(
                 'formatter': 'default',
                 'stream': sys.stderr,  # noqa: F405
             },
+            'slack': {'level': 'ERROR', 'class': 'baseapp.utils.log.SlackExceptionHandler'},
         },
         'loggers': {
             '': {'level': 'DEBUG', 'handlers': ['stdout']},
             'app': {'level': DJANGO_LOG_LEVEL, 'handlers': ['stdout'], 'propagate': False},
-            'django.request': {'handlers': ['mail_admins'], 'level': 'ERROR', 'propagate': False},
+            'django.request': {'handlers': ['mail_admins', 'slack'], 'level': 'ERROR', 'propagate': False},
         },
     }
 )
 
-SECURE_SSL_HOST = True
-SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_PRELOAD = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
-X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_HOST = True
 SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+SESSION_COOKIE_DOMAIN = None
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_COOKIE_NAME = ''
+
+X_FRAME_OPTIONS = 'DENY'
+
 
 # ADMINS = (('Your Name', 'your@email.com'),)
 # MANAGERS = ADMINS

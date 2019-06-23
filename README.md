@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
 ![Django](https://img.shields.io/badge/django-2.2-green.svg)
-![Version](https://img.shields.io/badge/version-3.2.0-yellow.svg)
+![Version](https://img.shields.io/badge/version-3.2.1-yellow.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c73fb40b38f5455abd34d496bbc52b9b)](https://www.codacy.com/app/vigo/django2-project-template?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vigo/django2-project-template&amp;utm_campaign=Badge_Grade)
 
 # Django Project Starter Template
@@ -67,15 +67,13 @@ export DATABASE_URL="postgres://postgres:YOUR-POSTGRES-PASSWORD@localhost:5432/m
 
 # or for osx/homebrew postgres usage;
 export DATABASE_URL="postgres://localhost:5432/my_project_dev"
-export DJANGO_SECRET="WE-WILL-FIX-THIS"
+export DJANGO_SECRET=$(head -c 75 /dev/random | base64 | tr -dc 'a-zA-Z0-9' | head -c 50)
 ```
 
 By default, `DJANGO_ENV` environment variable is set to `development` via
 `manage.py`. For production usage, `DJANGO_ENV` environment variable is set to
 `production` via `wsgi.py`. This means, if you don’t set `DJANGO_ENV` variable,
 app sets it for you. 
-
-We’ll fix `DJANGO_SECRET` variable after completing package installation.
 
 Now trigger `workon my_projects_env`, this reloads environment variables.
 then;
@@ -128,15 +126,6 @@ $ python manage.py runserver_plus # or
 $ rake
 ```
 
-Now, please generate your secret via:
-
-```bash
-$ python manage.py generate_secret_key
-```
-
-and fix your `~/.virtualenvs/my_projects_env/bin/postactivate`, edit `DJANGO_SECRET` 
-variable and hit `workon my_projects_env` for reloading environment variables.
-
 You can fix your Django Admin titles now. Go to `config/urls.py` and fix:
 
 ```python
@@ -168,6 +157,9 @@ Do not forget to compile your locale messages files.
 - Easy naming for your admin site!
 - `DJANGO_ENV` indicator for your admin site!
 - Custom and configurable error pages: `400`, `403`, `404`, `500`
+- `OverwriteStorage` for overwriting file uploads
+- Custom file storage for missing files for development environment: `FileNotFoundFileSystemStorage`
+- Report errors to Slack: `SlackExceptionHandler`
 
 ---
 
@@ -1509,7 +1501,46 @@ Now make migrations etc... Use it as `from YOUR_APP.models import Page` :)
 
 ## New Features
 
+### SlackExceptionHandler
+
+`baseapp.utils.log.SlackExceptionHandler`
+
+You can send errors/exceptions to [slack](https://api.slack.com) channel.
+Just create a slack app, get the webhook URL and set as `SLACK_HOOK`
+environment variable. Due to slack message size limitation, `traceback`
+is disabled.
+
+Example message contains:
+
+- http status
+- error message
+- exception message
+- user.id or None
+- full path
+
+```bash
+http status: 500
+ERROR (internal IP): Internal Server Error: /__baseapp__/
+Exception: User matching query does not exist.
+user_id: anonymous (None)
+full path: /__baseapp__/?foo=!
+```
+
+You can enable/disable in `config/settings/production.py` / `config/settings/heroku.py`:
+
+```python
+:
+:
+    'loggers': {
+        'django.request': {'handlers': ['mail_admins', 'slack'], 'level': 'ERROR', 'propagate': False},  # remove 'slack'
+    }
+:
+:
+```
+
 ### FileNotFoundFileSystemStorage
+
+`baseapp.storage.FileNotFoundFileSystemStorage`
 
 After shipping/deploying Django app, users start to upload files, right ?
 Then you need to implement new features etc. You can get the dump of the
@@ -1554,6 +1585,13 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2019-06-23**
+
+- New Version: 3.2.1
+- Fix `production` and `heroku` logging options
+- Update security related config variables
+- Add Slack error reporter
 
 **2019-06-15**
 
