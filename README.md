@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
 ![Python](https://img.shields.io/badge/python-3.7.3-green.svg)
 ![Django](https://img.shields.io/badge/django-2.2-green.svg)
-![Version](https://img.shields.io/badge/version-3.3.0-yellow.svg)
+![Version](https://img.shields.io/badge/version-3.3.1-yellow.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c73fb40b38f5455abd34d496bbc52b9b)](https://www.codacy.com/app/vigo/django2-project-template?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vigo/django2-project-template&amp;utm_campaign=Badge_Grade)
 
 # Django Project Starter Template
@@ -1283,7 +1283,7 @@ rake locale:update                                               # Update locale
 rake new:application[name_of_application]                        # Create new Django application
 rake new:model[name_of_application,name_of_model,type_of_model]  # Create new Model for given application: django,basemodel,softdelete
 rake run_server                                                  # Run server
-rake shell[repl]                                                 # Run shell+ avail: ipython,bpython default: ipython
+rake shell[repl]                                                 # Run shell+ avail: ptpython,ipython,bpython default: ptpython
 rake test:browse_coverage[port]                                  # Browse test coverage
 rake test:coverage[cli_args]                                     # Show test coverage (default: '--show-missing --ignore-errors --skip-covered')
 rake test:run[name_of_application,verbose]                       # Run tests for given application
@@ -1427,12 +1427,18 @@ $ rake new:model[blog,Post,softdelete]     # will create model using our `BaseMo
 
 Runs Django repl/shell with use `shell_plus` of [django-extensions][01].
  `rake shell`. This loads everything to your shell! Also you can see the
-SQL statements while playing in shell. We have two different repls: `ipython` and `bpython`.
-Default repl is: `ipython`
+SQL statements while playing in shell. We have couple different repls:
+
+1. `ptpython`
+1. `bpython`
+1. `ipython`
+
+Default repl is: `ptpython`
 
 ```bash
 $ rake shell
 $ rake shell[bpython]
+$ rake shell[ipython]
 ```
 
 ### `rake test:run[name_of_application,verbose]`
@@ -1593,6 +1599,7 @@ This project is licensed under MIT
 - New package for Python 3.7.3
 - Upgrade dependencies (`base.pip`, `development.pip`)
 - Add `production.pip`
+- Add `ptpython` as default repl
 
 **2019-06-23**
 

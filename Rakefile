@@ -17,7 +17,7 @@ task :run_server => [:check_development_environment] do
 end
 
 
-AVAILABLE_REPLS = ["ipython", "bpython"]
+AVAILABLE_REPLS = ["ptpython", "ipython", "bpython"]
 desc "Run shell+ avail: #{AVAILABLE_REPLS.join(',')} default: #{AVAILABLE_REPLS.first}"
 task :shell, [:repl] => [:check_development_environment]  do |_, args|
   args.with_defaults(:repl => AVAILABLE_REPLS.first)

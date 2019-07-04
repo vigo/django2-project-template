@@ -16,3 +16,4 @@ flake8-print==3.1.0
 flake8-quotes==2.0.1
 flake8-string-format==0.2.3
 pylint==2.3.1
+ptpython==2.0.4
