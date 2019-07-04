@@ -6,21 +6,12 @@
 set -e
 set -o pipefail
 
-# color_0=$(tput setaf 0)
-# color_1=$(tput setaf 1) # red
 color_2=$(tput setaf 2) # green
-# color_3=$(tput setaf 3) # orange
-# color_4=$(tput setaf 4) # blue
-# color_5=$(tput setaf 5) # pink
-# color_6=$(tput setaf 6) # cyan
-# color_7=$(tput setaf 7) # white
-# color_8=$(tput setaf 8) # gray
 color_r=$(tput sgr0)    # reset
 
 AVAILABLE_OPTIONS=(
-    "Django 2.2"
-    "Django 2.1.7"
-    "Django 2.1.5"
+    "Django 2.2 for Python 3.7.3"
+    "Django 2.2 for Python 3.7.0"
     "Cancel and quit"
 )
 
@@ -29,16 +20,12 @@ PS3="Select option:"
 select i in "${AVAILABLE_OPTIONS[@]}"
 do
     case $i in
-        "Django 2.2")
+        "Django 2.2 for Python 3.7.3")
+            PACKAGE="django-2.2-lts-py373"
+            break
+            ;;
+        "Django 2.2 for Python 3.7.0")
             PACKAGE="django-2.2-lts"
-            break
-            ;;
-        "Django 2.1.7")
-            PACKAGE="django-2.1.7"
-            break
-            ;;
-        "Django 2.1.5")
-            PACKAGE="django-2.1.5"
             break
             ;;
         "Cancel and quit")

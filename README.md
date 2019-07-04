@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/vigo/django2-project-template.svg?branch=master)](https://travis-ci.org/vigo/django2-project-template)
-![Python](https://img.shields.io/badge/django-3.7.0-green.svg)
+![Python](https://img.shields.io/badge/python-3.7.3-green.svg)
 ![Django](https://img.shields.io/badge/django-2.2-green.svg)
-![Version](https://img.shields.io/badge/version-3.2.1-yellow.svg)
+![Version](https://img.shields.io/badge/version-3.3.0-yellow.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c73fb40b38f5455abd34d496bbc52b9b)](https://www.codacy.com/app/vigo/django2-project-template?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=vigo/django2-project-template&amp;utm_campaign=Badge_Grade)
 
 # Django Project Starter Template
@@ -11,7 +11,7 @@ Django releases as much as I can!
 
 ## Requirements
 
-- Latest `Python 3.7.0` runtime environment.
+- Latest `Python 3.7.3` runtime environment.
 - `PostgreSQL`
 - `pip`, `virtualenv`, `virtualenvwrapper`
 - If you like to run Rake Tasks, you need `Ruby` too but not required: `2.5.0`
@@ -558,10 +558,10 @@ All the base/common required Python packages/modules are defined under `requirem
 
 ```bash
 Django==2.2
-Pillow==6.0.0
-django-extensions==2.1.6
+Pillow==6.1.0
+django-extensions==2.1.9
 python-slugify==3.0.2
-psycopg2-binary==2.8
+psycopg2-binary==2.8.3
 dj-database-url==0.5.0
 ```
 
@@ -678,20 +678,21 @@ All the required modules are defined under `requirements/development.pip`:
 
 ```bash
 -r base.pip
-ipython==7.4.0
-Werkzeug==0.15.2
-django-debug-toolbar==1.11
+ipython==7.6.1
+bpython==0.18
+Werkzeug==0.15.4
+django-debug-toolbar==2.0
 coverage==4.5.3
-isort==4.3.16
+isort==4.3.21
 black==19.3b0
 flake8==3.7.7
-flake8-bandit==2.1.0
+flake8-bandit==2.1.1
 flake8-blind-except==0.1.1
-flake8-bugbear==18.8.0
+flake8-bugbear==19.3.0
 flake8-builtins==1.4.1
 flake8-polyfill==1.0.2
 flake8-print==3.1.0
-flake8-quotes==1.0.0
+flake8-quotes==2.0.1
 flake8-string-format==0.2.3
 pylint==2.3.1
 ```
@@ -1585,6 +1586,13 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2019-07-04**
+
+- New Version: 3.3.0
+- New package for Python 3.7.3
+- Upgrade dependencies (`base.pip`, `development.pip`)
+- Add `production.pip`
 
 **2019-06-23**
 

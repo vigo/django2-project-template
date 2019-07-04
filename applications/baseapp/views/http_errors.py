@@ -10,7 +10,6 @@ console = console(source=__name__)
 
 def exception_message(exception):
     exception_repr = exception.__class__.__name__
-    console('exception_repr', exception_repr)
     if not exception:
         return None
     try:

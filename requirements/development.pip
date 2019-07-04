@@ -1,18 +1,18 @@
 -r base.pip
-ipython==7.4.0
+ipython==7.6.1
 bpython==0.18
-Werkzeug==0.15.2
-django-debug-toolbar==1.11
+Werkzeug==0.15.4
+django-debug-toolbar==2.0
 coverage==4.5.3
-isort==4.3.16
+isort==4.3.21
 black==19.3b0
 flake8==3.7.7
-flake8-bandit==2.1.0
+flake8-bandit==2.1.1
 flake8-blind-except==0.1.1
-flake8-bugbear==18.8.0
+flake8-bugbear==19.3.0
 flake8-builtins==1.4.1
 flake8-polyfill==1.0.2
 flake8-print==3.1.0
-flake8-quotes==1.0.0
+flake8-quotes==2.0.1
 flake8-string-format==0.2.3
 pylint==2.3.1
