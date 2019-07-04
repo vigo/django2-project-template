@@ -1595,7 +1595,7 @@ This project is licensed under MIT
 
 **2019-07-04**
 
-- New Version: 3.3.0
+- New Version: 3.3.1
 - New package for Python 3.7.3
 - Upgrade dependencies (`base.pip`, `development.pip`)
 - Add `production.pip`
