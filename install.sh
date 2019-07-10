@@ -10,8 +10,7 @@ color_2=$(tput setaf 2) # green
 color_r=$(tput sgr0)    # reset
 
 AVAILABLE_OPTIONS=(
-    "Django 2.2 for Python 3.7.3"
-    "Django 2.2 for Python 3.7.0"
+    "Django 2.2-lts / Python 3.7.3"
     "Cancel and quit"
 )
 
@@ -20,12 +19,8 @@ PS3="Select option:"
 select i in "${AVAILABLE_OPTIONS[@]}"
 do
     case $i in
-        "Django 2.2 for Python 3.7.3")
+        "Django 2.2-lts / Python 3.7.3")
             PACKAGE="django-2.2-lts-py373"
-            break
-            ;;
-        "Django 2.2 for Python 3.7.0")
-            PACKAGE="django-2.2-lts"
             break
             ;;
         "Cancel and quit")
