@@ -1,20 +1,29 @@
 import os
 
+from django.apps import apps
 from django.conf import settings
 from django.core.files import File
 from django.core.files.storage import FileSystemStorage
 
+from .utils import console
+
 __all__ = ['FileNotFoundFileSystemStorage']
 
-FILE_NOT_FOUND_IMAGE = 'file-not-found.jpg'
+console = console(source=__name__)
+
+FILE_NOT_FOUND_IMAGE = 'images/file-not-found.jpg'
 
 
 class FileNotFoundFileSystemStorage(FileSystemStorage):
+    @property
+    def file_not_found_image_path(self):
+        app_config = apps.get_app_config('baseapp')
+        return os.path.join(app_config.path, 'static', FILE_NOT_FOUND_IMAGE)
+
     def _open(self, name, mode='rb'):
         if self.exists(os.path.join(settings.MEDIA_ROOT, name)):
             return super()._open(name, mode)
-        dummy_file = os.path.join(settings.STATICFILES_DIRS[0], FILE_NOT_FOUND_IMAGE)
-        return File(open(dummy_file, mode))
+        return File(open(self.file_not_found_image_path, mode))
 
     def size(self, name):
         if self.exists(os.path.join(settings.MEDIA_ROOT, name)):

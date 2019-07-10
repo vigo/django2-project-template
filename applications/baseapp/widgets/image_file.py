@@ -3,7 +3,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from PIL import Image
 
+from ..utils import console
+
 __all__ = ['AdminImageFileWidget']
+
+console = console(source=__name__)
 
 
 def is_image(file):
@@ -33,11 +37,17 @@ class AdminImageFileWidget(AdminFileWidget):
         if value:
             possible_image = is_image(value.path)
             if possible_image:
-                object_name = f'{name}-preview'
-                widget = (
-                    f'<div class="admin-image-preview {object_name}">'
-                    f'<img class="thumbnail" src="{value.url}">'
-                    f'<p class="file-upload">{_("Dimensions")}: {possible_image[0]} x {possible_image[1]}</p>'
-                    f'</div>{widget}'
-                )
+                image_width = possible_image[0]
+                image_height = possible_image[1]
+            else:
+                image_width = 0
+                image_height = 0
+
+            object_name = f'{name}-preview'
+            widget = (
+                f'<div class="admin-image-preview {object_name}">'
+                f'<img class="thumbnail" src="{value.url}">'
+                f'<p class="file-upload">{_("Dimensions")}: {image_width} x {image_height}</p>'
+                f'</div>{widget}'
+            )
         return widget
