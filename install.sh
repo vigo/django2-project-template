@@ -10,6 +10,7 @@ color_2=$(tput setaf 2) # green
 color_r=$(tput sgr0)    # reset
 
 AVAILABLE_OPTIONS=(
+    "Django 2.2.3 / Python 3.7.3"
     "Django 2.2-lts / Python 3.7.3"
     "Cancel and quit"
 )
@@ -19,6 +20,10 @@ PS3="Select option:"
 select i in "${AVAILABLE_OPTIONS[@]}"
 do
     case $i in
+        "Django 2.2.3 / Python 3.7.3")
+            PACKAGE="django-2.2.3-py373"
+            break
+            ;;
         "Django 2.2-lts / Python 3.7.3")
             PACKAGE="django-2.2-lts-py373"
             break
@@ -48,6 +53,7 @@ cd "${PROJECT_NAME}" &&
 rm -f LICENSE.txt
 rm -f README.md
 rm -f install.sh
+rm -rf screenshots
 cp config/settings/development.example.py config/settings/development.py &&
 cp config/settings/test.example.py config/settings/test.py &&
 echo

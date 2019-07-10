@@ -557,7 +557,7 @@ need to create a copy of it! (*if you follow along from the beginning, you’ve 
 All the base/common required Python packages/modules are defined under `requirements/base.pip`:
 
 ```bash
-Django==2.2
+Django==2.2.3
 Pillow==6.1.0
 django-extensions==2.1.9
 python-slugify==3.0.2
@@ -680,12 +680,13 @@ All the required modules are defined under `requirements/development.pip`:
 -r base.pip
 ipython==7.6.1
 bpython==0.18
+ptpython==2.0.4
 Werkzeug==0.15.4
 django-debug-toolbar==2.0
 coverage==4.5.3
 isort==4.3.21
 black==19.3b0
-flake8==3.7.7
+flake8==3.7.8
 flake8-bandit==2.1.1
 flake8-blind-except==0.1.1
 flake8-bugbear==19.3.0
@@ -950,6 +951,10 @@ folder. Handlers are under `baseapp/views/http_errors.py`
 ---
 
 ## `HtmlDebugMixin`
+
+![Example baseapp view](screenshots/example-baseapp-view.png "Debug on view layer")
+
+---
 
 `HtmlDebugMixin` injects `{{ IS_DEBUG }}` and `{{ LANG }}` template variables
 to context. Also with `self.hdbg(arg, arg, arg)` method, you can debug
@@ -1298,6 +1303,7 @@ Migrates database with given database name. Default is `default`. If you like
 to work multiple databases:
 
 ```python
+# example
 # config/settings/development.py
 
 DATABASES = {
@@ -1549,6 +1555,10 @@ You can enable/disable in `config/settings/production.py` / `config/settings/her
 
 `baseapp.storage.FileNotFoundFileSystemStorage`
 
+![FileNotFoundFileSystemStorage handles non existing images](screenshots/django-admin-storage.png "Django admin")
+
+---
+
 After shipping/deploying Django app, users start to upload files, right ?
 Then you need to implement new features etc. You can get the dump of the
 database but what about uploaded files ? Sometimes files are too much or
@@ -1597,6 +1607,9 @@ This project is licensed under MIT
 
 - New Version: 3.2.2
 - Enhance `FileSystemStorage` (#26)
+- Add example screenshots
+- Upgrade python packages
+- Django 2.2.3
 
 **2019-07-04**
 
