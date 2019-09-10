@@ -29,7 +29,7 @@ class ViewTestCase(TestCase):
         response = self.client.get(reverse('baseapp:index'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Welcome to Django')
+        self.assertContains(response, 'Welcome To Django')
         environment_name = response.context.get('DJANGO_ENVIRONMENT_NAME', None)
         self.assertTrue(environment_name in ['test', 'travis'])
 
