@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 {% load static i18n %}
 
-{% block title %}{% trans "Example page" %}{% endblock %}
+{% block title %}{% trans "example page"|title %}{% endblock %}
 
 {% block body %}
 <section class="section">
     <div class="container">
-        <h1 class="title">{% trans "Welcome to Django" %}</h1>
-        <p class="subtitle">{% trans "It worked!" %}</p>
+        <h1 class="title">{% trans "welcome to django"|title %}</h1>
+        <p class="subtitle">{% trans "it worked!"|title %}</p>
         
         <table class="table is-bordered is-fullwidth">
             <tr>
-                <th>{% trans "Variable" %}</th>
-                <th>{% trans "Value" %}</th>
+                <th>{% trans "variable"|title %}</th>
+                <th>{% trans "value"|title %}</th>
             </tr>
             <tr>
                 <td><code>{% templatetag openvariable %} IS_DEBUG {% templatetag closevariable %}</code></td>

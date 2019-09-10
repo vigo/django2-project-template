@@ -2,17 +2,17 @@
 
 {% load i18n %}
 
-{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+{% block title %}{{ title }} | {{ site_title|default:_('django site admin')|title }}{% endblock %}
 
 {% block branding %}
 <h1 id="site-name">
-    <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
+    <a href="{% url 'admin:index' %}">{{ site_header|default:_('django administration')|title }}</a>
 </h1>
 {% endblock %}
 
 
 {% block welcome-msg %}
-    {% trans 'Welcome,' %}
+    {% trans 'welcome,'|capfirst %}
     <strong>{{ user.get_full_name }}</strong>.
 {% endblock %}
 

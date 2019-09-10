@@ -13,9 +13,9 @@ from baseapp.views import (
     custom_500_error,
 )
 
-admin.site.index_title = _('Your admin index title')
-admin.site.site_title = _('Your site title')
-admin.site.site_header = _('Your site header')
+admin.site.index_title = _('your admin index title')
+admin.site.site_title = _('your site title')
+admin.site.site_header = _('your site header')
 
 urlpatterns = [path('admin/', admin.site.urls), path('__baseapp__/', include('baseapp.urls', namespace='baseapp'))]
 

@@ -26,7 +26,7 @@ class UserManager(BaseUserManager):
 
     def create_user(self, email, first_name, last_name, middle_name=None, password=None):
         if not email:
-            raise ValueError(_('Users must have an email address'))
+            raise ValueError(_('user must have an email address'))
 
         user_create_fields = {'email': email, 'first_name': first_name, 'last_name': last_name}
 
@@ -57,13 +57,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('updated at'))
     email = models.EmailField(unique=True, verbose_name=_('email address'))
     first_name = models.CharField(max_length=255, verbose_name=_('first name'))
     middle_name = models.CharField(max_length=255, null=True, blank=True, verbose_name=_('middle name'))
     last_name = models.CharField(max_length=255, verbose_name=_('last name'))
-    avatar = models.FileField(upload_to=save_user_avatar, verbose_name=_('Profile Image'), null=True, blank=True)
+    avatar = models.FileField(upload_to=save_user_avatar, verbose_name=_('profile image'), null=True, blank=True)
     is_active = models.BooleanField(default=True, verbose_name=_('active'))
     is_staff = models.BooleanField(default=False, verbose_name=_('staff status'))
 

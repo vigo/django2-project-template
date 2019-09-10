@@ -14,7 +14,7 @@ Django releases as much as I can!
 - Latest `Python 3.7.3` runtime environment.
 - `PostgreSQL`
 - `pip`, `virtualenv`, `virtualenvwrapper`
-- If you like to run Rake Tasks, you need `Ruby` too but not required: `2.5.0`
+- If you like to run Rake Tasks, you need `Ruby` too...
 
 ## Installation
 
@@ -557,10 +557,10 @@ need to create a copy of it! (*if you follow along from the beginning, you’ve 
 All the base/common required Python packages/modules are defined under `requirements/base.pip`:
 
 ```bash
-Django==2.2.3
+Django==2.2.5
 Pillow==6.1.0
-django-extensions==2.1.9
-python-slugify==3.0.2
+django-extensions==2.2.1
+python-slugify==3.0.3
 psycopg2-binary==2.8.3
 dj-database-url==0.5.0
 ```
@@ -678,18 +678,18 @@ All the required modules are defined under `requirements/development.pip`:
 
 ```bash
 -r base.pip
-ipython==7.6.1
+ipython==7.8.0
 bpython==0.18
 ptpython==2.0.4
-Werkzeug==0.15.4
+Werkzeug==0.15.6
 django-debug-toolbar==2.0
-coverage==4.5.3
+coverage==4.5.4
 isort==4.3.21
 black==19.3b0
 flake8==3.7.8
 flake8-bandit==2.1.1
 flake8-blind-except==0.1.1
-flake8-bugbear==19.3.0
+flake8-bugbear==19.8.0
 flake8-builtins==1.4.1
 flake8-polyfill==1.0.2
 flake8-print==3.1.0
@@ -718,7 +718,7 @@ All the required modules are defined under `requirements/heroku.pip`:
 ```bash
 -r base.pip
 gunicorn==19.9.0
-whitenoise==4.1.2
+whitenoise==4.1.3
 ```
 
 By default, Heroku requires `requirements.txt`. Therefore we have it too :)
@@ -1602,6 +1602,12 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2019-09-10**
+
+- Django 2.2.5
+- Fix Turkish locales
+- Fix password validations for custom user
 
 **2019-07-10**
 

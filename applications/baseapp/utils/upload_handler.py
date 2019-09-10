@@ -30,7 +30,7 @@ def save_file(instance, filename, upload_to='upload/%Y/%m/%d/'):
         class MyModel(models.Model):
             image = models.FileField(
                 upload_to='my_custom_uploader',
-                verbose_name=_('Profile Image'),
+                verbose_name=_('profile image'),
             )
 
     """

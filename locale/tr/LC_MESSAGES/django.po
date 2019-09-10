@@ -3,227 +3,274 @@
 # This file is distributed under the same license as the Django package.
 # Uğur Özyılmazel <ugurozyilmazel@gmail.com>, 2017.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: django-base-project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-13 16:52+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2019-09-10 11:10+0000\n"
+"PO-Revision-Date: 2019-09-10 14:10+0300\n"
 "Last-Translator: Uğur Özyılmazel <ugurozyilmazel@gmail.com>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: \n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.2.3\n"
 
-#: applications/baseapp/admin/base.py:28 applications/baseapp/admin/base.py:45
+#: applications/baseapp/admin/base.py:45 applications/baseapp/admin/base.py:63
 msgid "1 record was"
 msgstr "1 kayıt"
 
-#: applications/baseapp/admin/base.py:31 applications/baseapp/admin/base.py:48
+#: applications/baseapp/admin/base.py:47 applications/baseapp/admin/base.py:65
 #, python-format
 msgid "%(number_of_rows)s records were"
 msgstr "%(number_of_rows)s kayıt"
 
-#: applications/baseapp/admin/base.py:34
+#: applications/baseapp/admin/base.py:48
 #, python-format
 msgid "%(message_bit)s successfully marked as active"
-msgstr "%(message_bit)s aktif olarak işaretlendi."
+msgstr "%(message_bit)s aktif olarak işaretlendi"
 
-#: applications/baseapp/admin/base.py:50
+#: applications/baseapp/admin/base.py:66
 #, python-format
 msgid "%(message_bit)s deleted"
-msgstr "%(message_bit)s silindi."
+msgstr "%(message_bit)s silindi"
 
-#: applications/baseapp/admin/base.py:86
+#: applications/baseapp/admin/base.py:72
+#, python-format
+msgid "Cannot delete %(name)s"
+msgstr ""
+
+#: applications/baseapp/admin/base.py:74
+msgid "Are you sure?"
+msgstr ""
+
+#: applications/baseapp/admin/base.py:116
 #, python-format
 msgid "Recover selected %(verbose_name_plural)s"
 msgstr "Seçili silinmiş %(verbose_name_plural)s nesnelerini geri getir"
 
-#: applications/baseapp/admin/base.py:97
+#: applications/baseapp/admin/base.py:124
 #, python-format
 msgid "Hard delete selected %(verbose_name_plural)s"
 msgstr "Seçili %(verbose_name_plural)s nesnelerini gerçekten sil"
 
 #: applications/baseapp/admin/user.py:37
-msgid "User information"
-msgstr "Kullanıcı Bilgileri"
+msgid "user information"
+msgstr "kullanıcı bilgileri"
 
-#: applications/baseapp/admin/user.py:50
-msgid "Permissions"
+#: applications/baseapp/admin/user.py:38
+msgid "permissions"
+msgstr "izinler"
+
+#: applications/baseapp/admin/user.py:54 applications/baseapp/models/user.py:66
+msgid "profile image"
+msgstr "profil fotoğrafı"
+
+#: applications/baseapp/apps.py:7 applications/baseapp/apps.py:8
+msgid "baseapp"
 msgstr ""
 
-#: applications/baseapp/admin/user.py:92
-#: applications/baseapp/models/user.py:113
-msgid "Profile Image"
-msgstr "Profil Fotoğrafı"
+#: applications/baseapp/forms/user.py:20 applications/baseapp/forms/user.py:49
+msgid "password"
+msgstr "parola"
 
-#: applications/baseapp/forms/user.py:16 applications/baseapp/forms/user.py:47
-msgid "Password"
-msgstr ""
-
-#: applications/baseapp/forms/user.py:18
+#: applications/baseapp/forms/user.py:22
+#, python-brace-format
 msgid ""
 "Raw passwords are not stored, so there is no way to see this user's "
-"password, but you can change the password using <a href=\"../password/"
-"\">this form</a>."
+"password, but you can change the password using <a href=\"{0}\">this form</"
+"a>."
 msgstr ""
 
-#: applications/baseapp/forms/user.py:36 applications/baseapp/forms/user.py:62
-#: applications/baseapp/models/user.py:100
+#: applications/baseapp/forms/user.py:31 applications/baseapp/forms/user.py:62
+#: applications/baseapp/models/user.py:63
 msgid "first name"
-msgstr ""
+msgstr "ad"
 
-#: applications/baseapp/forms/user.py:37 applications/baseapp/forms/user.py:63
-#: applications/baseapp/models/user.py:109
+#: applications/baseapp/forms/user.py:31 applications/baseapp/forms/user.py:62
+#: applications/baseapp/models/user.py:65
 msgid "last name"
-msgstr ""
+msgstr "soyad"
 
-#: applications/baseapp/forms/user.py:50
-msgid "Password confirmation"
-msgstr ""
+#: applications/baseapp/forms/user.py:53
+msgid "password confirmation"
+msgstr "parola doğrulama"
 
-#: applications/baseapp/forms/user.py:75
-msgid "Passwords don't match"
-msgstr ""
+#: applications/baseapp/forms/user.py:77
+msgid "passwords don't match"
+msgstr "parolalar aynı değil"
 
-#: applications/baseapp/models/base.py:160
-msgid "Offline"
-msgstr "Kapalı"
+#: applications/baseapp/models/base.py:134
+msgid "offline"
+msgstr "çevrim dışı"
 
-#: applications/baseapp/models/base.py:161
-msgid "Online"
-msgstr "Yayında"
+#: applications/baseapp/models/base.py:135
+msgid "online"
+msgstr "yayında"
 
-#: applications/baseapp/models/base.py:162
-msgid "Deleted"
-msgstr "Silinmiş"
+#: applications/baseapp/models/base.py:136
+msgid "deleted"
+msgstr "silinmiş"
 
-#: applications/baseapp/models/base.py:163
-msgid "Draft"
-msgstr "Taslak"
+#: applications/baseapp/models/base.py:137
+msgid "draft"
+msgstr "taslak"
 
-#: applications/baseapp/models/base.py:167
-#: applications/baseapp/models/user.py:91
-msgid "Created At"
-msgstr "Oluşturma Tarihi"
+#: applications/baseapp/models/base.py:140
+#: applications/baseapp/models/user.py:60
+msgid "created at"
+msgstr "oluşturma tarihi"
 
-#: applications/baseapp/models/base.py:170
-#: applications/baseapp/models/user.py:94
-msgid "Updated At"
-msgstr "Güncelleme Tarihi"
+#: applications/baseapp/models/base.py:141
+#: applications/baseapp/models/user.py:61
+msgid "updated at"
+msgstr "güncelleme tarihi"
 
-#: applications/baseapp/models/base.py:175
-msgid "Status"
-msgstr "Durum"
+#: applications/baseapp/models/base.py:142
+msgid "status"
+msgstr "durumu"
 
-#: applications/baseapp/models/base.py:187
-msgid "Deleted At"
-msgstr "Silinme Tarihi"
+#: applications/baseapp/models/base.py:152
+msgid "deleted at"
+msgstr "silinme tarihi"
 
-#: applications/baseapp/models/user.py:35
-msgid "Users must have an email address"
-msgstr ""
+#: applications/baseapp/models/user.py:29
+msgid "user must have an email address"
+msgstr "kullanıcının mutlaka bir eposta adresi olmalı"
 
-#: applications/baseapp/models/user.py:97
+#: applications/baseapp/models/user.py:62
 msgid "email address"
-msgstr ""
+msgstr "eposta adresi"
 
-#: applications/baseapp/models/user.py:106
+#: applications/baseapp/models/user.py:64
 msgid "middle name"
 msgstr "göbek adı"
 
-#: applications/baseapp/models/user.py:118
+#: applications/baseapp/models/user.py:67
 msgid "active"
 msgstr ""
 
-#: applications/baseapp/models/user.py:121
+#: applications/baseapp/models/user.py:68
 msgid "staff status"
 msgstr ""
 
-#: applications/baseapp/models/user.py:128
+#: applications/baseapp/models/user.py:74
 msgid "user"
-msgstr ""
+msgstr "kullanıcı"
 
-#: applications/baseapp/models/user.py:129
+#: applications/baseapp/models/user.py:75
 msgid "users"
-msgstr ""
+msgstr "kullanıcılar"
 
-#: applications/baseapp/widgets/image_file.py:52
-msgid "Dimensions"
-msgstr "Boyutları"
+#: config/urls.py:16
+msgid "your admin index title"
+msgstr "admin listesi başlığı"
 
-#: applications/blog/apps.py:6 applications/blog/apps.py:7
-msgid "Blog"
-msgstr ""
+#: config/urls.py:17
+msgid "your site title"
+msgstr "siteniniz başlığı"
 
-#: applications/blog/models/category.py:15
-msgid "title"
-msgstr ""
-
-#: applications/blog/models/category.py:20
-#: applications/blog/models/category.py:21 applications/blog/models/post.py:24
-msgid "Category"
-msgstr ""
-
-#: applications/blog/models/post.py:18
-msgid "Author"
-msgstr ""
-
-#: applications/blog/models/post.py:28
-msgid "Title"
-msgstr ""
-
-#: applications/blog/models/post.py:31
-msgid "Body"
-msgstr ""
-
-#: applications/blog/models/post.py:36 applications/blog/models/post.py:37
-msgid "Post"
-msgstr ""
-
-#: config/urls.py:7
-msgid "Your admin index title"
-msgstr "Admin listesi başlığı"
-
-#: config/urls.py:8
-msgid "Your site title"
-msgstr "Siteniniz başlığı"
-
-#: config/urls.py:9
-msgid "Your site header"
-msgstr "Marka ya da proje başlığı"
+#: config/urls.py:18
+msgid "your site header"
+msgstr "marka ya da proje başlığı"
 
 #: templates/admin/base_site.html:5
-msgid "Django site admin"
-msgstr ""
+msgid "django site admin"
+msgstr "django site yöneticisi"
 
 #: templates/admin/base_site.html:9
-msgid "Django administration"
-msgstr ""
+msgid "django administration"
+msgstr "django yönetimi"
 
 #: templates/admin/base_site.html:15
-msgid "Welcome,"
+msgid "welcome,"
+msgstr "hoşgediniz,"
+
+#: templates/admin/hard_delete_selected_confirmation.html:14
+msgid "home"
+msgstr "anasayfya"
+
+#: templates/admin/hard_delete_selected_confirmation.html:17
+msgid "Delete multiple objects"
+msgstr ""
+
+#: templates/admin/hard_delete_selected_confirmation.html:23
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would result in deleting related "
+"objects, but your account doesn't have permission to delete the following "
+"types of objects:"
+msgstr ""
+
+#: templates/admin/hard_delete_selected_confirmation.html:30
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would require deleting the following "
+"protected related objects:"
+msgstr ""
+
+#: templates/admin/hard_delete_selected_confirmation.html:37
+#, python-format
+msgid ""
+"Are you sure you want to delete the selected %(objects_name)s? All of the "
+"following objects and their related items will be deleted:"
+msgstr ""
+
+#: templates/admin/hard_delete_selected_confirmation.html:39
+msgid "Objects"
+msgstr ""
+
+#: templates/admin/hard_delete_selected_confirmation.html:50
+msgid "Yes, I'm sure"
+msgstr ""
+
+#: templates/admin/hard_delete_selected_confirmation.html:51
+msgid "No, take me back"
 msgstr ""
 
 #: templates/baseapp/index.html:4
-msgid "Example page"
-msgstr ""
+msgid "example page"
+msgstr "örnek sayfa"
 
 #: templates/baseapp/index.html:9
-msgid "Welcome to Django"
-msgstr ""
+msgid "welcome to django"
+msgstr "django’ya hoşgeldiniz"
 
 #: templates/baseapp/index.html:10
-msgid "It worked!"
-msgstr ""
+msgid "it worked!"
+msgstr "çalıştı!"
 
 #: templates/baseapp/index.html:14
-msgid "Variable"
-msgstr ""
+msgid "variable"
+msgstr "değişken"
 
 #: templates/baseapp/index.html:15
-msgid "Value"
-msgstr ""
+msgid "value"
+msgstr "değer"
+
+#: templates/custom_errors/400.html:4 templates/custom_errors/400.html:9
+msgid "bad request"
+msgstr "yanlış istek"
+
+#: templates/custom_errors/400.html:11 templates/custom_errors/403.html:11
+#: templates/custom_errors/404.html:11 templates/custom_errors/500.html:10
+#, python-format
+msgid "requested page: <strong>%(request_path)s</strong>"
+msgstr "çağrılan sayfa: <strong>%(request_path)s</strong>"
+
+#: templates/custom_errors/403.html:4 templates/custom_errors/403.html:9
+msgid "permission denied"
+msgstr "izin reddedildi"
+
+#: templates/custom_errors/404.html:4 templates/custom_errors/404.html:9
+msgid "page not found error"
+msgstr "sayfa bulunamadı hatası"
+
+#: templates/custom_errors/500.html:4 templates/custom_errors/500.html:9
+msgid "server error"
+msgstr "sunucu hatası"
+
+#~ msgid "Profile Image"
+#~ msgstr "Profil Fotoğrafı"

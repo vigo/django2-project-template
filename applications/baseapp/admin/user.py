@@ -34,8 +34,8 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email', 'first_name', 'middle_name', 'last_name')
     ordering = ('email',)
     fieldsets = (
-        (_('User information'), {'fields': ('email', 'password', 'first_name', 'middle_name', 'last_name', 'avatar')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        (_('user information'), {'fields': ('email', 'password', 'first_name', 'middle_name', 'last_name', 'avatar')}),
+        (_('permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
     )
     add_fieldsets = (
         (None, {'classes': ('wide',), 'fields': ('email', 'first_name', 'last_name', 'password1', 'password2')}),
@@ -51,7 +51,7 @@ class UserAdmin(BaseUserAdmin):
             return format_html('<img class="thumbnail" src="{0}" alt="{1}">', obj.avatar.url, obj.get_full_name())
         return '---'
 
-    user_profile_image.short_description = _('Profile Image')
+    user_profile_image.short_description = _('profile image')
 
     class Media:
         css = {'all': ['admin/baseapp.css']}

@@ -131,15 +131,15 @@ class BaseModel(models.Model):
     STATUS_DRAFT = 3
 
     STATUS_CHOICES = (
-        (STATUS_OFFLINE, _('Offline')),
-        (STATUS_ONLINE, _('Online')),
-        (STATUS_DELETED, _('Deleted')),
-        (STATUS_DRAFT, _('Draft')),
+        (STATUS_OFFLINE, _('offline')),
+        (STATUS_ONLINE, _('online')),
+        (STATUS_DELETED, _('deleted')),
+        (STATUS_DRAFT, _('draft')),
     )
 
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('Created At'))
-    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('Updated At'))
-    status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ONLINE, verbose_name=_('Status'))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_('updated at'))
+    status = models.IntegerField(choices=STATUS_CHOICES, default=STATUS_ONLINE, verbose_name=_('status'))
 
     objects = BaseModelManager()
 
@@ -149,7 +149,7 @@ class BaseModel(models.Model):
 
 class BaseModelWithSoftDelete(BaseModel):
 
-    deleted_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Deleted At'))
+    deleted_at = models.DateTimeField(null=True, blank=True, verbose_name=_('deleted at'))
 
     objects = BaseModelWithSoftDeleteManager()
 
