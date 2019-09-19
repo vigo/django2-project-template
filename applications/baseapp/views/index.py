@@ -1,8 +1,7 @@
-from django.utils.text import slugify
 from django.views.generic.base import TemplateView
 
 from ..mixins import HtmlDebugMixin
-from ..utils import console, numerify, urlify
+from ..utils import console, numerify
 
 __all__ = ['IndexView']
 
@@ -16,7 +15,6 @@ class IndexView(HtmlDebugMixin, TemplateView):
         self.hdbg('This', 'is', 'an', 'example', 'of')
         self.hdbg('self.hdbg', 'usage')
         self.hdbg(self.request.META)
-        self.hdbg(slugify(urlify('Merhaba Dünya! Ben Uğur Özyılmazel')))
         kwargs = super().get_context_data(**kwargs)
 
         query_string_p = numerify(self.request.GET.get('p'))

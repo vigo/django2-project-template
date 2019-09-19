@@ -152,7 +152,7 @@ Do not forget to compile your locale messages files.
 - App and Model creator management commands
 - Custom Locale middleware
 - Debug Mixin for your HTML templates
-- Handy utils: `console`, `console.dir()`, `numerify`, `urlify`, `save_file`
+- Handy utils: `console`, `console.dir()`, `numerify`, `save_file`
 - File widget for Django Admin: `AdminImageFileWidget`
 - Easy naming for your admin site!
 - `DJANGO_ENV` indicator for your admin site!
@@ -1114,22 +1114,6 @@ from baseapp.utils import numerify
 
 ---
 
-## `baseapp.utils.urlify`
-
-Small wrapper function for `slugify`.
-
-```python
-from baseapp.utils import urlify
-
->>> slugify(urlify('Merhaba Dünya!'))
-'merhaba-dunya'
-
->>>  slugify(urlify('Merhaba Dünya! ĞŞİ'))
-'merhaba-dunya-gsi'
-```
-
----
-
 ## `baseapp.utils.save_file`
 
 While using `FileField`, sometimes you need to handle uploaded files. In this
@@ -1607,6 +1591,8 @@ This project is licensed under MIT
 
 **2019-09-19**
 
+- New Version: 3.4.3
+- Remove `urlify`, using `from slugify import slugify` instead
 - New Version: 3.4.2
 - Remove `baseapp/utils/storage.py`, now using only `baseapp/storage.py`
 
