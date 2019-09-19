@@ -1176,7 +1176,31 @@ class MyModel(models.Model):
     )
 ```
 
-## `baseapp.utils.storage`
+## `baseapp.storage`
+
+### `FileNotFoundFileSystemStorage`
+
+![FileNotFoundFileSystemStorage handles non existing images](screenshots/django-admin-storage.png "Django admin")
+
+---
+
+After shipping/deploying Django app, users start to upload files, right ?
+Then you need to implement new features etc. You can get the dump of the
+database but what about uploaded files ? Sometimes files are too much or
+too big. If you call, let’s say, a model’s `ImageField`’s `url` property,
+local dev server logs lot’s of **file not found** errors to console.
+
+Also breaks the look of application via broken image signs in browser.
+
+Now, you won’t see any errors... `FileNotFoundFileSystemStorage` is a
+fake storage that handles non existing files. Returns `file-not-found.jpg`
+from `static/` folder.
+
+This is **development purposes** only! Do not use in the production!
+
+You don’t need to change/add anything to your code...
+
+### `OverwriteStorage`
 
 `OverwriteStorage` helps you to overwrite file when uploading from django
 admin. Example usage:
@@ -1197,6 +1221,8 @@ class MyModel(models.Model):
 ```
 
 Add `storage` option in you file related fields.
+
+---
 
 ## `AdminImageFileWidget`
 
@@ -1551,30 +1577,6 @@ You can enable/disable in `config/settings/production.py` / `config/settings/her
 :
 ```
 
-### FileNotFoundFileSystemStorage
-
-`baseapp.storage.FileNotFoundFileSystemStorage`
-
-![FileNotFoundFileSystemStorage handles non existing images](screenshots/django-admin-storage.png "Django admin")
-
----
-
-After shipping/deploying Django app, users start to upload files, right ?
-Then you need to implement new features etc. You can get the dump of the
-database but what about uploaded files ? Sometimes files are too much or
-too big. If you call, let’s say, a model’s `ImageField`’s `url` property,
-local dev server logs lot’s of **file not found** errors to console.
-
-Also breaks the look of application via broken image signs in browser.
-
-Now, you won’t see any errors... `FileNotFoundFileSystemStorage` is a
-fake storage that handles non existing files. Returns `file-not-found.jpg`
-from `static/` folder.
-
-This is **development purposes** only! Do not use in the production!
-
-You don’t need to change/add anything to your code...
-
 ---
 
 ## Contributer(s)
@@ -1602,6 +1604,11 @@ This project is licensed under MIT
 ---
 
 ## Change Log
+
+**2019-09-19**
+
+- New Version: 3.4.2
+- Remove `baseapp/utils/storage.py`, now using only `baseapp/storage.py`
 
 **2019-09-10**
 

@@ -7,7 +7,7 @@ from django.core.files.storage import FileSystemStorage
 
 from .utils import console
 
-__all__ = ['FileNotFoundFileSystemStorage']
+__all__ = ['FileNotFoundFileSystemStorage', 'OverwriteStorage']
 
 console = console(source=__name__)
 
@@ -35,3 +35,10 @@ class FileNotFoundFileSystemStorage(FileSystemStorage):
         if self.exists(os.path.join(settings.MEDIA_ROOT, name)):
             return url
         return f'{settings.STATIC_URL}{FILE_NOT_FOUND_IMAGE}'
+
+
+class OverwriteStorage(FileSystemStorage):
+    def get_available_name(self, name, max_length=None):
+        if self.exists(name):
+            os.remove(os.path.join(settings.MEDIA_ROOT, name))
+        return name
