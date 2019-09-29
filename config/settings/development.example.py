@@ -13,7 +13,7 @@ from .base import *  # noqa: F403
 
 ansi_escape = re.compile(r'\x1b[^m]*m')
 
-LOGGIN_SKIP_THESE_EXTENSIONS = ['css', 'js', 'png', 'jpg', 'svg', 'gif', 'woff']
+LOGGING_SKIP_THESE_EXTENSIONS = ['css', 'js', 'png', 'jpg', 'svg', 'gif', 'woff']
 
 
 def create_log_message_chunk(record):
@@ -38,7 +38,7 @@ def create_log_message_chunk(record):
 def development_log_callback(record):
     message_chunk = create_log_message_chunk(record)
     if message_chunk:
-        if message_chunk.get('extension') in LOGGIN_SKIP_THESE_EXTENSIONS:
+        if message_chunk.get('extension') in LOGGING_SKIP_THESE_EXTENSIONS:
             return False
     return True
 
