@@ -10,8 +10,13 @@ DEBUG = False
 try:
     from django.conf import settings
 
-    DEBUG = settings.DEBUG
-except BaseException:
+    try:
+        from django.core.exceptions import ImproperlyConfigured
+
+        DEBUG = settings.DEBUG
+    except ImproperlyConfigured:
+        pass
+except ImportError:
     pass
 
 TERMINAL_COLUMNS, TERMINAL_LINES = shutil.get_terminal_size()
@@ -82,7 +87,7 @@ class Console:
 
     """
 
-    valid_options = ['source', 'width', 'indent', 'color']
+    valid_options = ['source', 'width', 'indent', 'color', 'debug']
     available_colors = dict(black=0, red=1, green=2, yellow=3, blue=4, magenta=5, cyan=6, white=7, default=8)
 
     defaults_options = {
@@ -123,93 +128,94 @@ class Console:
         return '\033[3{0}m{1}{2}'.format(self.available_colors[self.options['color']], input_string, '\033[0m')
 
     def __call__(self, *args, **options):
-        if args:
+        if args and self.options.get('debug', False):
             self.oprint(args, **options)
 
     def dir(self, *args, **options):  # noqa: A003
-        out = {}
-        for arg in args:
-            source_name = arg.__class__.__name__
+        if self.options.get('debug', False):
+            out = {}
+            for arg in args:
+                source_name = arg.__class__.__name__
 
-            if source_name != 'type':
-                source_name = 'instance of {0}'.format(source_name)
+                if source_name != 'type':
+                    source_name = 'instance of {0}'.format(source_name)
 
-            if hasattr(arg, '__name__'):
-                source_name = arg.__name__
+                if hasattr(arg, '__name__'):
+                    source_name = arg.__name__
 
-            source = '{0} | {1}'.format(source_name, type(arg))
+                source = '{0} | {1}'.format(source_name, type(arg))
 
-            public_attributes = []
-            internal_methods = []
-            private_methods = []
+                public_attributes = []
+                internal_methods = []
+                private_methods = []
 
-            for object_method in dir(arg):
-                if object_method.startswith('__'):
-                    internal_methods.append(object_method)
-                elif object_method.startswith('_'):
-                    private_methods.append(object_method)
-                else:
-                    public_attributes.append(object_method)
+                for object_method in dir(arg):
+                    if object_method.startswith('__'):
+                        internal_methods.append(object_method)
+                    elif object_method.startswith('_'):
+                        private_methods.append(object_method)
+                    else:
+                        public_attributes.append(object_method)
 
-            if public_attributes:
-                out.update(public_attributes=public_attributes)
-            if internal_methods:
-                out.update(internal_methods=internal_methods)
-            if private_methods:
-                out.update(private_methods=private_methods)
+                if public_attributes:
+                    out.update(public_attributes=public_attributes)
+                if internal_methods:
+                    out.update(internal_methods=internal_methods)
+                if private_methods:
+                    out.update(private_methods=private_methods)
 
-            if hasattr(arg, '__dict__'):
-                property_list = []
-                static_methods = []
-                class_methods = []
-                public_methods = []
+                if hasattr(arg, '__dict__'):
+                    property_list = []
+                    static_methods = []
+                    class_methods = []
+                    public_methods = []
 
-                for (obj_attr, obj_attr_val) in arg.__dict__.items():
-                    _name = type(obj_attr_val).__name__
+                    for (obj_attr, obj_attr_val) in arg.__dict__.items():
+                        _name = type(obj_attr_val).__name__
 
-                    if _name == 'property':
-                        property_list.append(obj_attr)
-                        if obj_attr in public_attributes:
-                            public_attributes.remove(obj_attr)
+                        if _name == 'property':
+                            property_list.append(obj_attr)
+                            if obj_attr in public_attributes:
+                                public_attributes.remove(obj_attr)
 
-                    if _name == 'staticmethod':
-                        static_methods.append(obj_attr)
-                        if obj_attr in public_attributes:
-                            public_attributes.remove(obj_attr)
+                        if _name == 'staticmethod':
+                            static_methods.append(obj_attr)
+                            if obj_attr in public_attributes:
+                                public_attributes.remove(obj_attr)
 
-                    if _name == 'classmethod':
-                        class_methods.append(obj_attr)
-                        if obj_attr in public_attributes:
-                            public_attributes.remove(obj_attr)
+                        if _name == 'classmethod':
+                            class_methods.append(obj_attr)
+                            if obj_attr in public_attributes:
+                                public_attributes.remove(obj_attr)
 
-                    if _name == 'function':
-                        public_methods.append(obj_attr)
-                        if obj_attr in internal_methods:
-                            internal_methods.remove(obj_attr)
-                        if obj_attr in public_attributes:
-                            public_attributes.remove(obj_attr)
+                        if _name == 'function':
+                            public_methods.append(obj_attr)
+                            if obj_attr in internal_methods:
+                                internal_methods.remove(obj_attr)
+                            if obj_attr in public_attributes:
+                                public_attributes.remove(obj_attr)
 
-                if property_list:
-                    out.update(property_list=property_list)
-                if static_methods:
-                    out.update(static_methods=static_methods)
-                if class_methods:
-                    out.update(class_methods=class_methods)
-                if public_methods:
-                    out.update(public_methods=public_methods)
+                    if property_list:
+                        out.update(property_list=property_list)
+                    if static_methods:
+                        out.update(static_methods=static_methods)
+                    if class_methods:
+                        out.update(class_methods=class_methods)
+                    if public_methods:
+                        out.update(public_methods=public_methods)
 
-                if not arg.__dict__.get('__init__', False):
-                    instance_attributes = []
-                    for instance_attr in list(arg.__dict__.keys()):
-                        instance_attributes.append(instance_attr)
-                        if instance_attr in public_attributes:
-                            public_attributes.remove(instance_attr)
-                        if instance_attr in public_methods:
-                            public_methods.remove(instance_attr)
-                    out.update(instance_attributes=instance_attributes)
+                    if not arg.__dict__.get('__init__', False):
+                        instance_attributes = []
+                        for instance_attr in list(arg.__dict__.keys()):
+                            instance_attributes.append(instance_attr)
+                            if instance_attr in public_attributes:
+                                public_attributes.remove(instance_attr)
+                            if instance_attr in public_methods:
+                                public_methods.remove(instance_attr)
+                        out.update(instance_attributes=instance_attributes)
 
-            options.update(source=source)
-            self.oprint(out, **options)
+                options.update(source=source)
+                self.oprint(out, **options)
 
     def oprint(self, input_txt, **options):
         source = self.options['source']
@@ -236,13 +242,9 @@ class Console:
 def console(**options):
     global DEBUG, TERMINAL_COLUMNS
 
-    if DEBUG or os.getenv('DJANGO_ENV', 'not_available') == 'test':
-        if 'width' not in options.keys():
-            options.update(width=TERMINAL_COLUMNS)
-        return Console(**options)
+    debug = DEBUG or os.getenv('DJANGO_ENV', 'not_available') == 'test'
 
-    c = type('Console', (object,), dict())
-    setattr(c, 'dir', lambda *args, **kwargs: '')  # noqa: B010
-    setattr(c, '__init__', lambda *args, **kwargs: None)  # noqa: B010
-    setattr(c, '__call__', lambda *args, **kwargs: '')  # noqa: B010
-    return c
+    options.update(debug=debug)
+    if 'width' not in options.keys():
+        options.update(width=TERMINAL_COLUMNS)
+    return Console(**options)

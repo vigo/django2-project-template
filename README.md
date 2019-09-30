@@ -1589,6 +1589,11 @@ This project is licensed under MIT
 
 ## Change Log
 
+**2019-09-30**
+
+- Fix `console` function.
+- New Version: 3.4.4
+
 **2019-09-19**
 
 - New Version: 3.4.3
