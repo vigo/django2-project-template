@@ -5,9 +5,10 @@
 - Change log is now individual file `CHANGELOG.md` 
 - Upgrade to Django 2.2.6
 - Now using Python 3.7.4
+- Upgrade bulma to 0.8.0
 - Upgrade packages
 - Fix admin list filter for soft deleted objects
-- New Version: 3.5.0
+- New Version: 3.5.1
 
 
 **2019-09-30**
